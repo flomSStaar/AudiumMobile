@@ -18,6 +18,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false"
+            android:label="LoginActivity" />
+        <activity
+            android:name=".SearchActivity"
+            android:exported="false"
+            android:label="SearchActivity" />
     </application>
 
 </manifest>
