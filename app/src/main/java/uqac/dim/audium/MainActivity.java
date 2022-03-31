@@ -1,10 +1,10 @@
 package uqac.dim.audium;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Playlist;
@@ -18,9 +18,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        User u = new User("Thomas", "Wilhem", 18, "thwilhem", "bonjour");
+        User u = new User("Thomas", "Wilhem", 18, "thwilhem");
         Artist lolo = new Artist("lolo", "barto", 23);
-        Track t = new Track("TestTrack", lolo, "oui");
+        Track t = new Track("TestTrack", lolo, "31387138");
         u.getPlaylists().add(new Playlist("oui", "non"));
         //u.getPlaylists().get(0).getTrackList().add(t); Fait tout planter
 

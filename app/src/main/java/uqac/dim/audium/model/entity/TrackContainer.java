@@ -1,42 +1,106 @@
 package uqac.dim.audium.model.entity;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.List;
 
-abstract public class TrackContainer {
+public abstract class TrackContainer implements Comparable<TrackContainer> {
 
-    private Set<Track> trackList;
-    private String title;
+    protected List<Track> tracks;
+    protected String title;
+    protected String description;
 
+    /**
+     * Constructs a new TrackContainer with a title.
+     *
+     * @param title Title of this track container
+     */
+    public TrackContainer(String title) {
+        this(title, null);
+    }
+
+    /**
+     * Constructs a new TrackContainer with a title and a description.
+     *
+     * @param title       Title of this track container
+     * @param description Description of this track container
+     */
     public TrackContainer(String title, String description) {
-        trackList = new TreeSet<>();
         this.title = title;
         this.description = description;
+        tracks = new ArrayList<>();
     }
 
-    private String description;
-
-    public Set<Track> getTrackList() {
-        return trackList;
+    /**
+     * Returns the tracks of this container.
+     *
+     * @return Tracks of this container
+     */
+    public List<Track> getTracks() {
+        return tracks;
     }
 
-    public void setTrackList(Set<Track> trackList) {
-        this.trackList = trackList;
+    /**
+     * Sets the list of track of this container.
+     *
+     * @param tracks The new list of tracks of this container
+     */
+    private void setTracks(List<Track> tracks) {
+        if (tracks != null) {
+            this.tracks = tracks;
+        } else {
+            throw new IllegalArgumentException("tracks cannot be null");
+        }
     }
 
+    /**
+     * Returns the title of this container.
+     *
+     * @return Title of this container
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Sets the title of this container.
+     *
+     * @param title The new title of this container
+     */
     public void setTitle(String title) {
-        this.title = title;
+        if (title != null) {
+            this.title = title;
+        } else {
+            throw new IllegalArgumentException("title cannot be null");
+        }
     }
 
-    private void removeTrack(Track t){
-        trackList.remove(t);
+    /**
+     * Returns the description of this container.
+     *
+     * @return Description of this container
+     */
+    public String getDescription() {
+        return description;
     }
 
-    private void addTrack(Track t){
-        trackList.add(t);
+    /**
+     * Sets the description of this container.
+     *
+     * @param description The new description of this container
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    //TODO
+    private void addTrack(Track t) {
+        if (t != null && !tracks.contains(t)) {
+            tracks.add(t);
+        }
+    }
+
+    //TODO
+    private void removeTrack(Track t) {
+        tracks.remove(t);
     }
 }
