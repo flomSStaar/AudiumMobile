@@ -25,4 +25,7 @@
     <string name="username_validation">Username must contain only lowercase, uppercase and number characters, contains not spaces or special characters</string>
     <string name="invalid_state">You have not the permissions to access to this page</string>
     <string name="logout">Logout</string>
+    <string name="gerer_utilisteurs">Gérer les utilisteurs</string>
+    <string name="gerer_artistes">Gérer les artistes</string>
+    <string name="gerer_musiques">Gérer les musiques</string>
 </resources>

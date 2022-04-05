@@ -29,6 +29,9 @@
         <activity
             android:name=".SearchActivity"
             android:exported="false" />
+        <activity
+            android:name=".UserListActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

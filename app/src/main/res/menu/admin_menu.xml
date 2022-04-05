@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_utilisateurs" android:title="@string/gerer_utilisteurs"/>
+    <item android:id="@+id/menu_artistes" android:title="@string/gerer_artistes"/>
+    <item android:id="@+id/menu_musiques" android:title="@string/gerer_musiques"/>
+</menu>
