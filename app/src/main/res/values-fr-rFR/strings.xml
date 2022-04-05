@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Audium</string>
     <string name="username">Nom d\'utilisateur</string>
     <string name="register">S\'inscrire</string>
     <string name="password">Mot de passe</string>
     <string name="home">Accueil</string>
     <string name="search">Rechercher</string>
     <string name="settings">Paramètres</string>
-    <string name="invalid_username">Nom d\'utilisateur invalide</string>
-    <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">Connexion échouée</string>
     <string name="login">Connexion</string>
+    <string name="first_name">Prénom</string>
+    <string name="last_name">Nom</string>
+    <string name="enter_username_and_password">Veuillez saisir votre nom d\'utilisateur et votre mot de passe</string>
+    <string name="age">Age</string>
+    <string name="cannot_register">Impossible de s\'inscrire pour le moment, réessayez plus tard</string>
+    <string name="register_failed">"L'inscription a échouée "</string>
+    <string name="register_success">Inscription réussie</string>
+    <string name="fields_must_be_valid">Tous les champs doivent être valides</string>
+    <string name="username_exists">Le nom d\'utilisateur existe déjà</string>
+    <string name="register_error">Une erreur est survenue lors de l\'inscription</string>
+    <string name="invalid_age">Votre age doit être supérieur à 0</string>
+    <string name="password_validation">Le mot de passe doit être de 8 caractères minumum, contenir seulement des lettres minuscules ou majuscules non accentuées, des chiffres, ne pas contenir des espaces ou des caractères spéciaux</string>
+    <string name="last_name_validation">Le nom ne doit pas contenir de caractères spéciaux</string>
+    <string name="first_name_validation">Le prénom ne doit pas contenir de caractères spéciaux et ne doit pas commencer et finir par des espaces</string>
+    <string name="username_validation">Le nom d\'utilisateur doit contenir seulement des lettres minuscules ou majuscules non accentuées, des chiffres, ne pas contenir des espaces ou des caractères spéciaux</string>
+    <string name="invalid_state">Vous n\\\'avez pas le droit d\\\'accder à cette page</string>
+    <string name="logout">Déconnexion</string>
 </resources>

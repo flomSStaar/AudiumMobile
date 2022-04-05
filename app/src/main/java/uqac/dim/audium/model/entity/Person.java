@@ -9,6 +9,14 @@ public abstract class Person {
     protected int age;
 
     /**
+     * Construcs a new Person.
+     * This constructor is used for deserializing from database.
+     * Don't use this constructor!
+     */
+    protected Person() { }
+
+
+    /**
      * Construcs a new Person with first name, last name and age.
      *
      * @param firstName First name of this person
@@ -36,7 +44,7 @@ public abstract class Person {
      * @param firstName The new first name of this person
      */
     public void setFirstName(String firstName) {
-        if (firstName != null && !firstName.isEmpty()) {
+        if (firstName != null && !firstName.trim().isEmpty()) {
             this.firstName = firstName;
         } else {
             throw new IllegalArgumentException("firstName cannot be null or empty");
@@ -58,7 +66,7 @@ public abstract class Person {
      * @param lastName The new last name of this person
      */
     public void setLastName(String lastName) {
-        if (lastName != null && !lastName.isEmpty()) {
+        if (lastName != null && !lastName.trim().isEmpty()) {
             this.lastName = lastName;
         } else {
             throw new IllegalArgumentException("lastName cannot be null or empty");

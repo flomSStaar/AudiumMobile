@@ -97,9 +97,9 @@ public class Artist extends Person {
      * @param stageName The new stage name for this artist
      */
     public void setStageName(String stageName) {
-        if ((stageName == null || stageName.isEmpty()) && firstName != null && lastName != null) {
+        if ((stageName == null || stageName.trim().isEmpty()) && firstName != null && lastName != null) {
             this.stageName = null;
-        } else if (stageName != null && !stageName.isEmpty()) {
+        } else if (stageName != null && !stageName.trim().isEmpty()) {
             this.stageName = stageName;
         } else {
             throw new IllegalArgumentException("artistName cannot be null or empty");
@@ -125,9 +125,9 @@ public class Artist extends Person {
      */
     @Override
     public void setFirstName(String firstName) {
-        if ((firstName == null || firstName.isEmpty()) && stageName != null) {
+        if ((firstName == null || firstName.trim().isEmpty()) && stageName != null) {
             this.firstName = null;
-        } else if (firstName != null && !firstName.isEmpty()) {
+        } else if (firstName != null && !firstName.trim().isEmpty()) {
             this.firstName = firstName;
         } else {
             throw new IllegalArgumentException("firstName cannot be null or empty");
@@ -141,9 +141,9 @@ public class Artist extends Person {
      */
     @Override
     public void setLastName(String lastName) {
-        if ((lastName == null || lastName.isEmpty()) && stageName != null) {
+        if ((lastName == null || lastName.trim().isEmpty()) && stageName != null) {
             this.lastName = null;
-        } else if (lastName != null && !lastName.isEmpty()) {
+        } else if (lastName != null && !lastName.trim().isEmpty()) {
             this.lastName = lastName;
         } else {
             throw new IllegalArgumentException("lastName cannot be null or empty");

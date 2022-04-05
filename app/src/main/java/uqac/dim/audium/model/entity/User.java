@@ -1,13 +1,23 @@
 package uqac.dim.audium.model.entity;
 
+import com.google.firebase.firestore.Exclude;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class User extends Person {
 
-    // Mettre un id ?
-    protected String login;
-    protected List<Playlist> playlists;
+    protected String username;
+    protected List<Playlist> playlists = new ArrayList<>();
+
+    /**
+     * Construcs a new User.
+     * This constructor is used for deserializing from database.
+     * Don't use this constructor!
+     */
+    protected User() {
+        super();
+    }
 
     /**
      * Constructs a new User with first name, last name, age and login.
@@ -15,11 +25,11 @@ public class User extends Person {
      * @param firstName First name of this user
      * @param lastName  Last name of this user
      * @param age       Age of this user
-     * @param login     Login of this user
+     * @param username  Login of this user
      */
-    public User(String firstName, String lastName, int age, String login) {
+    public User(String firstName, String lastName, int age, String username) {
         super(firstName, lastName, age);
-        setLogin(login);
+        setUsername(username);
         playlists = new ArrayList<>();
     }
 
@@ -28,6 +38,7 @@ public class User extends Person {
      *
      * @return Playlists of this user
      */
+    @Exclude
     public List<Playlist> getPlaylists() {
         return playlists;
     }
@@ -50,20 +61,30 @@ public class User extends Person {
      *
      * @return Login of this user
      */
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
     /**
      * Sets the login of this user.
      *
-     * @param login The new login of this user
+     * @param username The new login of this user
      */
-    public void setLogin(String login) {
-        if (login != null && !login.isEmpty()) {
-            this.login = login;
+    public void setUsername(String username) {
+        if (username != null && !username.trim().isEmpty()) {
+            this.username = username;
         } else {
-            throw new IllegalArgumentException("login cannot be null or empty");
+            throw new IllegalArgumentException("username cannot be null or empty");
         }
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                ", username='" + username + '\'' +
+                '}';
     }
 }

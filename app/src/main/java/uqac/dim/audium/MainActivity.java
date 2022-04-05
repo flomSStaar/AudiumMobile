@@ -2,38 +2,51 @@ package uqac.dim.audium;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import uqac.dim.audium.model.entity.Artist;
-import uqac.dim.audium.model.entity.Playlist;
-import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.model.entity.User;
 
 public class MainActivity extends AppCompatActivity {
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        User u = new User("Thomas", "Wilhem", 18, "thwilhem");
-        Artist lolo = new Artist("lolo", "barto", 23);
-        Track t = new Track("TestTrack", lolo, "31387138");
-        u.getPlaylists().add(new Playlist("oui", "non"));
-        //u.getPlaylists().get(0).getTrackList().add(t); Fait tout planter
+        ((Button) findViewById(R.id.btn_logout)).setOnClickListener(this::deconnection);
+        initUser();
+    }
 
-        Button searchBtn = findViewById(R.id.btn_search);
-        searchBtn.setOnClickListener(view -> {
-            Intent i = new Intent(getApplicationContext(), SearchActivity.class);
-            startActivity(i);
-        });
+    private void initUser() {
+        try {
+            Bundle extras = getIntent().getExtras();
 
-        Button loginBtn = findViewById(R.id.btn_login);
-        loginBtn.setOnClickListener(view -> {
-            Intent i = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(i);
-        });
+            String firstName = (String) extras.get("firstName");
+            String lastName = (String) extras.get("lastName");
+            int age = Integer.parseInt(extras.get("age").toString());
+            String username = (String) extras.get("username");
+
+            user = new User(firstName, lastName, age, username);
+
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), R.string.invalid_state, Toast.LENGTH_SHORT).show();
+            Log.e("DIM", "Invalid state");
+            e.printStackTrace();
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            finish();
+        }
+    }
+
+    private void deconnection(View view) {
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        intent.putExtra("username", user.getUsername());
+        startActivity(intent);
+        finish();
     }
 }
