@@ -1,6 +1,10 @@
 package uqac.dim.audium;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -29,15 +33,25 @@ public class UserListActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
-        ArrayList<String> l = new ArrayList<>();
+        ArrayList<User> l = new ArrayList<>();
+        ListView userListView = ((ListView) findViewById(R.id.userList));
         db = FirebaseFirestore.getInstance();
         db.collection("users")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for(int i=0; i<queryDocumentSnapshots.getDocuments().size();i++)
-                        l.add(queryDocumentSnapshots.getDocuments().get(i).toObject(User.class).getUsername());
-                    ((ListView) findViewById(R.id.userList)).setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1,l));
+                    for (int i = 0; i < queryDocumentSnapshots.getDocuments().size(); i++)
+                        l.add(queryDocumentSnapshots.getDocuments().get(i).toObject(User.class));
+                    userListView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, l));
                 });
+
+        userListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
+                Intent intent = new Intent(UserListActivity.this, UserProfileActivity.class);
+                intent.putExtra("username", ((User)userListView.getItemAtPosition(position)).getUsername());
+                startActivity(intent);
+            }
+        });
 
 
     }

@@ -68,8 +68,11 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_utilisateurs:
                 Intent intent = new Intent(getApplicationContext(), UserListActivity.class);
                 startActivity(intent);
+                break;
             case R.id.menu_artistes:
-
+                Intent intent2 = new Intent(getApplicationContext(), ArtistListActivity.class);
+                startActivity(intent2);
+                break;
             case R.id.menu_musiques:
 
             default:
@@ -87,9 +90,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Faire l'ajout de musique plus tard
 
-        //Peut voir les infos des utilisateurs
+        //Peut voir les infos des utilisateurs - FAIT
 
-        //Voir pour supprimer les utilisateurs
+        //Voir pour supprimer les utilisateurs - A CODER DANS LE BOUTTON
 
         //Ajouter les artistes et les albums correspondant
 

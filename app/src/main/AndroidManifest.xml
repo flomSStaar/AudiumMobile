@@ -32,6 +32,15 @@
         <activity
             android:name=".UserListActivity"
             android:exported="false" />
+        <activity
+            android:name=".UserProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ArtistListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ArtistProfileActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

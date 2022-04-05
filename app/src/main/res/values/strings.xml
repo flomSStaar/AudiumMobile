@@ -28,4 +28,7 @@
     <string name="gerer_utilisteurs">Gérer les utilisteurs</string>
     <string name="gerer_artistes">Gérer les artistes</string>
     <string name="gerer_musiques">Gérer les musiques</string>
+    <string name="suprrimer">Suprrimer</string>
+    <string name="ajouter">Ajouter</string>
+    <string name="liste_des_artistes">Liste des artistes</string>
 </resources>
