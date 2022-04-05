@@ -72,16 +72,19 @@ public class LoginActivity extends AppCompatActivity {
                     .get().addOnSuccessListener(queryDocumentSnapshots -> {
                 if (queryDocumentSnapshots.getDocuments().size() == 1) {
                     User user = queryDocumentSnapshots.getDocuments().get(0).toObject(User.class);
-                    Log.i("DIM", "Login successful");
+                    if (user != null) {
+                        Log.i("DIM", "Login successful");
 
-                    //Start the main activity
-                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                    i.putExtra("firstName", user.getFirstName());
-                    i.putExtra("lastName", user.getLastName());
-                    i.putExtra("age", user.getAge());
-                    i.putExtra("username", user.getUsername());
-                    startActivity(i);
-                    finish();
+                        //Start the main activity
+                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                        i.putExtra("firstName", user.getFirstName());
+                        i.putExtra("lastName", user.getLastName());
+                        i.putExtra("age", user.getAge());
+                        i.putExtra("username", user.getUsername());
+                        i.putExtra("isAdmin", user.isAdmin());
+                        startActivity(i);
+                        finish();
+                    }
                 } else {
                     Log.e("DIM", "Invalid credentials");
                 }

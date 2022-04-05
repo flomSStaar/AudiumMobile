@@ -21,6 +21,10 @@ public class MainActivity extends AppCompatActivity {
 
         ((Button) findViewById(R.id.btn_logout)).setOnClickListener(this::deconnection);
         initUser();
+
+        if (user != null && user.isAdmin()) {
+            initAdminMenu();
+        }
     }
 
     private void initUser() {
@@ -31,9 +35,9 @@ public class MainActivity extends AppCompatActivity {
             String lastName = (String) extras.get("lastName");
             int age = Integer.parseInt(extras.get("age").toString());
             String username = (String) extras.get("username");
+            boolean isAdmin = "true".equals(extras.get("isAdmin").toString());
 
-            user = new User(firstName, lastName, age, username);
-
+            user = new User(firstName, lastName, age, username, isAdmin);
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), R.string.invalid_state, Toast.LENGTH_SHORT).show();
             Log.e("DIM", "Invalid state");
@@ -41,6 +45,17 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             finish();
         }
+    }
+
+    //TODO
+    //Faire le menu
+    private void initAdminMenu() {
+        //Admin doit pouvoir voir et modifier les musiques et les supprimer
+        //Faire l'ajout de musique plus tard
+        //Peut voir les infos des utilisateurs
+        //Voir pour supprimer les utilisateurs
+        //Ajouter les artistes et les albums correspondant
+        //Faire une vue pour les albums + gestion des albums
     }
 
     private void deconnection(View view) {

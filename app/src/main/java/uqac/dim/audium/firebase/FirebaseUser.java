@@ -15,7 +15,7 @@ public class FirebaseUser extends User {
      * @param username  Login of this user
      */
     public FirebaseUser(String firstName, String lastName, int age, String username, String password) {
-        super(firstName, lastName, age, username);
+        super(firstName, lastName, age, username, false);
         this.password = password;
     }
 

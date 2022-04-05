@@ -1,6 +1,7 @@
 package uqac.dim.audium.model.entity;
 
 import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.PropertyName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,8 @@ import java.util.List;
 public class User extends Person {
 
     protected String username;
+    @PropertyName("admin")
+    protected boolean isAdmin;
     protected List<Playlist> playlists = new ArrayList<>();
 
     /**
@@ -26,10 +29,12 @@ public class User extends Person {
      * @param lastName  Last name of this user
      * @param age       Age of this user
      * @param username  Login of this user
+     * @param isAdmin   Admin state of this user
      */
-    public User(String firstName, String lastName, int age, String username) {
+    public User(String firstName, String lastName, int age, String username, boolean isAdmin) {
         super(firstName, lastName, age);
-        setUsername(username);
+        this.username = username;
+        this.isAdmin = isAdmin;
         playlists = new ArrayList<>();
     }
 
@@ -66,17 +71,14 @@ public class User extends Person {
     }
 
     /**
-     * Sets the login of this user.
+     * Returns if the user is admin
      *
-     * @param username The new login of this user
+     * @return True if admin otherwise false
      */
-    public void setUsername(String username) {
-        if (username != null && !username.trim().isEmpty()) {
-            this.username = username;
-        } else {
-            throw new IllegalArgumentException("username cannot be null or empty");
-        }
+    public boolean isAdmin() {
+        return isAdmin;
     }
+
 
     @Override
     public String toString() {
@@ -85,6 +87,7 @@ public class User extends Person {
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
                 ", username='" + username + '\'' +
+                ", isAdmin=" + isAdmin +
                 '}';
     }
 }
