@@ -30,4 +30,5 @@
     <string name="wrong_credentials">Les informations saisies ne correspondent pas</string>
     <string name="show">Afficher</string>
     <string name="hide">Cacher</string>
+    <string name="registertext">Pas encore de compte ? </string>
 </resources>
