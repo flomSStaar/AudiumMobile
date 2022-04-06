@@ -47,6 +47,8 @@ public class LoginActivity extends AppCompatActivity {
             String username = (String) extras.get("username");
             editUsername.setText(username);
         }
+
+
     }
 
     private void login(View view) {
