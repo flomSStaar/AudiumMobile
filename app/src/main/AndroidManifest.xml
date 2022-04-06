@@ -31,16 +31,16 @@
             android:name=".SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".UserListActivity"
+            android:name=".adminActivity.UserListActivity"
             android:exported="false" />
         <activity
-            android:name=".UserProfileActivity"
+            android:name=".adminActivity.UserProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".ArtistListActivity"
+            android:name=".adminActivity.ArtistListActivity"
             android:exported="false" />
         <activity
-            android:name=".ArtistProfileActivity"
+            android:name=".adminActivity.ArtistProfileActivity"
             android:exported="false" />
     </application>
 

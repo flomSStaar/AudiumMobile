@@ -1,4 +1,4 @@
-package uqac.dim.audium;
+package uqac.dim.audium.adminActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import uqac.dim.audium.R;
 import uqac.dim.audium.model.entity.Artist;
 
 public class ArtistProfileActivity extends AppCompatActivity {
@@ -51,4 +52,5 @@ public class ArtistProfileActivity extends AppCompatActivity {
         database.child("artists").child(String.valueOf(artist.getId())).removeValue();
         artist=null;
     }
+
 }

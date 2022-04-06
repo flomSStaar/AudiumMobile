@@ -1,4 +1,4 @@
-package uqac.dim.audium;
+package uqac.dim.audium.adminActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import uqac.dim.audium.R;
 import uqac.dim.audium.model.entity.Artist;
 
 public class ArtistListActivity extends AppCompatActivity {

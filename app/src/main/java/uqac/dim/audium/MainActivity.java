@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import uqac.dim.audium.adminActivity.ArtistListActivity;
+import uqac.dim.audium.adminActivity.UserListActivity;
 import uqac.dim.audium.model.entity.User;
 
 public class MainActivity extends AppCompatActivity {
