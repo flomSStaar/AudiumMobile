@@ -31,4 +31,9 @@
     <string name="suprrimer">Suprrimer</string>
     <string name="ajouter">Ajouter</string>
     <string name="liste_des_artistes">Liste des artistes</string>
+    <string name="invalid_password">Invalid password</string>
+    <string name="invalid_username">Username invalid</string>
+    <string name="wrong_credentials">Credentials doesn\'t match</string>
+    <string name="show">Show</string>
+    <string name="hide">Hide</string>
 </resources>

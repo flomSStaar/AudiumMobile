@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import uqac.dim.audium.model.entity.User;
+import uqac.dim.audium.model.utils.HashPassword;
 import uqac.dim.audium.model.utils.Utils;
 
 public class LoginActivity extends AppCompatActivity {
@@ -31,10 +32,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Button loginBtn = (Button) findViewById(R.id.btn_login);
-        Button registerBtn = (Button) findViewById(R.id.btn_register);
-        loginBtn.setOnClickListener(this::login);
-        registerBtn.setOnClickListener(this::register);
+        ((Button) findViewById(R.id.btn_login)).setOnClickListener(this::login);
+        ((Button) findViewById(R.id.btn_register)).setOnClickListener(this::register);
 
         editUsername = (EditText) findViewById(R.id.edit_username);
         editPassword = (EditText) findViewById(R.id.edit_password);
@@ -66,9 +65,10 @@ public class LoginActivity extends AppCompatActivity {
         String password = editPassword.getText().toString();
 
         if (username.matches(Utils.USERNAME_REGEX) && password.matches(Utils.PASSWORD_REGEX)) {
+            String hashPassword = HashPassword.hashPassword(password);
             db.collection("users")
                     .whereEqualTo("username", username)
-                    .whereEqualTo("password", password)
+                    .whereEqualTo("password", hashPassword)
                     .get().addOnSuccessListener(queryDocumentSnapshots -> {
                 if (queryDocumentSnapshots.getDocuments().size() == 1) {
                     User user = queryDocumentSnapshots.getDocuments().get(0).toObject(User.class);
@@ -86,20 +86,26 @@ public class LoginActivity extends AppCompatActivity {
                         finish();
                     }
                 } else {
-                    Log.e("DIM", "Invalid credentials");
+                    Toast.makeText(getApplicationContext(), getString(R.string.wrong_credentials), Toast.LENGTH_SHORT).show();
+                    Log.e("DIM", "Wrong credentials");
                 }
             });
         } else {
-            if (!username.matches(Utils.USERNAME_REGEX)) {
-                editUsername.setText(username.trim());
-                editUsername.setError(getString(R.string.username_validation));
-            }
-            if (!password.matches(Utils.PASSWORD_REGEX)) {
-                editPassword.setText("");
-                editPassword.setError(getString(R.string.password_validation));
+            if (username.trim().isEmpty() && password.trim().isEmpty()) {
+                Toast.makeText(getApplicationContext(), R.string.enter_username_and_password, Toast.LENGTH_SHORT).show();
+            } else {
+                if (!username.matches(Utils.USERNAME_REGEX)) {
+                    editUsername.setText(username.trim());
+                    editUsername.setError(getString(R.string.username_validation));
+                    Toast.makeText(getApplicationContext(), getString(R.string.invalid_username), Toast.LENGTH_SHORT).show();
+                }
+                if (!password.matches(Utils.PASSWORD_REGEX)) {
+                    editPassword.setText("");
+                    editPassword.setError(getString(R.string.password_validation));
+                    Toast.makeText(getApplicationContext(), getString(R.string.invalid_password), Toast.LENGTH_SHORT).show();
+                }
             }
             Log.e("DIM", "Invalid username or password!");
-            Toast.makeText(getApplicationContext(), R.string.enter_username_and_password, Toast.LENGTH_SHORT).show();
         }
     }
 
