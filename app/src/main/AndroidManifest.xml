@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Audium">
         <activity
-            android:name=".LoginActivity"
+            android:name=".activity.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,25 +22,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".activity.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".SearchActivity"
+            android:name=".activity.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".UserListActivity"
+            android:name=".activity.UserListActivity"
             android:exported="false" />
         <activity
-            android:name=".UserProfileActivity"
+            android:name=".activity.UserProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".ArtistListActivity"
+            android:name=".activity.ArtistListActivity"
             android:exported="false" />
         <activity
-            android:name=".ArtistProfileActivity"
+            android:name=".activity.ArtistProfileActivity"
             android:exported="false" />
     </application>
 

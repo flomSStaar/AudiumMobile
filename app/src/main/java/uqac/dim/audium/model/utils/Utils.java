@@ -12,6 +12,7 @@ public class Utils {
     public static final String USERNAME_REGEX = "^[a-zA-Z0-9#?!@$%^&*-.]+$";
     public static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9#?!@$%^&*-.]{" + MIN_PASSWORD_LENGTH + ",}$";
 
+    public static final String USER_DATA_FILE = "user.data";
 
     public static void showKeyboard(Context context, View v) {
         if (v != null) {

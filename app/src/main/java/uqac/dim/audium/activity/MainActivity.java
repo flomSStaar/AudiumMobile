@@ -1,4 +1,4 @@
-package uqac.dim.audium;
+package uqac.dim.audium.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +11,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
+
+import uqac.dim.audium.R;
 import uqac.dim.audium.model.entity.User;
+import uqac.dim.audium.model.utils.Utils;
 
 public class MainActivity extends AppCompatActivity {
     private User user;
@@ -100,6 +104,11 @@ public class MainActivity extends AppCompatActivity {
     //// --------------------------------------------------
 
     private void deconnection(View view) {
+        File file = new File(getFilesDir(), Utils.USER_DATA_FILE);
+        if (file.exists()) {
+            file.delete();
+        }
+
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         intent.putExtra("username", user.getUsername());
         startActivity(intent);
