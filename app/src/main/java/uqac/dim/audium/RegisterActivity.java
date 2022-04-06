@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import uqac.dim.audium.firebase.FirebaseUser;
+import uqac.dim.audium.model.utils.HashPassword;
 import uqac.dim.audium.model.utils.Utils;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -61,7 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void onEditTextFocusChange(View view, boolean b) {
         if (!b) {
             EditText editText = (EditText) view;
-            if(!editText.getText().toString().trim().isEmpty()){
+            if (!editText.getText().toString().trim().isEmpty()) {
                 editText.setError(null);
             }
         }
@@ -86,7 +87,8 @@ public class RegisterActivity extends AppCompatActivity {
                 db.collection("users").get().addOnSuccessListener(queryDocumentSnapshots -> {
                     if (queryDocumentSnapshots.getDocuments().stream()
                             .noneMatch(documentSnapshot -> documentSnapshot.getId().equals(username))) {
-                        FirebaseUser user = new FirebaseUser(firstName, lastName, age, username, password);
+                        String hashPassword = HashPassword.hashPassword(password);
+                        FirebaseUser user = new FirebaseUser(firstName, lastName, age, username, hashPassword);
                         //Save the user in the database
                         db.collection("users")
                                 .document(username).set(user)

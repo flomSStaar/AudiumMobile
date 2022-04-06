@@ -25,4 +25,9 @@
     <string name="username_validation">Le nom d\'utilisateur doit contenir seulement des lettres minuscules ou majuscules non accentuées, des chiffres, ne pas contenir des espaces ou des caractères spéciaux</string>
     <string name="invalid_state">Vous n\\\'avez pas le droit d\\\'accder à cette page</string>
     <string name="logout">Déconnexion</string>
+    <string name="invalid_password">Mot de passe invalide</string>
+    <string name="invalid_username">Nom d\'utilisateur invalide</string>
+    <string name="wrong_credentials">Les informations saisies ne correspondent pas</string>
+    <string name="show">Afficher</string>
+    <string name="hide">Cacher</string>
 </resources>
