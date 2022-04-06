@@ -3,43 +3,55 @@ package uqac.dim.audium;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import uqac.dim.audium.model.entity.Artist;
 
 public class ArtistProfileActivity extends AppCompatActivity {
 
-    FirebaseFirestore db;
+    DatabaseReference database;
+    Artist artist;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_profile);
+        setContentView(R.layout.activity_artist_profile);
         Intent i = getIntent();
-        db = FirebaseFirestore.getInstance();
+        database = FirebaseDatabase.getInstance().getReference();
+        database.child("artists").child( String.valueOf(i.getLongExtra("id",0))).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                artist = snapshot.getValue(Artist.class);
+                ((TextView)findViewById(R.id.stageName)).setText(artist.getStageName());
+                ((TextView)findViewById(R.id.artistFirstname)).setText(artist.getFirstName());
+                ((TextView)findViewById(R.id.artistLastname)).setText(artist.getLastName());
+                ((TextView)findViewById(R.id.artistAge)).setText(String.valueOf(artist.getAge()));
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-        db.collection("artists")
-                .whereEqualTo("stageName", i.getStringExtra("stageName"))
-                .get().addOnSuccessListener(queryDocumentSnapshots -> {
-            if (queryDocumentSnapshots.getDocuments().size() == 1) {
-                Artist artist = queryDocumentSnapshots.getDocuments().get(0).toObject(Artist.class);
-                if (artist != null) {
-                    ((TextView)findViewById(R.id.stageName)).setText(artist.getStageName());
-                    ((TextView)findViewById(R.id.artistFirstname)).setText(artist.getFirstName());
-                    ((TextView)findViewById(R.id.artistLastname)).setText(artist.getLastName());
-                    ((TextView)findViewById(R.id.artistAge)).setText(String.valueOf(artist.getAge()));
-
-                    // Afficher les albums
-                }
-            } else {
-                Log.e("DIM", "Invalid credentials");
             }
         });
+
+    }
+
+    public void deleteArtist(View view) {
+        database = FirebaseDatabase.getInstance().getReference();
+        database.child("artists").child(String.valueOf(artist.getId())).removeValue();
+        artist=null;
     }
 }

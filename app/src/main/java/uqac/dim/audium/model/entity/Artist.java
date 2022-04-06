@@ -1,12 +1,17 @@
 package uqac.dim.audium.model.entity;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.Set;
 import java.util.TreeSet;
 
 public class Artist extends Person {
 
+    protected Long id;
     protected Set<Album> albums;
     protected String stageName;
+
+    public Artist(){}
 
     /**
      * Constructs a new artist having only artist name and age.
@@ -14,9 +19,10 @@ public class Artist extends Person {
      * @param stageName Stage name
      * @param age       Age of the artist
      */
-    public Artist(String stageName, int age) {
+    public Artist(String stageName, int age, Long id) {
         super("a", "a", age); //astuce pour pouvoir affecter artistName
         setStageName(stageName);
+        setId(id);
         setFirstName(null);
         setLastName(null);
     }
@@ -28,9 +34,10 @@ public class Artist extends Person {
      * @param lastName  Last Name of the artist
      * @param age       Age of the artist
      */
-    public Artist(String firstName, String lastName, int age) {
-        this(firstName, lastName, null, age);
+    public Artist(String firstName, String lastName, int age, Long id) {
+        this(firstName, lastName, null, age,id);
     }
+
 
     /**
      * Constructs a new Artist with first name, last name, stage name and age of the artist.
@@ -40,8 +47,8 @@ public class Artist extends Person {
      * @param stageName Stage name of the artist
      * @param age       Age of the artist
      */
-    public Artist(String firstName, String lastName, String stageName, int age) {
-        this(firstName, lastName, stageName, age, new TreeSet<>());
+    public Artist(String firstName, String lastName, String stageName, int age, Long id) {
+        this(firstName, lastName, stageName, age, new TreeSet<>(),id);
     }
 
     /**
@@ -54,9 +61,10 @@ public class Artist extends Person {
      * @param age       Age of the artist
      * @param albums    Albums of the artist
      */
-    public Artist(String firstName, String lastName, String stageName, int age, Set<Album> albums) {
+    public Artist(String firstName, String lastName, String stageName, int age, Set<Album> albums, Long id) {
         super(firstName, lastName, age);
         setStageName(stageName);
+        setId(id);
         setAlbums(albums);
     }
 
@@ -65,6 +73,7 @@ public class Artist extends Person {
      *
      * @return Albums of this artist
      */
+    @Exclude
     public Set<Album> getAlbums() {
         return albums;
     }
@@ -81,6 +90,20 @@ public class Artist extends Person {
             throw new IllegalArgumentException("albums cannot be null");
         }
     }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        if (id != null && id > 0 ) {
+            this.id = id;
+        } else {
+            throw new IllegalArgumentException("id cannot be lower than 0 or null");
+        }
+    }
+
 
     /**
      * Returns the stage name of this artist.
@@ -157,14 +180,14 @@ public class Artist extends Person {
      */
     @Override
     public String toString() {
-        /*return "Artist{" +
+        return "Artist{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
                 ", stageNameName='" + stageName + '\'' +
                 '}';
 
-         */
-        return stageName;
+
+        //return stageName;
     }
 }

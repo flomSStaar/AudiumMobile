@@ -3,6 +3,7 @@ package uqac.dim.audium;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -16,6 +17,7 @@ import uqac.dim.audium.model.entity.User;
 public class UserProfileActivity extends AppCompatActivity {
 
     FirebaseFirestore db;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,4 +43,5 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
     }
+
 }
