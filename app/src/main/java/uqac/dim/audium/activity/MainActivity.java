@@ -1,15 +1,13 @@
-package uqac.dim.audium;
+package uqac.dim.audium.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,7 +20,13 @@ import androidx.viewpager2.widget.ViewPager2;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.io.File;
+
+import uqac.dim.audium.R;
+import uqac.dim.audium.activity.admin.ArtistListActivity;
+import uqac.dim.audium.activity.admin.UserListActivity;
 import uqac.dim.audium.model.entity.User;
+import uqac.dim.audium.model.utils.Utils;
 
 public class MainActivity extends AppCompatActivity {
     private User user;
@@ -139,15 +143,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_utilisateurs:
+            case R.id.user_menu:
                 Intent intent = new Intent(getApplicationContext(), UserListActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.menu_artistes:
+            case R.id.artist_menu:
                 Intent intent2 = new Intent(getApplicationContext(), ArtistListActivity.class);
                 startActivity(intent2);
                 break;
-            case R.id.menu_musiques:
+            case R.id.track_menu:
 
             default:
 
@@ -176,6 +180,11 @@ public class MainActivity extends AppCompatActivity {
     //// --------------------------------------------------
 
     private void deconnection(View view) {
+        File file = new File(getFilesDir(), Utils.USER_DATA_FILE);
+        if (file.exists()) {
+            file.delete();
+        }
+
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         intent.putExtra("username", user.getUsername());
         startActivity(intent);

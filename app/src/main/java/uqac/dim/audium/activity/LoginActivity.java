@@ -1,4 +1,4 @@
-package uqac.dim.audium;
+package uqac.dim.audium.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,8 +15,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Objects;
+
+import uqac.dim.audium.R;
 import uqac.dim.audium.model.entity.User;
 import uqac.dim.audium.model.utils.HashPassword;
 import uqac.dim.audium.model.utils.Utils;
@@ -25,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> activityResultLauncher;
     private EditText editUsername;
     private EditText editPassword;
-    private FirebaseFirestore db;
+    private FirebaseDatabase db;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,12 +50,22 @@ public class LoginActivity extends AppCompatActivity {
 
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::getRegisterResult);
 
-        db = FirebaseFirestore.getInstance();
+        db = FirebaseDatabase.getInstance();
 
-        if (getIntent() != null && getIntent().getExtras() != null) {
-            Bundle extras = getIntent().getExtras();
-            String username = (String) extras.get("username");
-            editUsername.setText(username);
+        File path = new File(getFilesDir(), "user.data");
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path))) {
+            User user = (User) ois.readObject();
+            Log.i("DIM", "user loaded from file");
+            launchMain(user, false);
+        } catch (IOException | ClassNotFoundException e) {
+            Log.e("DIM", "cannot load user from file");
+            e.printStackTrace();
+
+            if (getIntent() != null && getIntent().getExtras() != null) {
+                Bundle extras = getIntent().getExtras();
+                String username = (String) extras.get("username");
+                editUsername.setText(username);
+            }
         }
 
 
@@ -68,30 +88,30 @@ public class LoginActivity extends AppCompatActivity {
 
         if (username.matches(Utils.USERNAME_REGEX) && password.matches(Utils.PASSWORD_REGEX)) {
             String hashPassword = HashPassword.hashPassword(password);
-            db.collection("users")
-                    .whereEqualTo("username", username)
-                    .whereEqualTo("password", hashPassword)
-                    .get().addOnSuccessListener(queryDocumentSnapshots -> {
-                if (queryDocumentSnapshots.getDocuments().size() == 1) {
-                    User user = queryDocumentSnapshots.getDocuments().get(0).toObject(User.class);
-                    if (user != null) {
-                        Log.i("DIM", "Login successful");
 
-                        //Start the main activity
-                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                        i.putExtra("firstName", user.getFirstName());
-                        i.putExtra("lastName", user.getLastName());
-                        i.putExtra("age", user.getAge());
-                        i.putExtra("username", user.getUsername());
-                        i.putExtra("isAdmin", user.isAdmin());
-                        startActivity(i);
-                        finish();
-                    }
-                } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.wrong_credentials), Toast.LENGTH_SHORT).show();
-                    Log.e("DIM", "Wrong credentials");
-                }
-            });
+            DatabaseReference usersRef = db.getReference("users/" + username);
+            usersRef.get()
+                    .addOnSuccessListener(dataSnapshot -> {
+                        if (dataSnapshot.exists()) {
+                            String dbPassword = dataSnapshot.child("password").getValue(String.class);
+                            if (Objects.equals(dbPassword, hashPassword)) {
+                                User user = dataSnapshot.getValue(User.class);
+                                if (user != null) {
+                                    Log.i("DIM", "Login successful");
+
+                                    launchMain(user, true);
+                                }
+                            } else {
+                                Toast.makeText(getApplicationContext(), getString(R.string.wrong_credentials), Toast.LENGTH_SHORT).show();
+                                Log.e("DIM", "Wrong credentials");
+                            }
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e("DIM", e.toString());
+                        //TODO
+                        //Erreur de connexion à la base
+                    });
         } else {
             if (username.trim().isEmpty() && password.trim().isEmpty()) {
                 Toast.makeText(getApplicationContext(), R.string.enter_username_and_password, Toast.LENGTH_SHORT).show();
@@ -109,6 +129,29 @@ public class LoginActivity extends AppCompatActivity {
             }
             Log.e("DIM", "Invalid username or password!");
         }
+    }
+
+    private void launchMain(User user, boolean saveInFile) {
+        if (saveInFile) {
+            File path = new File(getFilesDir(), "user.data");
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path))) {
+                oos.writeObject(user);
+                Log.i("DIM", "User saved in file");
+            } catch (IOException e) {
+                Log.e("DIM", "Cannot save the user in file");
+                e.printStackTrace();
+            }
+        }
+
+        //Start the main activity
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        i.putExtra("firstName", user.getFirstName());
+        i.putExtra("lastName", user.getLastName());
+        i.putExtra("age", user.getAge());
+        i.putExtra("username", user.getUsername());
+        i.putExtra("isAdmin", user.isAdmin());
+        startActivity(i);
+        finish();
     }
 
     private void getRegisterResult(@NonNull ActivityResult result) {

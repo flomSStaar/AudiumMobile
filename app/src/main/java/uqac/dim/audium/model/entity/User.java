@@ -1,12 +1,13 @@
 package uqac.dim.audium.model.entity;
 
-import com.google.firebase.firestore.Exclude;
-import com.google.firebase.firestore.PropertyName;
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.PropertyName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User extends Person {
+public class User extends Person implements Serializable {
 
     protected String username;
     @PropertyName("admin")

@@ -1,8 +1,9 @@
 package uqac.dim.audium.model.entity;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class Person {
+public abstract class Person implements Serializable {
 
     protected String firstName;
     protected String lastName;
