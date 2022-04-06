@@ -15,7 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Objects;
 
 import uqac.dim.audium.model.entity.User;
 import uqac.dim.audium.model.utils.HashPassword;
@@ -25,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> activityResultLauncher;
     private EditText editUsername;
     private EditText editPassword;
-    private FirebaseFirestore db;
+    private FirebaseDatabase db;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
 
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::getRegisterResult);
 
-        db = FirebaseFirestore.getInstance();
+        db = FirebaseDatabase.getInstance();
 
         if (getIntent() != null && getIntent().getExtras() != null) {
             Bundle extras = getIntent().getExtras();
@@ -66,30 +69,38 @@ public class LoginActivity extends AppCompatActivity {
 
         if (username.matches(Utils.USERNAME_REGEX) && password.matches(Utils.PASSWORD_REGEX)) {
             String hashPassword = HashPassword.hashPassword(password);
-            db.collection("users")
-                    .whereEqualTo("username", username)
-                    .whereEqualTo("password", hashPassword)
-                    .get().addOnSuccessListener(queryDocumentSnapshots -> {
-                if (queryDocumentSnapshots.getDocuments().size() == 1) {
-                    User user = queryDocumentSnapshots.getDocuments().get(0).toObject(User.class);
-                    if (user != null) {
-                        Log.i("DIM", "Login successful");
 
-                        //Start the main activity
-                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                        i.putExtra("firstName", user.getFirstName());
-                        i.putExtra("lastName", user.getLastName());
-                        i.putExtra("age", user.getAge());
-                        i.putExtra("username", user.getUsername());
-                        i.putExtra("isAdmin", user.isAdmin());
-                        startActivity(i);
-                        finish();
-                    }
-                } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.wrong_credentials), Toast.LENGTH_SHORT).show();
-                    Log.e("DIM", "Wrong credentials");
-                }
-            });
+            DatabaseReference usersRef = db.getReference("users/" + username);
+            usersRef.get()
+                    .addOnSuccessListener(dataSnapshot -> {
+                        if (dataSnapshot.exists()) {
+                            String dbPassword = dataSnapshot.child("password").getValue(String.class);
+                            if (Objects.equals(dbPassword, hashPassword)) {
+                                User user = dataSnapshot.getValue(User.class);
+                                if (user != null) {
+                                    Log.i("DIM", "Login successful");
+
+                                    //Start the main activity
+                                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                                    i.putExtra("firstName", user.getFirstName());
+                                    i.putExtra("lastName", user.getLastName());
+                                    i.putExtra("age", user.getAge());
+                                    i.putExtra("username", user.getUsername());
+                                    i.putExtra("isAdmin", user.isAdmin());
+                                    startActivity(i);
+                                    finish();
+                                }
+                            } else {
+                                Toast.makeText(getApplicationContext(), getString(R.string.wrong_credentials), Toast.LENGTH_SHORT).show();
+                                Log.e("DIM", "Wrong credentials");
+                            }
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e("DIM", e.toString());
+                        //TODO
+                        //Erreur de connexion à la base
+                    });
         } else {
             if (username.trim().isEmpty() && password.trim().isEmpty()) {
                 Toast.makeText(getApplicationContext(), R.string.enter_username_and_password, Toast.LENGTH_SHORT).show();

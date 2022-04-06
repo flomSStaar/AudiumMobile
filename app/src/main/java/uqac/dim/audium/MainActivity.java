@@ -3,12 +3,10 @@ package uqac.dim.audium;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -54,17 +52,17 @@ public class MainActivity extends AppCompatActivity {
     //// ------------------- Partie ADMIN ----------------
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        if(user.isAdmin()){
-            getMenuInflater().inflate(R.menu.admin_menu,menu);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (user.isAdmin()) {
+            getMenuInflater().inflate(R.menu.admin_menu, menu);
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch(item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.menu_utilisateurs:
                 Intent intent = new Intent(getApplicationContext(), UserListActivity.class);
                 startActivity(intent);

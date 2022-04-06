@@ -10,7 +10,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import uqac.dim.audium.firebase.FirebaseUser;
 import uqac.dim.audium.model.utils.HashPassword;
@@ -23,7 +24,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText editUsername;
     private EditText editPassword;
 
-    private FirebaseFirestore db;
+    private FirebaseDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,7 @@ public class RegisterActivity extends AppCompatActivity {
         registerBtn.setOnClickListener(this::register);
 
         try {
-            db = FirebaseFirestore.getInstance();
+            db = FirebaseDatabase.getInstance();
             initEditText();
         } catch (Exception e) {
             setResult(RESULT_CANCELED, new Intent().putExtra("error", "connection"));
@@ -84,26 +85,31 @@ public class RegisterActivity extends AppCompatActivity {
                     && age > 0
                     && username.matches(Utils.USERNAME_REGEX)
                     && password.matches(Utils.PASSWORD_REGEX)) {
-                db.collection("users").get().addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (queryDocumentSnapshots.getDocuments().stream()
-                            .noneMatch(documentSnapshot -> documentSnapshot.getId().equals(username))) {
-                        String hashPassword = HashPassword.hashPassword(password);
-                        FirebaseUser user = new FirebaseUser(firstName, lastName, age, username, hashPassword);
-                        //Save the user in the database
-                        db.collection("users")
-                                .document(username).set(user)
-                                .addOnSuccessListener(unused -> Toast.makeText(getApplicationContext(), R.string.register_success, Toast.LENGTH_SHORT).show())
-                                .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), R.string.register_failed, Toast.LENGTH_SHORT).show());
+                DatabaseReference usersRef = db.getReference("users");
+                usersRef.get()
+                        .addOnSuccessListener(dataSnapshot -> {
+                            if (!dataSnapshot.hasChild(username)) {
+                                String hashPassword = HashPassword.hashPassword(password);
+                                FirebaseUser user = new FirebaseUser(firstName, lastName, age, username, hashPassword);
 
-                        //Return information to the login page for connection
-                        setResult(RESULT_OK, new Intent().putExtra("username", username).putExtra("password", password));
-                        finish();
-                    } else {
-                        editUsername.setError(getString(R.string.username_exists));
-                        editUsername.setText(username);
-                        Utils.showKeyboard(getApplicationContext(), editUsername);
-                    }
-                });
+                                //Save the user in the database
+                                usersRef.child(username).setValue(user)
+                                        .addOnSuccessListener(unused -> Toast.makeText(getApplicationContext(), R.string.register_success, Toast.LENGTH_SHORT).show())
+                                        .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), R.string.register_failed, Toast.LENGTH_SHORT).show());
+
+                                //Return information to the login page for connection
+                                setResult(RESULT_OK, new Intent().putExtra("username", username).putExtra("password", password));
+                                finish();
+                            } else {
+                                editUsername.setError(getString(R.string.username_exists));
+                                editUsername.setText(username);
+                                Utils.showKeyboard(getApplicationContext(), editUsername);
+                            }
+                        })
+                        .addOnFailureListener(e -> {
+                            //TODO
+                            //Erreur si arrive pas à se connecter
+                        });
             } else {
                 //Sets the EditTexts without starting and ending spaces
 
