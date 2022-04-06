@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.File;
 
 import uqac.dim.audium.R;
+import uqac.dim.audium.activity.admin.ArtistListActivity;
+import uqac.dim.audium.activity.admin.UserListActivity;
 import uqac.dim.audium.model.entity.User;
 import uqac.dim.audium.model.utils.Utils;
 
@@ -67,15 +69,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_utilisateurs:
+            case R.id.user_menu:
                 Intent intent = new Intent(getApplicationContext(), UserListActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.menu_artistes:
+            case R.id.artist_menu:
                 Intent intent2 = new Intent(getApplicationContext(), ArtistListActivity.class);
                 startActivity(intent2);
                 break;
-            case R.id.menu_musiques:
+            case R.id.track_menu:
 
             default:
 

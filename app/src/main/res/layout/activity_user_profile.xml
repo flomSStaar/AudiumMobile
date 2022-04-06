@@ -3,37 +3,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <TextView
         android:id="@+id/prenom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="50sp"
-        >
-    </TextView>
+        android:layout_marginVertical="50sp" />
+
     <TextView
         android:id="@+id/nom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="50sp">
-    </TextView>
+        android:layout_marginVertical="50sp" />
+
     <TextView
         android:id="@+id/age"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="50sp">
-    </TextView>
+        android:layout_marginVertical="50sp" />
+
     <TextView
         android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="50sp">
-    </TextView>
+        android:layout_marginVertical="50sp" />
+
     <Button
+        android:id="@+id/btn_delete_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/suprrimer"
         android:layout_gravity="center"
         android:layout_marginVertical="50sp"
-        android:onClick="deleteArtist">
-    </Button>
+        android:text="@string/delete" />
 </LinearLayout>

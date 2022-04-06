@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menu_utilisateurs" android:title="@string/gerer_utilisteurs"/>
-    <item android:id="@+id/menu_artistes" android:title="@string/gerer_artistes"/>
-    <item android:id="@+id/menu_musiques" android:title="@string/gerer_musiques"/>
+    <item
+        android:id="@+id/user_menu"
+        android:title="@string/manage_users" />
+    <item
+        android:id="@+id/artist_menu"
+        android:title="@string/manage_artists" />
+    <item
+        android:id="@+id/track_menu"
+        android:title="@string/manage_tracks" />
 </menu>

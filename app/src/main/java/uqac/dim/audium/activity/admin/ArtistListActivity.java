@@ -1,4 +1,4 @@
-package uqac.dim.audium.activity;
+package uqac.dim.audium.activity.admin;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,7 +31,7 @@ public class ArtistListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_artist_list);
         ArrayList<Artist> l = new ArrayList<>();
-        ListView artistListView = ((ListView) findViewById(R.id.artistList));
+        ListView artistListView = ((ListView) findViewById(R.id.artists_list));
         database = FirebaseDatabase.getInstance().getReference();
         database.child("artists").addValueEventListener(new ValueEventListener() {
             @Override

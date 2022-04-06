@@ -31,4 +31,10 @@
     <string name="show">Afficher</string>
     <string name="hide">Cacher</string>
     <string name="registertext">Pas encore de compte ? </string>
+    <string name="manage_users">Gérer les utilisateurs</string>
+    <string name="manage_artists">Gérer les artistes</string>
+    <string name="manage_tracks">Gérer les musiques</string>
+    <string name="delete">Supprimer</string>
+    <string name="add">Ajouter</string>
+    <string name="artists_list">Liste des artistes</string>
 </resources>

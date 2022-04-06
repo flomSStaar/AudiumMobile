@@ -1,8 +1,9 @@
-package uqac.dim.audium.activity;
+package uqac.dim.audium.activity.admin;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,16 +28,19 @@ public class ArtistProfileActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_artist_profile);
+
+        ((Button) findViewById(R.id.btn_delete_artist)).setOnClickListener(this::deleteArtist);
+
         Intent i = getIntent();
         database = FirebaseDatabase.getInstance().getReference();
         database.child("artists").child(String.valueOf(i.getLongExtra("id", 0))).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 artist = snapshot.getValue(Artist.class);
-                ((TextView) findViewById(R.id.stageName)).setText(artist.getStageName());
-                ((TextView) findViewById(R.id.artistFirstname)).setText(artist.getFirstName());
-                ((TextView) findViewById(R.id.artistLastname)).setText(artist.getLastName());
-                ((TextView) findViewById(R.id.artistAge)).setText(String.valueOf(artist.getAge()));
+                ((TextView) findViewById(R.id.tv_stage_name)).setText(artist.getStageName());
+                ((TextView) findViewById(R.id.tv_artist_first_name)).setText(artist.getFirstName());
+                ((TextView) findViewById(R.id.tv_artist_last_name)).setText(artist.getLastName());
+                ((TextView) findViewById(R.id.tv_artist_age)).setText(String.valueOf(artist.getAge()));
             }
 
             @Override
@@ -47,7 +51,7 @@ public class ArtistProfileActivity extends AppCompatActivity {
 
     }
 
-    public void deleteArtist(View view) {
+    private void deleteArtist(View view) {
         database = FirebaseDatabase.getInstance().getReference();
         database.child("artists").child(String.valueOf(artist.getId())).removeValue();
         artist = null;
