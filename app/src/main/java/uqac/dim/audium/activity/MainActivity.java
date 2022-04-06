@@ -23,6 +23,8 @@ import java.util.List;
 import java.io.File;
 
 import uqac.dim.audium.R;
+import uqac.dim.audium.SliderAdapter;
+import uqac.dim.audium.SliderItem;
 import uqac.dim.audium.activity.admin.ArtistListActivity;
 import uqac.dim.audium.activity.admin.UserListActivity;
 import uqac.dim.audium.model.entity.User;

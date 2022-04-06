@@ -4,7 +4,7 @@ public class SliderItem {
 
     private String image;
 
-    SliderItem(String image) {
+    public SliderItem(String image) {
         this.image = image;
     }
 
