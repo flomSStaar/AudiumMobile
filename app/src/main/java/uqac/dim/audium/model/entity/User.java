@@ -1,7 +1,7 @@
 package uqac.dim.audium.model.entity;
 
-import com.google.firebase.firestore.Exclude;
-import com.google.firebase.firestore.PropertyName;
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.PropertyName;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -8,7 +8,7 @@ import android.os.PowerManager;
 
 import androidx.annotation.Nullable;
 
-public class MediaService extends Service implements MediaPlayer.OnPreparedListener,MediaPlayer.OnErrorListener {
+public class MediaService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
     private static final String ACTION_PLAY = "com.example.action.PLAY";
     MediaPlayer mediaPlayer;
 
@@ -27,6 +27,8 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
 
             wifiLock.acquire();
         }
+        //A changer
+        return Service.START_NOT_STICKY;
     }
 
     @Nullable
@@ -35,10 +37,12 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
         return null;
     }
 
-    /** Called when MediaPlayer is ready */
-        public void onPrepared(MediaPlayer player) {
-            player.start();
-        }
+    /**
+     * Called when MediaPlayer is ready
+     */
+    public void onPrepared(MediaPlayer player) {
+        player.start();
+    }
 
     @Override
     public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
@@ -50,5 +54,4 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
         super.onDestroy();
         if (mediaPlayer != null) mediaPlayer.release();
     }
-}
 }
