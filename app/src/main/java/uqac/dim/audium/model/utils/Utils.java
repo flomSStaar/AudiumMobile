@@ -5,24 +5,12 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 public class Utils {
-<<<<<<< HEAD
-    public static final int MIN_PASSWORD_LENGTH = 6;
+
+    public static final int MIN_PASSWORD_LENGTH = 8;
     public static final String FIRSTNAME_REGEX = "^([a-zA-Z]|[a-zA-Z][a-zA-Z '-]*[a-zA-Z])$";
     public static final String LASTNAME_REGEX = FIRSTNAME_REGEX;
     public static final String USERNAME_REGEX = "^[a-zA-Z0-9#?!@$%^&*-.]+$";
     public static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9#?!@$%^&*-.]{" + MIN_PASSWORD_LENGTH + ",}$";
-
-=======
-    public static final int MIN_PASSWORD_LENGTH = 8;
-//    public static final String FIRSTNAME_REGEX = "^([a-zA-Z]|[a-zA-Z][a-zA-Z '-]*[a-zA-Z])$";
-//    public static final String LASTNAME_REGEX = FIRSTNAME_REGEX;
-//    public static final String USERNAME_REGEX = "^[a-zA-Z0-9]+$";
-//    public static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[#?!@$%^&*-.])[A-Za-z0-9#?!@$%^&*-.]{" + MIN_PASSWORD_LENGTH + ",}$";
-    public static final String FIRSTNAME_REGEX = "^([a-zA-Z]|[a-zA-Z][a-zA-Z ,.'-]*[a-zA-Z.])$";
-    public static final String LASTNAME_REGEX = FIRSTNAME_REGEX;
-    public static final String USERNAME_REGEX = "^[a-zA-Z0-9]+$";
-    public static final String PASSWORD_REGEX = "^[a-zA-Z0-9]{" + MIN_PASSWORD_LENGTH + ",}$";
->>>>>>> ee24ccc472e047c19fe1d865ed35bfea1d424f78
 
 
     public static void showKeyboard(Context context, View v) {
