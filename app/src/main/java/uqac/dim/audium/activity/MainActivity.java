@@ -26,6 +26,7 @@ import uqac.dim.audium.R;
 import uqac.dim.audium.SliderAdapter;
 import uqac.dim.audium.SliderItem;
 import uqac.dim.audium.activity.admin.ArtistListActivity;
+import uqac.dim.audium.activity.admin.TrackListActivity;
 import uqac.dim.audium.activity.admin.UserListActivity;
 import uqac.dim.audium.model.entity.User;
 import uqac.dim.audium.model.utils.Utils;
@@ -154,7 +155,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent2);
                 break;
             case R.id.track_menu:
-
+                Intent intent3 = new Intent(getApplicationContext(), TrackListActivity.class);
+                startActivity(intent3);
+                break;
             default:
 
         }
