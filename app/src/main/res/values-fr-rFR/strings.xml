@@ -37,4 +37,10 @@
     <string name="delete">Supprimer</string>
     <string name="add">Ajouter</string>
     <string name="artists_list">Liste des artistes</string>
+    <string name="admin">Admin</string>
+    <string name="artist_informations">Informations de l\'artiste</string>
+    <string name="albums">Albums</string>
+    <string name="musics">Musiques</string>
+    <string name="track_list">Liste de musiques</string>
+    <string name="back">Retour</string>
 </resources>

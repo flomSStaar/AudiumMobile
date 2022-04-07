@@ -41,4 +41,7 @@
     <string name="albums">Albums</string>
     <string name="musics">Musics</string>
     <string name="track_list">Track List</string>
+    <string name="app_name_capital" translatable="false">AUDIUM</string>
+    <string name="admin">Admin</string>
+    <string name="back">Back</string>
 </resources>

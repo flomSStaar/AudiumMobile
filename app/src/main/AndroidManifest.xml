@@ -28,7 +28,7 @@
             android:name=".activity.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.SearchActivity"
+            android:name=".activity.SettingsActivity"
             android:exported="false" />
         <activity
             android:name=".activity.admin.UserListActivity"
