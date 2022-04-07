@@ -60,7 +60,7 @@ public class ArtistListActivity extends AppCompatActivity {
     }
 
     public void addArtists(View view) {
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        /*FirebaseDatabase db = FirebaseDatabase.getInstance();
         db.getReference("ids/lastArtistId").get()
                 .addOnSuccessListener(dataSnapshot -> {
                     Long lastArtistId = dataSnapshot.getValue(Long.class);
@@ -70,6 +70,9 @@ public class ArtistListActivity extends AppCompatActivity {
                         db.getReference("ids/lastArtistId").setValue(++lastArtistId);
                     }
                 });
+         */
+        Intent intent = new Intent(getApplicationContext(), AddArtistActivity.class);
+        startActivity(intent);
     }
 
 }
