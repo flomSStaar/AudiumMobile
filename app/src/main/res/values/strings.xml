@@ -37,4 +37,7 @@
     <string name="show">Show</string>
     <string name="hide">Hide</string>
     <string name="registertext">Not registered yet ? Please </string>
+    <string name="artist_informations">Artist Informations</string>
+    <string name="albums">Albums</string>
+    <string name="musics">Musics</string>
 </resources>

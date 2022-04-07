@@ -5,9 +5,11 @@ import java.util.List;
 
 public abstract class TrackContainer implements Comparable<TrackContainer> {
 
-    protected List<Track> tracks;
+    protected List<Long> tracks;
     protected String title;
     protected String description;
+
+    protected TrackContainer(){}
 
     /**
      * Constructs a new TrackContainer with a title.
@@ -35,7 +37,7 @@ public abstract class TrackContainer implements Comparable<TrackContainer> {
      *
      * @return Tracks of this container
      */
-    public List<Track> getTracks() {
+    public List<Long> getTracks() {
         return tracks;
     }
 
@@ -44,7 +46,7 @@ public abstract class TrackContainer implements Comparable<TrackContainer> {
      *
      * @param tracks The new list of tracks of this container
      */
-    private void setTracks(List<Track> tracks) {
+    private void setTracks(List<Long> tracks) {
         if (tracks != null) {
             this.tracks = tracks;
         } else {
@@ -93,7 +95,7 @@ public abstract class TrackContainer implements Comparable<TrackContainer> {
     }
 
     //TODO
-    private void addTrack(Track t) {
+    private void addTrack(Long t) {
         if (t != null && !tracks.contains(t)) {
             tracks.add(t);
         }
