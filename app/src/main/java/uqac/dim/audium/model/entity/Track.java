@@ -1,12 +1,16 @@
 package uqac.dim.audium.model.entity;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Track implements Comparable<Track> {
 
     protected String title;
-    protected Artist artist;
-    protected String id;
+    protected Long artist;
+    protected Long id;
+    protected List<Long> albums;
+
+    private Track(){}
 
     /**
      * Constructs a new Track composed of a title, the artist and an id.
@@ -15,7 +19,7 @@ public class Track implements Comparable<Track> {
      * @param artist Artist of this track
      * @param id     Id of this track
      */
-    public Track(String title, Artist artist, String id) {
+    public Track(String title, Long artist, Long id) {
         setTitle(title);
         setArtist(artist);
         setId(id);
@@ -44,7 +48,7 @@ public class Track implements Comparable<Track> {
      *
      * @return Artist of this track
      */
-    public Artist getArtist() {
+    public Long getArtist() {
         return artist;
     }
 
@@ -53,7 +57,7 @@ public class Track implements Comparable<Track> {
      *
      * @param artist The new artist of this track
      */
-    public void setArtist(Artist artist) {
+    public void setArtist(Long artist) {
         this.artist = artist;
     }
 
@@ -62,7 +66,7 @@ public class Track implements Comparable<Track> {
      *
      * @return Id of this track
      */
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
@@ -71,7 +75,7 @@ public class Track implements Comparable<Track> {
      *
      * @param id The new id of this track
      */
-    private void setId(String id) {
+    private void setId(Long id) {
         this.id = id;
     }
 
@@ -91,5 +95,10 @@ public class Track implements Comparable<Track> {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return title;
     }
 }

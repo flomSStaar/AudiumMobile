@@ -180,14 +180,14 @@ public class Artist extends Person {
      */
     @Override
     public String toString() {
-        return "Artist{" +
+        /*return "Artist{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
                 ", stageNameName='" + stageName + '\'' +
-                '}';
+                '}';*/
 
 
-        //return stageName;
+        return stageName;
     }
 }
