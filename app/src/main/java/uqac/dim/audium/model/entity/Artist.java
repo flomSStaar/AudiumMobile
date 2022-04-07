@@ -8,7 +8,7 @@ import java.util.TreeSet;
 public class Artist extends Person {
 
     protected Long id;
-    protected Set<Album> albums;
+    protected Set<Long> albumsID;
     protected String stageName;
 
     public Artist(){}
@@ -61,11 +61,11 @@ public class Artist extends Person {
      * @param age       Age of the artist
      * @param albums    Albums of the artist
      */
-    public Artist(String firstName, String lastName, String stageName, int age, Set<Album> albums, Long id) {
+    public Artist(String firstName, String lastName, String stageName, int age, Set<Long> albums, Long id) {
         super(firstName, lastName, age);
         setStageName(stageName);
         setId(id);
-        setAlbums(albums);
+        setAlbumsID(albums);
     }
 
     /**
@@ -74,8 +74,8 @@ public class Artist extends Person {
      * @return Albums of this artist
      */
     @Exclude
-    public Set<Album> getAlbums() {
-        return albums;
+    public Set<Long> getAlbumsID() {
+        return albumsID;
     }
 
     /**
@@ -83,9 +83,9 @@ public class Artist extends Person {
      *
      * @param albums The new albums of this artist
      */
-    public void setAlbums(Set<Album> albums) {
+    public void setAlbumsID(Set<Long> albums) {
         if (albums != null) {
-            this.albums = albums;
+            this.albumsID = albums;
         } else {
             throw new IllegalArgumentException("albums cannot be null");
         }
@@ -130,15 +130,15 @@ public class Artist extends Person {
     }
 
     //TODO
-    private void addAlbum(Album a) {
+    private void addAlbum(Long a) {
         if (a != null) {
-            albums.add(a);
+            albumsID.add(a);
         }
     }
 
     //TODO
-    private void removeAlbum(Album a) {
-        albums.remove(a);
+    private void removeAlbum(Long a) {
+        albumsID.remove(a);
     }
 
     /**
