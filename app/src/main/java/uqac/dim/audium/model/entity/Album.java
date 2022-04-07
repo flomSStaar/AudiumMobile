@@ -5,7 +5,7 @@ public class Album extends TrackContainer {
 
 
     protected Long id;
-    protected Long artist;
+    protected Long artistId;
 
     private Album(){
         super();
@@ -31,15 +31,15 @@ public class Album extends TrackContainer {
 
     public Album(String title, String description, Long id){
         super(title, description);
-        artist=id;
+        artistId=id;
     }
 
-    public Long getArtist() {
-        return artist;
+    public Long getArtistId() {
+        return artistId;
     }
 
-    public void setArtist(Long artistID) {
-        this.artist = artistID;
+    public void setArtistId(Long artistID) {
+        this.artistId = artistID;
     }
 
     public Album(String title, String description) {

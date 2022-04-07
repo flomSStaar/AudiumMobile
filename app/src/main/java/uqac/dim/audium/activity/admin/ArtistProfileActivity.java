@@ -25,6 +25,7 @@ import uqac.dim.audium.R;
 import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
+import uqac.dim.audium.model.entity.User;
 
 public class ArtistProfileActivity extends AppCompatActivity {
 
@@ -77,7 +78,7 @@ public class ArtistProfileActivity extends AppCompatActivity {
                 albums.clear();
                 for (DataSnapshot snap : snapshot.getChildren()) {
                     Album a = snap.getValue(Album.class);
-                    if(a.getArtist().equals(artist.getId()))
+                    if(a.getArtistId().equals(artist.getId()))
                         albums.add(a);
                 }
                 listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, albums));
@@ -113,5 +114,11 @@ public class ArtistProfileActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void addAlbum(View view) {
+        Intent intent = new Intent(getApplicationContext(), AddAlbumActivity.class);
+        intent.putExtra("id",artist.getId());
+        startActivity(intent);
     }
 }
