@@ -8,7 +8,10 @@ public class Track implements Comparable<Track> {
     protected String title;
     protected Long artist;
     protected Long id;
-    protected List<Long> albums;
+
+
+
+    protected Long album;
 
     private Track(){}
 
@@ -77,6 +80,15 @@ public class Track implements Comparable<Track> {
      */
     private void setId(Long id) {
         this.id = id;
+    }
+
+
+    public Long getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(Long album) {
+        this.album = album;
     }
 
     @Override

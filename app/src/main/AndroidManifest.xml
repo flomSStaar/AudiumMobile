@@ -51,6 +51,9 @@
         <activity
             android:name=".activity.admin.AddAlbumActivity"
             android:exported="false" />
+        <activity
+            android:name=".activity.AlbumPageActivity"
+            android:exported="false" />
         <service android:name=".MediaService"/>
     </application>
 
