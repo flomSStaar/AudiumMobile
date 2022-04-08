@@ -9,24 +9,47 @@
         android:layout_height="wrap_content"
         android:text="@string/admin" />
 
-    <Button
-        android:id="@+id/btn_manage_users"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/manage_users" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_manage_users"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/manage_users" />
 
 
-    <Button
-        android:id="@+id/btn_manage_artists"
+        <Button
+            android:id="@+id/btn_manage_artists"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/manage_artists" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/manage_artists" />
+        android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/btn_manage_tracks"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/manage_tracks" />
 
-    <Button
-        android:id="@+id/btn_manage_tracks"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/manage_tracks" />
+        <Button
+            android:id="@+id/btn_upload_file"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Upload file" />
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -54,6 +54,9 @@
         <activity
             android:name=".activity.AlbumPageActivity"
             android:exported="false" />
+        <activity
+            android:name=".activity.UploadTrackActivity"
+            android:exported="false" />
         <service android:name=".MediaService"/>
     </application>
 
