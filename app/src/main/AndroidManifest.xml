@@ -52,7 +52,7 @@
             android:name=".activity.admin.AddAlbumActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.UploadTrackActivity"
+            android:name=".activity.admin.AddTrackActivity"
             android:exported="false" />
         <service android:name=".MediaService"/>
     </application>
