@@ -126,6 +126,9 @@ public class AddAlbumActivity extends AppCompatActivity {
                         if (lastAlbumId != null) {
                                 FirebaseAlbum album = new FirebaseAlbum(lastAlbumId, title, description, imagePath, idArtist, idTracksSelected);
                                 db.getReference("albums/").child(String.valueOf(lastAlbumId)).setValue(album);
+                                for (Long id:idTracksSelected) {
+                                    db.getReference("tracks/" + id).child("albumId").setValue(lastAlbumId);
+                                }
                                 db.getReference("ids/lastAlbumId").setValue(++lastAlbumId);
 
                         }

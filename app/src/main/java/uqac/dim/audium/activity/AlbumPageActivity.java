@@ -80,9 +80,10 @@ public class AlbumPageActivity extends AppCompatActivity {
                 tracks.clear();
                 for (DataSnapshot snap : snapshot.getChildren()) {
                     Track t = snap.getValue(Track.class);
-                    if(t.getAlbumId().equals(albumId)) {
-                        tracks.add(t);
-                    }
+                    if(t.getAlbumId()!=null)
+                        if(t.getAlbumId().equals(albumId)) {
+                            tracks.add(t);
+                        }
                 }
                 if(tracks.size()!=0)
                     listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, tracks));
