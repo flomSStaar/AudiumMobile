@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -16,11 +17,16 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
 
 
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         String url = "https://firebasestorage.googleapis.com/v0/b/audium-4f845.appspot.com/o/musique.mp3?alt=media&token=f481b12b-c736-4dec-bb26-389212791cac";
+
         if (intent.getAction().equals(ACTION_PLAY)) {
+
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnPreparedListener(this);
+
             mediaPlayer.setOnErrorListener(this);
+            Log.i("DIM","zzedezdeez");
             mediaPlayer.prepareAsync(); // prepare async to not block main thread
 
             mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
@@ -28,6 +34,7 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
                     .createWifiLock(WifiManager.WIFI_MODE_FULL, "mylock");
 
             wifiLock.acquire();
+
         }
         //A changer
         return Service.START_NOT_STICKY;
