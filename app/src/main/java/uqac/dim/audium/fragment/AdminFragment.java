@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import uqac.dim.audium.R;
-import uqac.dim.audium.activity.UploadTrackActivity;
+import uqac.dim.audium.activity.admin.AddTrackActivity;
 import uqac.dim.audium.activity.admin.ArtistListActivity;
 import uqac.dim.audium.activity.admin.TrackListActivity;
 import uqac.dim.audium.activity.admin.UserListActivity;
@@ -21,7 +21,7 @@ public class AdminFragment extends Fragment {
     private Button btnArtists;
     private Button btnTracks;
     private Button btnUsers;
-    private Button btnUploadFile;
+    private Button btnAddTrack;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,12 +36,12 @@ public class AdminFragment extends Fragment {
         btnArtists = root.findViewById(R.id.btn_manage_artists);
         btnUsers = root.findViewById(R.id.btn_manage_users);
         btnTracks = root.findViewById(R.id.btn_manage_tracks);
-        btnUploadFile = root.findViewById(R.id.btn_upload_file);
+        btnAddTrack = root.findViewById(R.id.btn_add_track);
 
         btnArtists.setOnClickListener(this::viewArtists);
         btnUsers.setOnClickListener(this::viewUsers);
         btnTracks.setOnClickListener(this::viewTracks);
-        btnUploadFile.setOnClickListener(this::uploadFile);
+        btnAddTrack.setOnClickListener(this::addTrack);
 
         return root;
     }
@@ -58,7 +58,7 @@ public class AdminFragment extends Fragment {
         startActivity(new Intent(getContext(), TrackListActivity.class));
     }
 
-    private void uploadFile(View view) {
-        startActivity(new Intent(getContext(), UploadTrackActivity.class));
+    private void addTrack(View view) {
+        startActivity(new Intent(getContext(), AddTrackActivity.class));
     }
 }

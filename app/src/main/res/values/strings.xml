@@ -51,4 +51,10 @@
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="add_album">Add Album</string>
+    <string name="track_name">Track name</string>
+    <string name="music_path">Music path</string>
+    <string name="artist_id">Artist id</string>
+    <string name="album_id">Album Id</string>
+    <string name="choose_file">Choose file</string>
+    <string name="add_track">Add a track</string>
 </resources>
