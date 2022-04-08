@@ -2,27 +2,27 @@ package uqac.dim.audium.firebase;
 
 public final class FirebaseTrack {
     private Long id;
-    private String title;
+    private String name;
     private String path;
     private String imagePath;
     private Long artistId;
-    private Long album;
+    private Long albumId;
 
-    public FirebaseTrack(Long id, String title, String path, String imagePath, Long artistId, Long album) {
+    public FirebaseTrack(Long id, String name, String path, String imagePath, Long artistId, Long albumId) {
         this.id = id;
-        this.title = title;
+        this.name = name;
         this.path = path;
         this.imagePath = imagePath;
         this.artistId = artistId;
-        this.album = album;
+        this.albumId = albumId;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
     public String getPath() {
@@ -37,7 +37,7 @@ public final class FirebaseTrack {
         return artistId;
     }
 
-    public Long getAlbum() {
-        return album;
+    public Long getAlbumId() {
+        return albumId;
     }
 }
