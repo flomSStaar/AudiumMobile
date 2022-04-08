@@ -7,6 +7,7 @@ public class Album extends TrackContainer {
     protected Long id;
     protected Long artistId;
 
+
     private Album(){
         super();
     }

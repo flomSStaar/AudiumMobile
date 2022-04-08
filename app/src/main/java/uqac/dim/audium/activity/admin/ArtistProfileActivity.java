@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import uqac.dim.audium.R;
+import uqac.dim.audium.activity.AlbumPageActivity;
 import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
@@ -81,7 +83,11 @@ public class ArtistProfileActivity extends AppCompatActivity {
                     if(a.getArtistId().equals(artist.getId()))
                         albums.add(a);
                 }
-                listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, albums));
+                if(albums.size()!=0)
+                    listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, albums));
+                else{
+                    Toast.makeText(getApplicationContext(), "This artist has no albums", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -89,13 +95,22 @@ public class ArtistProfileActivity extends AppCompatActivity {
 
             }
         });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
+                Intent intent = new Intent(ArtistProfileActivity.this, AlbumPageActivity.class);
+                intent.putExtra("idAlbum", ((Album) listView.getItemAtPosition(position)).getId());
+                startActivity(intent);
+            }
+        });
+
+
     }
 
     public void showMusics(View view) {
         ListView listView = ((ListView) findViewById(R.id.artist_albums_tracks_list));
         ArrayList<Track> tracks = new ArrayList<>();
-
-
         database = FirebaseDatabase.getInstance().getReference();
         database.child("tracks").addValueEventListener(new ValueEventListener() {
             @Override
@@ -103,10 +118,14 @@ public class ArtistProfileActivity extends AppCompatActivity {
                 tracks.clear();
                 for (DataSnapshot snap : snapshot.getChildren()) {
                     Track t = snap.getValue(Track.class);
-                    if(t.getArtist().equals(artist.getId()))
+                    if(t.getArtistId().equals(artist.getId()))
                         tracks.add(t);
                 }
-                listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, tracks));
+                if(tracks.size()!=0)
+                    listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, tracks));
+                else{
+                    Toast.makeText(getApplicationContext(), "This artist has no tracks", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override

@@ -5,7 +5,7 @@ import java.util.List;
 
 public abstract class TrackContainer implements Comparable<TrackContainer> {
 
-    protected List<Long> tracks;
+    protected List<Long> tracksId;
     protected String title;
     protected String description;
 
@@ -29,7 +29,7 @@ public abstract class TrackContainer implements Comparable<TrackContainer> {
     public TrackContainer(String title, String description) {
         this.title = title;
         this.description = description;
-        tracks = new ArrayList<>();
+        tracksId = new ArrayList<>();
     }
 
     /**
@@ -37,8 +37,8 @@ public abstract class TrackContainer implements Comparable<TrackContainer> {
      *
      * @return Tracks of this container
      */
-    public List<Long> getTracks() {
-        return tracks;
+    public List<Long> getTracksId() {
+        return tracksId;
     }
 
     /**
@@ -46,9 +46,9 @@ public abstract class TrackContainer implements Comparable<TrackContainer> {
      *
      * @param tracks The new list of tracks of this container
      */
-    private void setTracks(List<Long> tracks) {
+    private void setTracksId(List<Long> tracks) {
         if (tracks != null) {
-            this.tracks = tracks;
+            this.tracksId = tracks;
         } else {
             throw new IllegalArgumentException("tracks cannot be null");
         }
@@ -96,13 +96,13 @@ public abstract class TrackContainer implements Comparable<TrackContainer> {
 
     //TODO
     private void addTrack(Long t) {
-        if (t != null && !tracks.contains(t)) {
-            tracks.add(t);
+        if (t != null && !tracksId.contains(t)) {
+            tracksId.add(t);
         }
     }
 
     //TODO
     private void removeTrack(Track t) {
-        tracks.remove(t);
+        tracksId.remove(t);
     }
 }
