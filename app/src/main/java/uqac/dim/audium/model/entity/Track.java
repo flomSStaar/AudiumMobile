@@ -5,13 +5,35 @@ import java.util.Objects;
 
 public class Track implements Comparable<Track> {
 
-    protected String title;
-    protected Long artist;
+    protected String name;
+    protected Long artistId;
     protected Long id;
 
+    public String getName() {
+        return name;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    protected Long album;
+    public Long getArtistId() {
+        return artistId;
+    }
+
+    public void setArtistId(Long artistId) {
+        this.artistId = artistId;
+    }
+
+    public Long getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(Long albumId) {
+        this.albumId = albumId;
+    }
+
+    protected Long albumId;
 
     private Track(){}
 
@@ -23,46 +45,11 @@ public class Track implements Comparable<Track> {
      * @param id     Id of this track
      */
     public Track(String title, Long artist, Long id) {
-        setTitle(title);
-        setArtist(artist);
+        setName(title);
+        setArtistId(artist);
         setId(id);
     }
 
-    /**
-     * Returns the title of this track.
-     *
-     * @return Title of this track
-     */
-    public String getTitle() {
-        return title;
-    }
-
-    /**
-     * Sets the title of this track.
-     *
-     * @param title The new title of this track
-     */
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    /**
-     * Returns the artist of this track.
-     *
-     * @return Artist of this track
-     */
-    public Long getArtist() {
-        return artist;
-    }
-
-    /**
-     * Sets the artist of this track.
-     *
-     * @param artist The new artist of this track
-     */
-    public void setArtist(Long artist) {
-        this.artist = artist;
-    }
 
     /**
      * Returns the id of this track.
@@ -83,17 +70,11 @@ public class Track implements Comparable<Track> {
     }
 
 
-    public Long getAlbum() {
-        return album;
-    }
 
-    public void setAlbum(Long album) {
-        this.album = album;
-    }
 
     @Override
     public int compareTo(Track track) {
-        return title.compareTo(track.title);
+        return name.compareTo(track.name);
     }
 
     @Override
@@ -111,6 +92,6 @@ public class Track implements Comparable<Track> {
 
     @Override
     public String toString() {
-        return title;
+        return name;
     }
 }

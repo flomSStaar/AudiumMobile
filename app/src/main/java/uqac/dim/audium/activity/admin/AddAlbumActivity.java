@@ -93,7 +93,7 @@ public class AddAlbumActivity extends AppCompatActivity {
                 tracks.clear();
                 for (DataSnapshot snap : snapshot.getChildren()) {
                     Track t = snap.getValue(Track.class);
-                    if(t.getArtist().equals(idArtist))
+                    if(t.getArtistId().equals(idArtist))
                         tracks.add(t);
                 }
                 if(tracks.size()!=0) {

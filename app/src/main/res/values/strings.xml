@@ -52,4 +52,5 @@
     <string name="add_album">Add Album</string>
     <string name="delete">Delete</string>
     <string name="modify">Modify</string>
+    <string name="save">Save</string>
 </resources>

@@ -118,7 +118,7 @@ public class ArtistProfileActivity extends AppCompatActivity {
                 tracks.clear();
                 for (DataSnapshot snap : snapshot.getChildren()) {
                     Track t = snap.getValue(Track.class);
-                    if(t.getArtist().equals(artist.getId()))
+                    if(t.getArtistId().equals(artist.getId()))
                         tracks.add(t);
                 }
                 if(tracks.size()!=0)

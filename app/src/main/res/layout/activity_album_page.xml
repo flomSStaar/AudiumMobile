@@ -40,21 +40,32 @@
         android:layout_marginVertical="30sp"
         android:layout_width="match_parent"
         android:layout_height="300sp"/>
+
+    <Button
+        android:id="@+id/save_album_button"
+        android:layout_width="100sp"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        android:layout_gravity="center"
+        android:onClick="saveAlbum"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center">
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="100sp"
             android:layout_height="wrap_content"
             android:text="@string/modify"
-            android:layout_marginHorizontal="50sp"/>
+            android:layout_marginHorizontal="50sp"
+            android:onClick="modifyAlbum"/>
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="100sp"
             android:layout_height="wrap_content"
             android:text="@string/delete"
-            android:layout_marginHorizontal="50sp"/>
+            android:layout_marginHorizontal="50sp"
+            android:onClick="deleteAlbum"/>
     </LinearLayout>
 
 </LinearLayout>

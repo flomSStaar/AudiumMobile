@@ -39,7 +39,7 @@ public class ListViewAdapter extends ArrayAdapter<Track> {
         LayoutInflater inflater = ((Activity)context).getLayoutInflater();
         View row = inflater.inflate(R.layout.track_list_item,parent,false);
         TextView name = row.findViewById(R.id.track_name);
-        name.setText(titles.get(position).getTitle());
+        name.setText(titles.get(position).getName());
 
         CheckBox checkBox = row.findViewById(R.id.track_checkbox);
         checkBox.setTag(position);
