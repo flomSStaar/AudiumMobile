@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.firebase.FirebaseAlbum;
@@ -27,6 +29,7 @@ import uqac.dim.audium.model.entity.Track;
 
 public class AlbumPageActivity extends AppCompatActivity {
     private Long albumId;
+    private List<Long> tracksId;
     private Album album;
     private DatabaseReference database;
     private EditText editTitle;
@@ -114,8 +117,32 @@ public class AlbumPageActivity extends AppCompatActivity {
 
     public void deleteAlbum(View view) {
         database = FirebaseDatabase.getInstance().getReference();
-        database.child("albums").child(String.valueOf(albumId)).removeValue();
-        albumId = null;
+
+        /// Supprimer les idAlbum des musiques
+        database.child("albums").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                    Album a = snap.getValue(Album.class);
+                    if (a != null && a.getId().equals(albumId)) {
+                        tracksId = a.getTracksId();
+                        database.child("albums").child(String.valueOf(albumId)).removeValue();
+                        database.child("tracks").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                            @Override
+                            public void onSuccess(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snap: dataSnapshot.getChildren()) {
+                                    Track t = snap.getValue(Track.class);
+                                    if(tracksId.contains(t.getId())){
+                                        t.setAlbumId(null);
+                                        database.child("tracks").child(String.valueOf(t.getId())).setValue(t);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
         finish();
     }
 }

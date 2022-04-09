@@ -9,7 +9,7 @@ public class Artist extends Person {
 
     protected Long id;
     protected String stageName;
-    protected List<Long> albumsID;
+    protected List<Long> albumsId;
 
     public Artist() {
         super();
@@ -67,7 +67,7 @@ public class Artist extends Person {
         super(firstName, lastName, age);
         setStageName(stageName);
         setId(id);
-        setAlbumsID(albums);
+        setAlbumsId(albums);
     }
 
     public Long getId() {
@@ -111,9 +111,8 @@ public class Artist extends Person {
      *
      * @return Albums of this artist
      */
-    @Exclude
-    public List<Long> getAlbumsID() {
-        return albumsID;
+    public List<Long> getAlbumsId() {
+        return albumsId;
     }
 
     /**
@@ -121,9 +120,9 @@ public class Artist extends Person {
      *
      * @param albums The new albums of this artist
      */
-    public void setAlbumsID(List<Long> albums) {
+    public void setAlbumsId(List<Long> albums) {
         if (albums != null) {
-            this.albumsID = albums;
+            this.albumsId = albums;
         } else {
             throw new IllegalArgumentException("albums cannot be null");
         }

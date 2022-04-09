@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +41,8 @@ public class TrackPageActivity extends AppCompatActivity {
 
     protected Track track;
     protected Long trackId;
+    protected Album album;
+    Album newA;
     protected Long albumId;
     protected Artist artist;
     private DatabaseReference database;
@@ -55,10 +59,28 @@ public class TrackPageActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_page);
+        database = FirebaseDatabase.getInstance().getReference();
 
         albumResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::getAlbumResult);
         albumId = null;
         trackId = getIntent().getLongExtra("trackId",0);
+
+        database.child("albums").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snap : snapshot.getChildren()) {
+                    Album a = snap.getValue(Album.class);
+                    if (a != null && a.getTracksId()!=null && a.getTracksId().contains(trackId)) {
+                        album = a;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         editName = (EditText) findViewById(R.id.edit_track_name);
         editAlbum = (TextView) findViewById(R.id.track_page_album);
@@ -77,7 +99,6 @@ public class TrackPageActivity extends AppCompatActivity {
         btnChangeAlbum = (Button) findViewById(R.id.btn_choose_album_track_page);
         btnChangeAlbum.setVisibility(View.INVISIBLE);
 
-        database = FirebaseDatabase.getInstance().getReference();
         database.child("tracks").child(String.valueOf(trackId)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -129,15 +150,29 @@ public class TrackPageActivity extends AppCompatActivity {
         String newName = editName.getText().toString();
         String newImagePath = editImagePath.getText().toString();
 
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
+
+        database = FirebaseDatabase.getInstance().getReference();
         FirebaseTrack newTrack = new FirebaseTrack(trackId,newName,track.getPath(),newImagePath,artist.getId(),albumId);
-        db.getReference("tracks/").child(String.valueOf(trackId)).setValue(newTrack);
-        if(albumId!=null)
-            db.getReference("albums/").child(String.valueOf(albumId)).setValue(newTrack.getId());
-        editName.setEnabled(false);
-        editImagePath.setEnabled(false);
-        btnSave.setVisibility(View.INVISIBLE);
-        btnChangeAlbum.setVisibility(View.INVISIBLE);
+        database.child("tracks").child(String.valueOf(trackId)).setValue(newTrack);
+        database.child("albums").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                    Album a = snap.getValue(Album.class);
+                    if (a != null && a.getId().equals(albumId)) {
+                        album = a;
+                        if(albumId!=null) {
+                            album.getTracksId().add(newTrack.getId());
+                            database.child("albums").child(albumId.toString()).child("tracksId").setValue(album.getTracksId());
+                        }
+                        editName.setEnabled(false);
+                        editImagePath.setEnabled(false);
+                        btnSave.setVisibility(View.INVISIBLE);
+                        btnChangeAlbum.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+        });
     }
 
     private void getAlbumResult(ActivityResult activityResult) {
@@ -176,7 +211,10 @@ public class TrackPageActivity extends AppCompatActivity {
     public void deleteTrack(View view) {
         database = FirebaseDatabase.getInstance().getReference();
         database.child("tracks").child(String.valueOf(trackId)).removeValue();
+
         // Remove les ids des tracks des albums
+        int index = album.getTracksId().indexOf(trackId);
+        database.child("albums").child(albumId.toString()).child("tracksId").child(String.valueOf(index)).removeValue();
         trackId = null;
         finish();
     }

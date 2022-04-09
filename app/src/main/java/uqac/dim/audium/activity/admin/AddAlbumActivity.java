@@ -27,11 +27,14 @@ import java.util.List;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.firebase.FirebaseAlbum;
+import uqac.dim.audium.model.entity.Album;
+import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.model.utils.ListViewAdapter;
 
 public class AddAlbumActivity extends AppCompatActivity {
     private Long artistId;
+    private Artist artist;
     private ListViewAdapter adapter;
     private DatabaseReference database;
     public static List<Long> idTracksSelected;
@@ -102,6 +105,23 @@ public class AddAlbumActivity extends AppCompatActivity {
             }
         });
 
+        database.child("artists").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snap : snapshot.getChildren()) {
+                    Artist a = snap.getValue(Artist.class);
+                    if (a != null && a.getId().equals(artistId)) {
+                        artist = a;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
     }
 
@@ -120,6 +140,16 @@ public class AddAlbumActivity extends AppCompatActivity {
                             db.getReference("albums/").child(String.valueOf(lastAlbumId)).setValue(album);
                             for (Long id : idTracksSelected) {
                                 db.getReference("tracks/" + id).child("albumId").setValue(lastAlbumId);
+                            }
+
+                            if(artist.getAlbumsId() == null) {
+                                List<Long> albumsIds = new ArrayList<>();
+                                albumsIds.add(lastAlbumId);
+                                db.getReference("artists/" + artistId).child("albumsId").setValue(albumsIds);
+                            }
+                            else {
+                                artist.getAlbumsId().add(lastAlbumId);
+                                db.getReference("artists/" + artistId).child("albumsId").setValue(artist.getAlbumsId());
                             }
                             db.getReference("ids/lastAlbumId").setValue(++lastAlbumId);
                             Intent resultIntent = new Intent();

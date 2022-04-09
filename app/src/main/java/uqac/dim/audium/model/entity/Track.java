@@ -95,7 +95,7 @@ public class Track implements Comparable<Track> {
     }
 
     public void setAlbumId(Long albumId) {
-        if (albumId != null && albumId > 0) {
+        if (albumId == null || albumId > 0) {
             this.albumId = albumId;
         } else {
             throw new IllegalArgumentException("albumId cannot be null or lower or equal than 0");
