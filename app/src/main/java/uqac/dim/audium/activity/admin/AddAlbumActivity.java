@@ -108,25 +108,28 @@ public class AddAlbumActivity extends AppCompatActivity {
 
     public void addAlbum(View view) {
         if (idTracksSelected.size() != 0) {
-        String title = ((EditText) findViewById(R.id.album_title)).getText().toString();
-        String description = ((EditText) findViewById(R.id.album_description)).getText().toString();
-        String imagePath = ((EditText) findViewById(R.id.album_image_path)).getText().toString();
+            String title = ((EditText) findViewById(R.id.album_title)).getText().toString();
+            String description = ((EditText) findViewById(R.id.album_description)).getText().toString();
+            String imagePath = ((EditText) findViewById(R.id.album_image_path)).getText().toString();
 
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
-        db.getReference("ids/lastAlbumId").get()
-                .addOnSuccessListener(dataSnapshot -> {
-                    Long lastAlbumId = dataSnapshot.getValue(Long.class);
-                    if (lastAlbumId != null) {
-                        FirebaseAlbum album = new FirebaseAlbum(lastAlbumId, title, description, imagePath, idArtist, idTracksSelected);
-                        db.getReference("albums/").child(String.valueOf(lastAlbumId)).setValue(album);
-                        db.getReference("ids/lastAlbumId").setValue(++lastAlbumId);
-                        Intent resultIntent = new Intent();
-                        resultIntent.putExtra("albumId", album.getId());
-                        resultIntent.putExtra("albumName", album.getTitle());
-                        setResult(RESULT_OK, resultIntent);
-                        finish();
-                    }
-                });
+            FirebaseDatabase db = FirebaseDatabase.getInstance();
+            db.getReference("ids/lastAlbumId").get()
+                    .addOnSuccessListener(dataSnapshot -> {
+                        Long lastAlbumId = dataSnapshot.getValue(Long.class);
+                        if (lastAlbumId != null) {
+                            FirebaseAlbum album = new FirebaseAlbum(lastAlbumId, title, description, imagePath, idArtist, idTracksSelected);
+                            db.getReference("albums/").child(String.valueOf(lastAlbumId)).setValue(album);
+                            for (Long id : idTracksSelected) {
+                                db.getReference("tracks/" + id).child("albumId").setValue(lastAlbumId);
+                            }
+                            db.getReference("ids/lastAlbumId").setValue(++lastAlbumId);
+                            Intent resultIntent = new Intent();
+                            resultIntent.putExtra("albumId", album.getId());
+                            resultIntent.putExtra("albumName", album.getTitle());
+                            setResult(RESULT_OK, resultIntent);
+                            finish();
+                        }
+                    });
         } else {
             Toast.makeText(getApplicationContext(), "You need to select at least one track", Toast.LENGTH_SHORT).show();
         }
