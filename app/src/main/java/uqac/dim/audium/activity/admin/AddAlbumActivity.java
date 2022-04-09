@@ -8,8 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -28,11 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uqac.dim.audium.R;
-import uqac.dim.audium.activity.AlbumPageActivity;
 import uqac.dim.audium.firebase.FirebaseAlbum;
-import uqac.dim.audium.firebase.FirebaseArtist;
-import uqac.dim.audium.model.entity.Album;
-import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.model.utils.ListViewAdapter;
 
@@ -48,7 +42,7 @@ public class AddAlbumActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Context c = this;
         setContentView(R.layout.activity_add_album);
-        idArtist = getIntent().getLongExtra("id",0);
+        idArtist = getIntent().getLongExtra("id", 0);
         idTracksSelected = new ArrayList<>();
         ActionMode actionMode = null;
 
@@ -93,12 +87,12 @@ public class AddAlbumActivity extends AppCompatActivity {
                 tracks.clear();
                 for (DataSnapshot snap : snapshot.getChildren()) {
                     Track t = snap.getValue(Track.class);
-                    if(t.getArtistId().equals(idArtist))
-                        if(t.getAlbumId()==null)
+                    if (t.getArtistId().equals(idArtist))
+                        if (t.getAlbumId() == null)
                             tracks.add(t);
                 }
-                if(tracks.size()!=0) {
-                    artistListView.setAdapter(new ListViewAdapter(tracks,c));
+                if (tracks.size() != 0) {
+                    artistListView.setAdapter(new ListViewAdapter(tracks, c));
                 }
 
             }
@@ -110,28 +104,30 @@ public class AddAlbumActivity extends AppCompatActivity {
         });
 
 
-
     }
 
     public void addAlbum(View view) {
-        if(idTracksSelected.size()!=0) {
-            String title = ((EditText) findViewById(R.id.album_title)).getText().toString();
-            String description = ((EditText) findViewById(R.id.album_description)).getText().toString();
-            String imagePath = ((EditText) findViewById(R.id.album_image_path)).getText().toString();
+        if (idTracksSelected.size() != 0) {
+        String title = ((EditText) findViewById(R.id.album_title)).getText().toString();
+        String description = ((EditText) findViewById(R.id.album_description)).getText().toString();
+        String imagePath = ((EditText) findViewById(R.id.album_image_path)).getText().toString();
 
-            FirebaseDatabase db = FirebaseDatabase.getInstance();
-            db.getReference("ids/lastAlbumId").get()
-                    .addOnSuccessListener(dataSnapshot -> {
-                        Long lastAlbumId = dataSnapshot.getValue(Long.class);
-                        if (lastAlbumId != null) {
-                                FirebaseAlbum album = new FirebaseAlbum(lastAlbumId, title, description, imagePath, idArtist, idTracksSelected);
-                                db.getReference("albums/").child(String.valueOf(lastAlbumId)).setValue(album);
-                                db.getReference("ids/lastAlbumId").setValue(++lastAlbumId);
-
-                        }
-                    });
-            finish();
-        }else{
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        db.getReference("ids/lastAlbumId").get()
+                .addOnSuccessListener(dataSnapshot -> {
+                    Long lastAlbumId = dataSnapshot.getValue(Long.class);
+                    if (lastAlbumId != null) {
+                        FirebaseAlbum album = new FirebaseAlbum(lastAlbumId, title, description, imagePath, idArtist, idTracksSelected);
+                        db.getReference("albums/").child(String.valueOf(lastAlbumId)).setValue(album);
+                        db.getReference("ids/lastAlbumId").setValue(++lastAlbumId);
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra("albumId", album.getId());
+                        resultIntent.putExtra("albumName", album.getTitle());
+                        setResult(RESULT_OK, resultIntent);
+                        finish();
+                    }
+                });
+        } else {
             Toast.makeText(getApplicationContext(), "You need to select at least one track", Toast.LENGTH_SHORT).show();
         }
     }

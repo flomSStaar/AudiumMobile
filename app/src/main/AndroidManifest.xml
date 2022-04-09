@@ -57,6 +57,12 @@
         <activity
             android:name=".activity.AlbumPageActivity"
             android:exported="false" />
+        <activity
+            android:name=".activity.chooser.ArtistChooser"
+            android:exported="false" />
+        <activity
+            android:name=".activity.chooser.AlbumChooser"
+            android:exported="false" />
 
         <service android:name=".MediaService" />
     </application>

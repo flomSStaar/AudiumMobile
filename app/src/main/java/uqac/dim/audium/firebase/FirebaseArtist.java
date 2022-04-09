@@ -8,10 +8,11 @@ public final class FirebaseArtist {
     private String lastName;
     private int age;
     private String stageName;
+    private List<Long> tracksId;
     private List<Long> albumsId;
     private String imagePath;
 
-    public FirebaseArtist(Long id, String firstName, String lastName, int age, String stageName, List<Long> albumsId, String imagePath) {
+    public FirebaseArtist(Long id, String firstName, String lastName, int age, String stageName, List<Long> tracksId, List<Long> albumsId, String imagePath) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -39,6 +40,10 @@ public final class FirebaseArtist {
 
     public String getStageName() {
         return stageName;
+    }
+
+    public List<Long> getTracksId() {
+        return tracksId;
     }
 
     public List<Long> getAlbumsId() {

@@ -14,7 +14,6 @@ import java.util.List;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.firebase.FirebaseArtist;
-import uqac.dim.audium.model.entity.Artist;
 
 public class AddArtistActivity extends AppCompatActivity {
 
@@ -30,6 +29,7 @@ public class AddArtistActivity extends AppCompatActivity {
         int age = !((EditText) findViewById(R.id.artist_age)).getText().toString().isEmpty() ? Integer.parseInt(((EditText) findViewById(R.id.artist_age)).getText().toString()) : -1;
         String stageName = ((EditText) findViewById(R.id.artist_stage_name)).getText().toString();
         String imagePath = ((EditText) findViewById(R.id.image_path)).getText().toString();
+        List<Long> tracksId = new ArrayList<>();
         List<Long> albumsID = new ArrayList<>();
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
@@ -37,7 +37,7 @@ public class AddArtistActivity extends AppCompatActivity {
                 .addOnSuccessListener(dataSnapshot -> {
                     Long lastArtistId = dataSnapshot.getValue(Long.class);
                     if (lastArtistId != null) {
-                        FirebaseArtist artist = new FirebaseArtist(lastArtistId,firstName,lastName,age,stageName,albumsID,imagePath);
+                        FirebaseArtist artist = new FirebaseArtist(lastArtistId, firstName, lastName, age, stageName, tracksId, albumsID, imagePath);
                         db.getReference("artists/").child(String.valueOf(lastArtistId)).setValue(artist);
                         db.getReference("ids/lastArtistId").setValue(++lastArtistId);
                     }

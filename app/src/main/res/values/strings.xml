@@ -59,4 +59,7 @@
     <string name="delete">Delete</string>
     <string name="modify">Modify</string>
     <string name="save">Save</string>
+    <string name="choose_an_album_from">Choose an album from</string>
+    <string name="choose_an_artist">Choose an artist</string>
+    <string name="choose_an_album">Choose an album</string>
 </resources>
