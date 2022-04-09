@@ -9,6 +9,25 @@ public class Track implements Comparable<Track> {
     protected Long artistId;
     protected Long albumId;
 
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    protected String path;
+    protected String imagePath;
+
     private Track() {
     }
 

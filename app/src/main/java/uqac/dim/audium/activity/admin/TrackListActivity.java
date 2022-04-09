@@ -1,5 +1,6 @@
 package uqac.dim.audium.activity.admin;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -18,6 +19,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import uqac.dim.audium.R;
+import uqac.dim.audium.activity.AlbumPageActivity;
+import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Track;
 
 public class TrackListActivity extends AppCompatActivity {
@@ -47,10 +50,16 @@ public class TrackListActivity extends AppCompatActivity {
 
             }
         });
+
+        artistListView.setOnItemClickListener((adapter, view1, position, arg) -> {
+            Intent intent = new Intent(TrackListActivity.this, TrackPageActivity.class);
+            intent.putExtra("trackId", ((Track) artistListView.getItemAtPosition(position)).getId());
+            startActivity(intent);
+        });
     }
 
     public void addTracks(View view) {
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        /*FirebaseDatabase db = FirebaseDatabase.getInstance();
         db.getReference("ids/lastTrackId").get()
                 .addOnSuccessListener(dataSnapshot -> {
                     Long lastTrackId = dataSnapshot.getValue(Long.class);
@@ -59,6 +68,8 @@ public class TrackListActivity extends AppCompatActivity {
                         db.getReference("tracks/").child(String.valueOf(lastTrackId)).setValue(track);
                         db.getReference("ids/lastTrackId").setValue(++lastTrackId);
                     }
-                });
+                });*/
+
+        startActivity(new Intent(getApplicationContext(), AddTrackActivity.class));
     }
 }
