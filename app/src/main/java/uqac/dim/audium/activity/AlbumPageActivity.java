@@ -1,5 +1,6 @@
 package uqac.dim.audium.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -23,13 +24,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uqac.dim.audium.R;
+import uqac.dim.audium.activity.admin.TrackListActivity;
+import uqac.dim.audium.activity.admin.TrackPageActivity;
 import uqac.dim.audium.firebase.FirebaseAlbum;
 import uqac.dim.audium.model.entity.Album;
+import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
 
 public class AlbumPageActivity extends AppCompatActivity {
     private Long albumId;
     private List<Long> tracksId;
+    private Artist artist;
     private Album album;
     private DatabaseReference database;
     private EditText editTitle;
@@ -50,10 +55,10 @@ public class AlbumPageActivity extends AppCompatActivity {
         btnSave.setVisibility(View.INVISIBLE);
 
         database = FirebaseDatabase.getInstance().getReference();
-        database.child("albums").child(String.valueOf(albumId)).addValueEventListener(new ValueEventListener() {
+        database.child("albums").child(String.valueOf(albumId)).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                album = snapshot.getValue(Album.class);
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                album = dataSnapshot.getValue(Album.class);
                 if (album != null) {
                     editTitle.setText(album.getTitle());
                     editTitle.setEnabled(false);
@@ -61,12 +66,18 @@ public class AlbumPageActivity extends AppCompatActivity {
                     editDescription.setEnabled(false);
                     editArtist.setText(album.getArtistId().toString());
                     editArtist.setEnabled(false);
+
+                    database.child("artists/" + album.getArtistId()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                        @Override
+                        public void onSuccess(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists())
+                                artist = dataSnapshot.getValue(Artist.class);
+                            else {
+                                // Verif a faire
+                            }
+                        }
+                    });
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 
@@ -95,6 +106,14 @@ public class AlbumPageActivity extends AppCompatActivity {
 
             }
         });
+        listView.setOnItemClickListener((adapter, view1, position, arg) -> {
+            Intent intent = new Intent(AlbumPageActivity.this, TrackPageActivity.class);
+            intent.putExtra("trackId", ((Track) listView.getItemAtPosition(position)).getId());
+            intent.putExtra("albumId", ((Track) listView.getItemAtPosition(position)).getAlbumId());
+            startActivity(intent);
+        });
+
+
     }
 
     public void modifyAlbum(View view) {
@@ -135,6 +154,9 @@ public class AlbumPageActivity extends AppCompatActivity {
                                     if(tracksId.contains(t.getId())){
                                         t.setAlbumId(null);
                                         database.child("tracks").child(String.valueOf(t.getId())).setValue(t);
+                                        List<Long> artistAlbumsId = artist.getAlbumsId();
+                                        artistAlbumsId.remove(albumId);
+                                        database.child("artists").child(artist.getId().toString()).child("albumsId").setValue(artistAlbumsId);
                                     }
                                 }
                             }

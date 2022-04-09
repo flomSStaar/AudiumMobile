@@ -54,6 +54,7 @@ public class TrackListActivity extends AppCompatActivity {
         artistListView.setOnItemClickListener((adapter, view1, position, arg) -> {
             Intent intent = new Intent(TrackListActivity.this, TrackPageActivity.class);
             intent.putExtra("trackId", ((Track) artistListView.getItemAtPosition(position)).getId());
+            intent.putExtra("albumId", ((Track) artistListView.getItemAtPosition(position)).getAlbumId());
             startActivity(intent);
         });
     }

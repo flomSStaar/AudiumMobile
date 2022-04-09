@@ -10,6 +10,24 @@ public class Artist extends Person {
     protected Long id;
     protected String stageName;
     protected List<Long> albumsId;
+    private List<Long> tracksId;
+    private String imagePath;
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public List<Long> getTracksId() {
+        return tracksId;
+    }
+
+    public void setTracksId(List<Long> tracksId) {
+        this.tracksId = tracksId;
+    }
 
     public Artist() {
         super();

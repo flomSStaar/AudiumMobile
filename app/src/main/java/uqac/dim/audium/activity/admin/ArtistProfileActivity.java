@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.activity.AlbumPageActivity;
@@ -30,6 +31,8 @@ import uqac.dim.audium.model.entity.Track;
 public class ArtistProfileActivity extends AppCompatActivity {
 
     private DatabaseReference database;
+    private List<Long> idTracks;
+    private List<Long> idAlbums;
     private Artist artist;
 
     @Override
@@ -52,6 +55,8 @@ public class ArtistProfileActivity extends AppCompatActivity {
                     ((TextView) findViewById(R.id.tv_artist_last_name)).setText(artist.getLastName());
                     ((TextView) findViewById(R.id.tv_artist_age)).setText(String.valueOf(artist.getAge()));
                 }
+                idTracks = artist.getTracksId();
+                idAlbums = artist.getAlbumsId();
             }
 
             @Override
@@ -65,6 +70,15 @@ public class ArtistProfileActivity extends AppCompatActivity {
     private void deleteArtist(View view) {
         database = FirebaseDatabase.getInstance().getReference();
         database.child("artists").child(String.valueOf(artist.getId())).removeValue();
+        for (Long idTrack: idTracks) {
+            database.child("tracks").child(String.valueOf(idTrack)).removeValue();
+        }
+        for(Long idAlbum : idAlbums){
+            database.child("albums").child(String.valueOf(idAlbum)).removeValue();
+        }
+
+
+
         artist = null;
     }
 
@@ -130,6 +144,12 @@ public class ArtistProfileActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
+        });
+        listView.setOnItemClickListener((adapter, view1, position, arg) -> {
+            Intent intent = new Intent(ArtistProfileActivity.this, TrackPageActivity.class);
+            intent.putExtra("trackId", ((Track) listView.getItemAtPosition(position)).getId());
+            intent.putExtra("albumId", ((Track) listView.getItemAtPosition(position)).getAlbumId());
+            startActivity(intent);
         });
     }
 

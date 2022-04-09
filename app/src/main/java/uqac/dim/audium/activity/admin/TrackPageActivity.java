@@ -23,10 +23,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.w3c.dom.Text;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.activity.chooser.AlbumChooser;
@@ -42,7 +45,6 @@ public class TrackPageActivity extends AppCompatActivity {
     protected Track track;
     protected Long trackId;
     protected Album album;
-    Album newA;
     protected Long albumId;
     protected Artist artist;
     private DatabaseReference database;
@@ -62,25 +64,24 @@ public class TrackPageActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance().getReference();
 
         albumResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::getAlbumResult);
-        albumId = null;
         trackId = getIntent().getLongExtra("trackId",0);
+        albumId = getIntent().getLongExtra("albumId",0);
+        if(albumId==0)
+            albumId=null;
 
-        database.child("albums").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot snap : snapshot.getChildren()) {
-                    Album a = snap.getValue(Album.class);
-                    if (a != null && a.getTracksId()!=null && a.getTracksId().contains(trackId)) {
-                        album = a;
+        if(albumId!=null) {
+            database.child("albums/" + albumId).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                @Override
+                public void onSuccess(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        Album a = dataSnapshot.getValue(Album.class);
+                        if (a != null && a.getTracksId() != null && a.getTracksId().contains(trackId)) {
+                            album = a;
+                        }
                     }
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+            });
+        }
 
         editName = (EditText) findViewById(R.id.edit_track_name);
         editAlbum = (TextView) findViewById(R.id.track_page_album);
@@ -113,17 +114,13 @@ public class TrackPageActivity extends AppCompatActivity {
                     }
                     editMusicPath.setText(track.getPath());
                     editImagePath.setText(track.getImagePath());
-                    database.child("artists").child(track.getArtistId().toString()).addValueEventListener(new ValueEventListener() {
+                    database.child("artists").child(track.getArtistId().toString()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            artist = snapshot.getValue(Artist.class);
+                        public void onSuccess(DataSnapshot dataSnapshot) {
+                            artist = dataSnapshot.getValue(Artist.class);
                             if (artist != null) {
                                 editArtist.setText(artist.getStageName());
                             }
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
                         }
                     });
                 }
@@ -210,11 +207,20 @@ public class TrackPageActivity extends AppCompatActivity {
 
     public void deleteTrack(View view) {
         database = FirebaseDatabase.getInstance().getReference();
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference ref = storage.getReferenceFromUrl(track.getPath());
+        ref.delete();
+        //Remove les ids des tracks des albums
+        if(album !=null){
+            List<Long> tracksId = album.getTracksId();
+            tracksId.remove(trackId);
+            database.child("albums").child(albumId.toString()).child("tracksId").setValue(tracksId);
+        }
+        List<Long> artistsTracksId = artist.getTracksId();
+        artistsTracksId.remove(trackId);
+        database.child("artists").child(artist.getId().toString()).child("tracksId").setValue(artistsTracksId);
         database.child("tracks").child(String.valueOf(trackId)).removeValue();
 
-        // Remove les ids des tracks des albums
-        int index = album.getTracksId().indexOf(trackId);
-        database.child("albums").child(albumId.toString()).child("tracksId").child(String.valueOf(index)).removeValue();
         trackId = null;
         finish();
     }
