@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
                 android:fontFamily="@font/montserrat"
-                android:text="Albums"
+                android:text="@string/albums"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 

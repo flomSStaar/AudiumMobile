@@ -2,6 +2,7 @@ package uqac.dim.audium.activity.chooser;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -58,7 +59,8 @@ public class ArtistChooser extends AppCompatActivity {
                         }
                         listViewArtists.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, artists));
                     } else {
-                        // Il n'existe pas d'artiste dans la base
+                        Log.i("DIM", "There is no artist in database");
+
                     }
                 });
     }

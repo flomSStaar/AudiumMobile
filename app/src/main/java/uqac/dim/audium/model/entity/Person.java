@@ -14,7 +14,8 @@ public abstract class Person implements Serializable {
      * This constructor is used for deserializing from database.
      * Don't use this constructor!
      */
-    protected Person() { }
+    protected Person() {
+    }
 
 
     /**

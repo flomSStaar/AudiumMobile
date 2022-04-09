@@ -20,9 +20,8 @@ import uqac.dim.audium.R;
 import uqac.dim.audium.model.entity.User;
 
 public class UserProfileActivity extends AppCompatActivity {
-
-    DatabaseReference database;
-    User user;
+    private DatabaseReference database;
+    private User user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,17 +30,17 @@ public class UserProfileActivity extends AppCompatActivity {
 
         ((Button) findViewById(R.id.btn_delete_user)).setOnClickListener(this::deleteUser);
 
-        Intent i = getIntent();
+        Intent intent = getIntent();
         database = FirebaseDatabase.getInstance().getReference();
-        database.child("users").child(i.getStringExtra("username")).addValueEventListener(new ValueEventListener() {
+        database.child("users").child(intent.getStringExtra("username")).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 user = snapshot.getValue(User.class);
                 if (user != null) {
-                    ((TextView) findViewById(R.id.username)).setText(user.getUsername());
-                    ((TextView) findViewById(R.id.nom)).setText(user.getFirstName());
-                    ((TextView) findViewById(R.id.prenom)).setText(user.getLastName());
-                    ((TextView) findViewById(R.id.age)).setText(String.valueOf(user.getAge()));
+                    ((TextView) findViewById(R.id.tv_username)).setText(user.getUsername());
+                    ((TextView) findViewById(R.id.tv_last_name)).setText(user.getFirstName());
+                    ((TextView) findViewById(R.id.tv_first_name)).setText(user.getLastName());
+                    ((TextView) findViewById(R.id.tv_age)).setText(String.valueOf(user.getAge()));
                 }
             }
 
@@ -53,7 +52,6 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void deleteUser(View view) {
-        database = FirebaseDatabase.getInstance().getReference();
         database.child("users").child(user.getUsername()).removeValue();
         user = null;
         finish();

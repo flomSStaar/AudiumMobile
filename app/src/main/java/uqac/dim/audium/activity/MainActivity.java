@@ -82,18 +82,18 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    private void previous(View v){
+    private void previous(View v) {
 
     }
 
-    private void pause(View v){
-        Intent i=new Intent(this, MediaService.class);
+    private void pause(View v) {
+        Intent i = new Intent(this, MediaService.class);
         i.setAction("com.example.action.PLAY");
         startService(i);
 
     }
 
-    private void skip(View v){
+    private void skip(View v) {
 
     }
 

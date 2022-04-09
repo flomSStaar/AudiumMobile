@@ -40,6 +40,24 @@ public class User extends Person implements Serializable {
     }
 
     /**
+     * Returns the login of this user.
+     *
+     * @return Login of this user
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * Returns if the user is admin
+     *
+     * @return True if admin otherwise false
+     */
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    /**
      * Returns the playlists of this user.
      *
      * @return Playlists of this user
@@ -62,35 +80,15 @@ public class User extends Person implements Serializable {
         }
     }
 
-    /**
-     * Returns the login of this user.
-     *
-     * @return Login of this user
-     */
-    public String getUsername() {
-        return username;
-    }
-
-    /**
-     * Returns if the user is admin
-     *
-     * @return True if admin otherwise false
-     */
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
 
     @Override
     public String toString() {
-        /*return "User{" +
+        return "User{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
                 ", username='" + username + '\'' +
                 ", isAdmin=" + isAdmin +
                 '}';
-        */
-        return username;
     }
 }

@@ -1,7 +1,6 @@
 package uqac.dim.audium.model.utils;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,18 +25,18 @@ public class ListViewAdapter extends ArrayAdapter<Track> {
     private List<Track> titles;
     private Context context;
 
-    public ListViewAdapter(List<Track> names, Context context){
-        super(context, R.layout.track_list_item,names);
+    public ListViewAdapter(List<Track> names, Context context) {
+        super(context, R.layout.track_list_item, names);
         this.context = context;
-        titles= new ArrayList<>();
+        titles = new ArrayList<>();
         this.titles = names;
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-        View row = inflater.inflate(R.layout.track_list_item,parent,false);
+        LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+        View row = inflater.inflate(R.layout.track_list_item, parent, false);
         TextView name = row.findViewById(R.id.track_name);
         name.setText(titles.get(position).getName());
 
@@ -47,10 +46,9 @@ public class ListViewAdapter extends ArrayAdapter<Track> {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 int position = (int) compoundButton.getTag();
-                if(AddAlbumActivity.idTracksSelected.contains(titles.get(position))){
+                if (AddAlbumActivity.idTracksSelected.contains(titles.get(position))) {
                     AddAlbumActivity.idTracksSelected.remove(titles.get(position));
-                }
-                else{
+                } else {
                     AddAlbumActivity.idTracksSelected.add(titles.get(position).getId());
                 }
 

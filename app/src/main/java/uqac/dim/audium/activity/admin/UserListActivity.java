@@ -2,8 +2,6 @@ package uqac.dim.audium.activity.admin;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -23,9 +21,7 @@ import uqac.dim.audium.R;
 import uqac.dim.audium.model.entity.User;
 
 public class UserListActivity extends AppCompatActivity {
-
-    DatabaseReference database;
-
+    private DatabaseReference database;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,13 +46,10 @@ public class UserListActivity extends AppCompatActivity {
 
             }
         });
-        userListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
-                Intent intent = new Intent(UserListActivity.this, UserProfileActivity.class);
-                intent.putExtra("username", ((User) userListView.getItemAtPosition(position)).getUsername());
-                startActivity(intent);
-            }
+        userListView.setOnItemClickListener((adapter, view, position, arg) -> {
+            Intent intent = new Intent(UserListActivity.this, UserProfileActivity.class);
+            intent.putExtra("username", ((User) userListView.getItemAtPosition(position)).getUsername());
+            startActivity(intent);
         });
 
     }

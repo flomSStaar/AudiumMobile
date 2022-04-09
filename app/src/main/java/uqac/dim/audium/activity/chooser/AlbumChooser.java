@@ -93,7 +93,7 @@ public class AlbumChooser extends AppCompatActivity {
                             Log.i("DIM", "No album for this artist");
                         }
                     } else {
-                        // !!!! L'artiste n'existe pas
+                        Log.e("DIM", "Artist " + artistId + " doesn't exist");
                     }
                 });
     }
@@ -109,7 +109,7 @@ public class AlbumChooser extends AppCompatActivity {
 
     private void createAlbum(View view) {
         Intent intent = new Intent(getApplicationContext(), AddAlbumActivity.class);
-        intent.putExtra("id", artistId);
+        intent.putExtra("artistId", artistId);
         albumResultLauncher.launch(intent);
     }
 

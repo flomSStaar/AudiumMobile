@@ -18,12 +18,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import uqac.dim.audium.R;
-import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
 
-public class TrackListActivity  extends AppCompatActivity {
-
-    DatabaseReference database;
+public class TrackListActivity extends AppCompatActivity {
+    private DatabaseReference database;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

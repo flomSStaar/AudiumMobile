@@ -2,14 +2,17 @@ package uqac.dim.audium.model.entity;
 
 public class Album extends TrackContainer {
 
-
-
     protected Long id;
     protected Long artistId;
 
-
-    private Album(){
+    private Album() {
         super();
+    }
+
+    public Album(String title, String description, Long id, Long artistId) {
+        super(title, description);
+        this.id = id;
+        this.artistId = artistId;
     }
 
     public Long getId() {
@@ -17,22 +20,11 @@ public class Album extends TrackContainer {
     }
 
     public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Override
-    public String getTitle() {
-        return title;
-    }
-
-    @Override
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Album(String title, String description, Long id){
-        super(title, description);
-        artistId=id;
+        if (id != null && id > 0) {
+            this.id = id;
+        } else {
+            throw new IllegalArgumentException("id cannot be null or lower or equal than 0");
+        }
     }
 
     public Long getArtistId() {
@@ -40,14 +32,12 @@ public class Album extends TrackContainer {
     }
 
     public void setArtistId(Long artistID) {
-        this.artistId = artistID;
+        if (artistID != null && artistID > 0) {
+            this.artistId = artistID;
+        } else {
+            throw new IllegalArgumentException("artistId cannot be null or lower or equal than 0");
+        }
     }
-
-    public Album(String title, String description) {
-        super(title, description);
-
-    }
-
 
     @Override
     public int compareTo(TrackContainer trackContainer) {
@@ -56,6 +46,11 @@ public class Album extends TrackContainer {
 
     @Override
     public String toString() {
-        return title;
+        return "Album{" +
+                "id=" + id +
+                ", artistId=" + artistId +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

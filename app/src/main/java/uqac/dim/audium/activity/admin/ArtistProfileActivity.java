@@ -3,7 +3,6 @@ package uqac.dim.audium.activity.admin;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -27,12 +26,11 @@ import uqac.dim.audium.activity.AlbumPageActivity;
 import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
-import uqac.dim.audium.model.entity.User;
 
 public class ArtistProfileActivity extends AppCompatActivity {
 
-    DatabaseReference database;
-    Artist artist;
+    private DatabaseReference database;
+    private Artist artist;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,16 +39,19 @@ public class ArtistProfileActivity extends AppCompatActivity {
 
         ((Button) findViewById(R.id.btn_delete_artist)).setOnClickListener(this::deleteArtist);
 
-        Intent i = getIntent();
+        Intent intent = getIntent();
+        long artistId = intent.getLongExtra("artistId", 0);
         database = FirebaseDatabase.getInstance().getReference();
-        database.child("artists").child(String.valueOf(i.getLongExtra("id", 0))).addValueEventListener(new ValueEventListener() {
+        database.child("artists").child(Long.toString(artistId)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 artist = snapshot.getValue(Artist.class);
-                ((TextView) findViewById(R.id.tv_stage_name)).setText(artist.getStageName());
-                ((TextView) findViewById(R.id.tv_artist_first_name)).setText(artist.getFirstName());
-                ((TextView) findViewById(R.id.tv_artist_last_name)).setText(artist.getLastName());
-                ((TextView) findViewById(R.id.tv_artist_age)).setText(String.valueOf(artist.getAge()));
+                if (artist != null) {
+                    ((TextView) findViewById(R.id.tv_stage_name)).setText(artist.getStageName());
+                    ((TextView) findViewById(R.id.tv_artist_first_name)).setText(artist.getFirstName());
+                    ((TextView) findViewById(R.id.tv_artist_last_name)).setText(artist.getLastName());
+                    ((TextView) findViewById(R.id.tv_artist_age)).setText(String.valueOf(artist.getAge()));
+                }
             }
 
             @Override
@@ -80,12 +81,12 @@ public class ArtistProfileActivity extends AppCompatActivity {
                 albums.clear();
                 for (DataSnapshot snap : snapshot.getChildren()) {
                     Album a = snap.getValue(Album.class);
-                    if(a.getArtistId().equals(artist.getId()))
+                    if (a != null && a.getArtistId().equals(artist.getId()))
                         albums.add(a);
                 }
-                if(albums.size()!=0)
+                if (albums.size() != 0)
                     listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, albums));
-                else{
+                else {
                     Toast.makeText(getApplicationContext(), "This artist has no albums", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -96,13 +97,10 @@ public class ArtistProfileActivity extends AppCompatActivity {
             }
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
-                Intent intent = new Intent(ArtistProfileActivity.this, AlbumPageActivity.class);
-                intent.putExtra("idAlbum", ((Album) listView.getItemAtPosition(position)).getId());
-                startActivity(intent);
-            }
+        listView.setOnItemClickListener((adapter, view1, position, arg) -> {
+            Intent intent = new Intent(ArtistProfileActivity.this, AlbumPageActivity.class);
+            intent.putExtra("albumId", ((Album) listView.getItemAtPosition(position)).getId());
+            startActivity(intent);
         });
 
 
@@ -118,12 +116,12 @@ public class ArtistProfileActivity extends AppCompatActivity {
                 tracks.clear();
                 for (DataSnapshot snap : snapshot.getChildren()) {
                     Track t = snap.getValue(Track.class);
-                    if(t.getArtistId().equals(artist.getId()))
+                    if (t != null && t.getArtistId().equals(artist.getId()))
                         tracks.add(t);
                 }
-                if(tracks.size()!=0)
+                if (tracks.size() != 0)
                     listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, tracks));
-                else{
+                else {
                     Toast.makeText(getApplicationContext(), "This artist has no tracks", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -137,7 +135,7 @@ public class ArtistProfileActivity extends AppCompatActivity {
 
     public void addAlbum(View view) {
         Intent intent = new Intent(getApplicationContext(), AddAlbumActivity.class);
-        intent.putExtra("id",artist.getId());
+        intent.putExtra("artistId", artist.getId());
         startActivity(intent);
     }
 }

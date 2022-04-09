@@ -6,7 +6,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,50 +18,46 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.firebase.FirebaseAlbum;
 import uqac.dim.audium.model.entity.Album;
-import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
 
 public class AlbumPageActivity extends AppCompatActivity {
-
-    protected Long albumId;
-    protected Album album;
-    DatabaseReference database;
-    EditText title;
-    EditText description;
-    EditText artist;
-    Button saveBtn;
+    private Long albumId;
+    private Album album;
+    private DatabaseReference database;
+    private EditText editTitle;
+    private EditText editDescription;
+    private EditText editArtist;
+    private Button btnSave;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album_page);
-        albumId=getIntent().getLongExtra("idAlbum",0);
+        albumId = getIntent().getLongExtra("albumId", 0);
 
-        title = ((EditText) findViewById(R.id.album_page_title));
-        description = ((EditText) findViewById(R.id.album_page_description));
-        artist = ((EditText) findViewById(R.id.album_page_stagename));
-        saveBtn = ((Button) findViewById(R.id.save_album_button));
-        saveBtn.setVisibility(View.INVISIBLE);
+        editTitle = (EditText) findViewById(R.id.edit_album_title);
+        editDescription = (EditText) findViewById(R.id.edit_album_description);
+        editArtist = (EditText) findViewById(R.id.edit_album_stagename);
+        btnSave = (Button) findViewById(R.id.btn_save_album);
+        btnSave.setVisibility(View.INVISIBLE);
 
         database = FirebaseDatabase.getInstance().getReference();
         database.child("albums").child(String.valueOf(albumId)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 album = snapshot.getValue(Album.class);
-                if(album!=null) {
-                    title.setText(album.getTitle());
-                    title.setEnabled(false);
-                    description.setText(album.getDescription());
-                    description.setEnabled(false);
-                    artist.setText(album.getArtistId().toString());
-                    artist.setEnabled(false);
+                if (album != null) {
+                    editTitle.setText(album.getTitle());
+                    editTitle.setEnabled(false);
+                    editDescription.setText(album.getDescription());
+                    editDescription.setEnabled(false);
+                    editArtist.setText(album.getArtistId().toString());
+                    editArtist.setEnabled(false);
                 }
             }
 
@@ -80,14 +75,14 @@ public class AlbumPageActivity extends AppCompatActivity {
                 tracks.clear();
                 for (DataSnapshot snap : snapshot.getChildren()) {
                     Track t = snap.getValue(Track.class);
-                    if(t.getAlbumId()!=null)
-                        if(t.getAlbumId().equals(albumId)) {
+                    if (t != null && t.getAlbumId() != null)
+                        if (t.getAlbumId().equals(albumId)) {
                             tracks.add(t);
                         }
                 }
-                if(tracks.size()!=0)
+                if (tracks.size() != 0)
                     listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, tracks));
-                else{
+                else {
                     Toast.makeText(getApplicationContext(), "This album has no tracks", Toast.LENGTH_SHORT).show(); ///Techniquement impossible
                 }
             }
@@ -100,21 +95,21 @@ public class AlbumPageActivity extends AppCompatActivity {
     }
 
     public void modifyAlbum(View view) {
-        title.setEnabled(true);
-        description.setEnabled(true);
-        saveBtn.setVisibility(View.VISIBLE);
+        editTitle.setEnabled(true);
+        editDescription.setEnabled(true);
+        btnSave.setVisibility(View.VISIBLE);
     }
 
     public void saveAlbum(View view) {
-        String newTitle = title.getText().toString();
-        String newDescription = description.getText().toString();
+        String newTitle = editTitle.getText().toString();
+        String newDescription = editDescription.getText().toString();
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         FirebaseAlbum newAlbum = new FirebaseAlbum(albumId, newTitle, newDescription, album.getDescription(), album.getArtistId(), album.getTracksId());
         db.getReference("albums/").child(String.valueOf(albumId)).setValue(newAlbum);
-        title.setEnabled(false);
-        description.setEnabled(false);
-        saveBtn.setVisibility(View.INVISIBLE);
+        editTitle.setEnabled(false);
+        editDescription.setEnabled(false);
+        btnSave.setVisibility(View.INVISIBLE);
     }
 
     public void deleteAlbum(View view) {

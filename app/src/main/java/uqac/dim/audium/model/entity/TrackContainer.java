@@ -5,11 +5,12 @@ import java.util.List;
 
 public abstract class TrackContainer implements Comparable<TrackContainer> {
 
-    protected List<Long> tracksId;
     protected String title;
     protected String description;
+    protected List<Long> tracksId;
 
-    protected TrackContainer(){}
+    protected TrackContainer() {
+    }
 
     /**
      * Constructs a new TrackContainer with a title.
@@ -27,31 +28,9 @@ public abstract class TrackContainer implements Comparable<TrackContainer> {
      * @param description Description of this track container
      */
     public TrackContainer(String title, String description) {
-        this.title = title;
-        this.description = description;
-        tracksId = new ArrayList<>();
-    }
-
-    /**
-     * Returns the tracks of this container.
-     *
-     * @return Tracks of this container
-     */
-    public List<Long> getTracksId() {
-        return tracksId;
-    }
-
-    /**
-     * Sets the list of track of this container.
-     *
-     * @param tracks The new list of tracks of this container
-     */
-    private void setTracksId(List<Long> tracks) {
-        if (tracks != null) {
-            this.tracksId = tracks;
-        } else {
-            throw new IllegalArgumentException("tracks cannot be null");
-        }
+        setTitle(title);
+        setDescription(description);
+        setTracksId(new ArrayList<>());
     }
 
     /**
@@ -94,15 +73,25 @@ public abstract class TrackContainer implements Comparable<TrackContainer> {
         this.description = description;
     }
 
-    //TODO
-    private void addTrack(Long t) {
-        if (t != null && !tracksId.contains(t)) {
-            tracksId.add(t);
-        }
+    /**
+     * Returns the tracks of this container.
+     *
+     * @return Tracks of this container
+     */
+    public List<Long> getTracksId() {
+        return tracksId;
     }
 
-    //TODO
-    private void removeTrack(Track t) {
-        tracksId.remove(t);
+    /**
+     * Sets the list of track of this container.
+     *
+     * @param tracks The new list of tracks of this container
+     */
+    private void setTracksId(List<Long> tracks) {
+        if (tracks != null) {
+            this.tracksId = tracks;
+        } else {
+            throw new IllegalArgumentException("tracks cannot be null");
+        }
     }
 }

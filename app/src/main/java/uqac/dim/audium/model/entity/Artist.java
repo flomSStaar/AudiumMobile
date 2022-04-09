@@ -2,16 +2,18 @@ package uqac.dim.audium.model.entity;
 
 import com.google.firebase.database.Exclude;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Artist extends Person {
 
     protected Long id;
-    protected Set<Long> albumsID;
     protected String stageName;
+    protected List<Long> albumsID;
 
-    public Artist(){}
+    public Artist() {
+        super();
+    }
 
     /**
      * Constructs a new artist having only artist name and age.
@@ -35,7 +37,7 @@ public class Artist extends Person {
      * @param age       Age of the artist
      */
     public Artist(String firstName, String lastName, int age, Long id) {
-        this(firstName, lastName, null, age,id);
+        this(firstName, lastName, null, age, id);
     }
 
 
@@ -48,7 +50,7 @@ public class Artist extends Person {
      * @param age       Age of the artist
      */
     public Artist(String firstName, String lastName, String stageName, int age, Long id) {
-        this(firstName, lastName, stageName, age, new TreeSet<>(),id);
+        this(firstName, lastName, stageName, age, new ArrayList<>(), id);
     }
 
     /**
@@ -61,49 +63,24 @@ public class Artist extends Person {
      * @param age       Age of the artist
      * @param albums    Albums of the artist
      */
-    public Artist(String firstName, String lastName, String stageName, int age, Set<Long> albums, Long id) {
+    public Artist(String firstName, String lastName, String stageName, int age, List<Long> albums, Long id) {
         super(firstName, lastName, age);
         setStageName(stageName);
         setId(id);
         setAlbumsID(albums);
     }
 
-    /**
-     * Returns the albums of this artist.
-     *
-     * @return Albums of this artist
-     */
-    @Exclude
-    public Set<Long> getAlbumsID() {
-        return albumsID;
-    }
-
-    /**
-     * Change the albums of this artist.
-     *
-     * @param albums The new albums of this artist
-     */
-    public void setAlbumsID(Set<Long> albums) {
-        if (albums != null) {
-            this.albumsID = albums;
-        } else {
-            throw new IllegalArgumentException("albums cannot be null");
-        }
-    }
-
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
-        if (id != null && id > 0 ) {
+        if (id != null && id > 0) {
             this.id = id;
         } else {
             throw new IllegalArgumentException("id cannot be lower than 0 or null");
         }
     }
-
 
     /**
      * Returns the stage name of this artist.
@@ -129,16 +106,27 @@ public class Artist extends Person {
         }
     }
 
-    //TODO
-    private void addAlbum(Long a) {
-        if (a != null) {
-            albumsID.add(a);
-        }
+    /**
+     * Returns the albums of this artist.
+     *
+     * @return Albums of this artist
+     */
+    @Exclude
+    public List<Long> getAlbumsID() {
+        return albumsID;
     }
 
-    //TODO
-    private void removeAlbum(Long a) {
-        albumsID.remove(a);
+    /**
+     * Change the albums of this artist.
+     *
+     * @param albums The new albums of this artist
+     */
+    public void setAlbumsID(List<Long> albums) {
+        if (albums != null) {
+            this.albumsID = albums;
+        } else {
+            throw new IllegalArgumentException("albums cannot be null");
+        }
     }
 
     /**
@@ -180,14 +168,11 @@ public class Artist extends Person {
      */
     @Override
     public String toString() {
-        /*return "Artist{" +
+        return "Artist{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
                 ", stageNameName='" + stageName + '\'' +
-                '}';*/
-
-
-        return stageName;
+                '}';
     }
 }

@@ -31,10 +31,9 @@ import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.model.utils.ListViewAdapter;
 
 public class AddAlbumActivity extends AppCompatActivity {
-
-    Long idArtist;
-    ListViewAdapter adapter;
-    DatabaseReference database;
+    private Long artistId;
+    private ListViewAdapter adapter;
+    private DatabaseReference database;
     public static List<Long> idTracksSelected;
 
     @Override
@@ -42,7 +41,7 @@ public class AddAlbumActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Context c = this;
         setContentView(R.layout.activity_add_album);
-        idArtist = getIntent().getLongExtra("id", 0);
+        artistId = getIntent().getLongExtra("artistId", 0);
         idTracksSelected = new ArrayList<>();
         ActionMode actionMode = null;
 
@@ -87,19 +86,19 @@ public class AddAlbumActivity extends AppCompatActivity {
                 tracks.clear();
                 for (DataSnapshot snap : snapshot.getChildren()) {
                     Track t = snap.getValue(Track.class);
-                    if (t.getArtistId().equals(idArtist))
-                        if (t.getAlbumId() == null)
+                    if (t != null && t.getArtistId().equals(artistId)) {
+                        if (t.getAlbumId() == null) {
                             tracks.add(t);
+                        }
+                    }
                 }
                 if (tracks.size() != 0) {
                     artistListView.setAdapter(new ListViewAdapter(tracks, c));
                 }
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 
@@ -117,7 +116,7 @@ public class AddAlbumActivity extends AppCompatActivity {
                     .addOnSuccessListener(dataSnapshot -> {
                         Long lastAlbumId = dataSnapshot.getValue(Long.class);
                         if (lastAlbumId != null) {
-                            FirebaseAlbum album = new FirebaseAlbum(lastAlbumId, title, description, imagePath, idArtist, idTracksSelected);
+                            FirebaseAlbum album = new FirebaseAlbum(lastAlbumId, title, description, imagePath, artistId, idTracksSelected);
                             db.getReference("albums/").child(String.valueOf(lastAlbumId)).setValue(album);
                             for (Long id : idTracksSelected) {
                                 db.getReference("tracks/" + id).child("albumId").setValue(lastAlbumId);

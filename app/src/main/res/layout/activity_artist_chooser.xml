@@ -5,9 +5,9 @@
     android:orientation="vertical">
 
     <TextView
-        android:text="@string/choose_an_artist"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="@string/choose_an_artist" />
 
     <LinearLayout
         android:layout_width="match_parent"

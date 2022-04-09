@@ -14,6 +14,7 @@ import java.util.List;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.firebase.FirebaseArtist;
+import uqac.dim.audium.model.utils.Utils;
 
 public class AddArtistActivity extends AppCompatActivity {
 
@@ -32,17 +33,19 @@ public class AddArtistActivity extends AppCompatActivity {
         List<Long> tracksId = new ArrayList<>();
         List<Long> albumsID = new ArrayList<>();
 
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
-        db.getReference("ids/lastArtistId").get()
-                .addOnSuccessListener(dataSnapshot -> {
-                    Long lastArtistId = dataSnapshot.getValue(Long.class);
-                    if (lastArtistId != null) {
-                        FirebaseArtist artist = new FirebaseArtist(lastArtistId, firstName, lastName, age, stageName, tracksId, albumsID, imagePath);
-                        db.getReference("artists/").child(String.valueOf(lastArtistId)).setValue(artist);
-                        db.getReference("ids/lastArtistId").setValue(++lastArtistId);
-                    }
-                });
-        finish();
+        if ((firstName.matches(Utils.FIRSTNAME_REGEX) && lastName.matches(Utils.LASTNAME_REGEX) || stageName.matches(Utils.STAGENAME_REGEX)) && age > 0 && !imagePath.trim().isEmpty()) {
+            FirebaseDatabase db = FirebaseDatabase.getInstance();
+            db.getReference("ids/lastArtistId").get()
+                    .addOnSuccessListener(dataSnapshot -> {
+                        Long lastArtistId = dataSnapshot.getValue(Long.class);
+                        if (lastArtistId != null) {
+                            FirebaseArtist artist = new FirebaseArtist(lastArtistId, firstName, lastName, age, stageName, tracksId, albumsID, imagePath);
+                            db.getReference("artists/").child(String.valueOf(lastArtistId)).setValue(artist);
+                            db.getReference("ids/lastArtistId").setValue(++lastArtistId);
+                        }
+                    });
+            finish();
+        }
 
     }
 }

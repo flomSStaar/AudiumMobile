@@ -88,10 +88,9 @@ public class AddTrackActivity extends AppCompatActivity {
     }
 
     private void addTrack(View view) {
-        //TODO Faire les verifications
         String trackName = editTrackName.getText().toString();
         String imagePath = editImagePath.getText().toString();
-        if (localFileUri != null && artistId != null) {
+        if (localFileUri != null && artistId != null && !trackName.trim().isEmpty() && !imagePath.trim().isEmpty()) {
             dbRef.child("ids/lastTrackId").get()
                     .addOnSuccessListener(dataSnapshot -> {
                         if (dataSnapshot.exists()) {
@@ -105,7 +104,7 @@ public class AddTrackActivity extends AppCompatActivity {
 
                                             ref.getDownloadUrl()
                                                     .addOnSuccessListener(uri -> {
-                                                        FirebaseTrack track = new FirebaseTrack(trackId, trackName, uri.toString(), imagePath, artistId, albumId);
+                                                        FirebaseTrack track = new FirebaseTrack(trackId, trackName.trim(), uri.toString(), imagePath.trim(), artistId, albumId);
 
                                                         dbRef.child("tracks").child(trackId.toString()).setValue(track);
                                                         dbRef.child("ids/lastTrackId").setValue(trackId + 1);
@@ -128,15 +127,16 @@ public class AddTrackActivity extends AppCompatActivity {
                                                         finish();
                                                     })
                                                     .addOnFailureListener(e -> {
-                                                        Log.e("DIM", e.getMessage());
+                                                        Toast.makeText(getApplicationContext(), getString(R.string.error_occured), Toast.LENGTH_SHORT).show();
+                                                        Log.e("DIM", "Cannot get download url");
                                                     });
                                         })
                                         .addOnProgressListener(snapshot -> {
                                             //Progress bar ??
                                         })
                                         .addOnFailureListener(e -> {
-                                            Log.i("DIM", "File upload error");
-                                            Toast.makeText(getApplicationContext(), "File upload error", Toast.LENGTH_SHORT).show();
+                                            Log.e("DIM", "Cannot upload file");
+                                            Toast.makeText(getApplicationContext(), getString(R.string.error_occured), Toast.LENGTH_SHORT).show();
                                         });
                             }
                         }

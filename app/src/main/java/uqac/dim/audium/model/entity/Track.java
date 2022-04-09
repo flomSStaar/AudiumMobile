@@ -1,41 +1,16 @@
 package uqac.dim.audium.model.entity;
 
-import java.util.List;
 import java.util.Objects;
 
 public class Track implements Comparable<Track> {
 
+    protected Long id;
     protected String name;
     protected Long artistId;
-    protected Long id;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Long getArtistId() {
-        return artistId;
-    }
-
-    public void setArtistId(Long artistId) {
-        this.artistId = artistId;
-    }
-
-    public Long getAlbumId() {
-        return albumId;
-    }
-
-    public void setAlbumId(Long albumId) {
-        this.albumId = albumId;
-    }
-
     protected Long albumId;
 
-    private Track(){}
+    private Track() {
+    }
 
     /**
      * Constructs a new Track composed of a title, the artist and an id.
@@ -49,7 +24,6 @@ public class Track implements Comparable<Track> {
         setArtistId(artist);
         setId(id);
     }
-
 
     /**
      * Returns the id of this track.
@@ -66,11 +40,48 @@ public class Track implements Comparable<Track> {
      * @param id The new id of this track
      */
     private void setId(Long id) {
-        this.id = id;
+        if (id != null && id > 0) {
+            this.id = id;
+        } else {
+            throw new IllegalArgumentException("id cannot be null or lower or equal than 0");
+        }
     }
 
+    public String getName() {
+        return name;
+    }
 
+    public void setName(String name) {
+        if (name != null && !name.trim().isEmpty()) {
+            this.name = name.trim();
+        } else {
+            throw new IllegalArgumentException("name cannot be null or empty");
+        }
+    }
 
+    public Long getArtistId() {
+        return artistId;
+    }
+
+    public void setArtistId(Long artistId) {
+        if (artistId != null && artistId > 0) {
+            this.artistId = artistId;
+        } else {
+            throw new IllegalArgumentException("artistId cannot be null or lower or equal than 0");
+        }
+    }
+
+    public Long getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(Long albumId) {
+        if (albumId != null && albumId > 0) {
+            this.albumId = albumId;
+        } else {
+            throw new IllegalArgumentException("albumId cannot be null or lower or equal than 0");
+        }
+    }
 
     @Override
     public int compareTo(Track track) {
@@ -92,6 +103,11 @@ public class Track implements Comparable<Track> {
 
     @Override
     public String toString() {
-        return name;
+        return "Track{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", artistId=" + artistId +
+                ", albumId=" + albumId +
+                '}';
     }
 }

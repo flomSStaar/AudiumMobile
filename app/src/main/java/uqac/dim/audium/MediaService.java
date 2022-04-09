@@ -13,12 +13,12 @@ import androidx.annotation.Nullable;
 
 public class MediaService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
     private static final String ACTION_PLAY = "com.example.action.PLAY";
-    MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer;
 
 
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        String url = "https://firebasestorage.googleapis.com/v0/b/audium-4f845.appspot.com/o/musique.mp3?alt=media&token=f481b12b-c736-4dec-bb26-389212791cac";
+        String url = "https://firebasestorage.googleapis.com/v0/b/audium-4f845.appspot.com/o/tracks%2F1?alt=media&token=b32941f9-60b3-4979-bd76-88e85195d87d";
 
         if (intent.getAction().equals(ACTION_PLAY)) {
 
@@ -26,7 +26,7 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
             mediaPlayer.setOnPreparedListener(this);
 
             mediaPlayer.setOnErrorListener(this);
-            Log.i("DIM","zzedezdeez");
+            Log.i("DIM", "zzedezdeez");
             mediaPlayer.prepareAsync(); // prepare async to not block main thread
 
             mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
