@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,10 +51,10 @@ public class ArtistProfileActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 artist = snapshot.getValue(Artist.class);
                 if (artist != null) {
-                    ((TextView) findViewById(R.id.tv_stage_name)).setText(artist.getStageName());
-                    ((TextView) findViewById(R.id.tv_artist_first_name)).setText(artist.getFirstName());
-                    ((TextView) findViewById(R.id.tv_artist_last_name)).setText(artist.getLastName());
-                    ((TextView) findViewById(R.id.tv_artist_age)).setText(String.valueOf(artist.getAge()));
+                    ((EditText) findViewById(R.id.tv_stage_name)).setText(artist.getStageName());
+                    ((EditText) findViewById(R.id.tv_artist_first_name)).setText(artist.getFirstName());
+                    ((EditText) findViewById(R.id.tv_artist_last_name)).setText(artist.getLastName());
+                    ((EditText) findViewById(R.id.tv_artist_age)).setText(String.valueOf(artist.getAge()));
                 }
                 idTracks = artist.getTracksId();
                 idAlbums = artist.getAlbumsId();

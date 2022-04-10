@@ -73,7 +73,7 @@ public class AlbumPageActivity extends AppCompatActivity {
                             if(dataSnapshot.exists())
                                 artist = dataSnapshot.getValue(Artist.class);
                             else {
-                                // Verif a faire
+
                             }
                         }
                     });
