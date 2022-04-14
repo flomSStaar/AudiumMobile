@@ -27,8 +27,10 @@ import uqac.dim.audium.R;
 import uqac.dim.audium.activity.admin.TrackPageActivity;
 import uqac.dim.audium.firebase.FirebaseAlbum;
 import uqac.dim.audium.firebase.FirebasePlaylist;
+import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.Track;
+import uqac.dim.audium.model.entity.User;
 
 public class PlaylistPageActivity extends AppCompatActivity {
 
@@ -106,6 +108,46 @@ public class PlaylistPageActivity extends AppCompatActivity {
     }
 
     public void deletePlaylist(View view) {
+        database = FirebaseDatabase.getInstance().getReference();
+
+        database.child("playlists").child(username).child(String.valueOf(playlistId)).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Playlist p = dataSnapshot.getValue(Playlist.class);
+                    List<Long> tracksId = p.getTracksId();
+
+                    database.child("playlists").child(username).child(String.valueOf(playlistId)).removeValue();
+
+                    // Remove de user
+                    database.child("users").child(username).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                        @Override
+                        public void onSuccess(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                User u = dataSnapshot.getValue(User.class);
+                                u.getPlaylists().remove(playlistId);
+                                database.child("users").child(String.valueOf(username)).child("playlists").setValue(u.getPlaylists());
+                            }
+                        }
+                    });
+
+                    /// Remove des tracks
+                    database.child("tracks").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                        @Override
+                        public void onSuccess(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                                Track t = snap.getValue(Track.class);
+                                if (tracksId.contains(t.getId())) {
+                                    t.getPlaylistsId().remove(playlistId);
+                                    database.child("tracks").child(String.valueOf(t.getId())).child("playlistsId").setValue(t.getPlaylistsId());
+                                }
+                            }
+                        }
+                    });
+                }
+                finish();
+            }
+        });
     }
 
     public void savePlaylist(View view) {
