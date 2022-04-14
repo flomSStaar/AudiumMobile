@@ -25,12 +25,15 @@ import java.util.List;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.activity.admin.TrackPageActivity;
+import uqac.dim.audium.firebase.FirebaseAlbum;
+import uqac.dim.audium.firebase.FirebasePlaylist;
 import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.Track;
 
 public class PlaylistPageActivity extends AppCompatActivity {
 
     protected String username;
+    protected Long playlistId;
     protected Playlist playlist;
     protected List<Track> tracks;
     private EditText editTitle;
@@ -49,7 +52,7 @@ public class PlaylistPageActivity extends AppCompatActivity {
         btnSave.setVisibility(View.INVISIBLE);
 
         username = getIntent().getStringExtra("username");
-        Long playlistId = getIntent().getLongExtra("playlistId",0);
+        playlistId = getIntent().getLongExtra("playlistId",0);
 
         database = FirebaseDatabase.getInstance().getReference();
         database.child("playlists").child(username).child(String.valueOf(playlistId)).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
@@ -97,8 +100,23 @@ public class PlaylistPageActivity extends AppCompatActivity {
     }
 
     public void modifyPlaylist(View view) {
+        editTitle.setEnabled(true);
+        editDescription.setEnabled(true);
+        btnSave.setVisibility(View.VISIBLE);
     }
 
     public void deletePlaylist(View view) {
+    }
+
+    public void savePlaylist(View view) {
+        String newTitle = editTitle.getText().toString();
+        String newDescription = editDescription.getText().toString();
+
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        FirebasePlaylist newPlaylist = new FirebasePlaylist(playlistId,username, newTitle, newDescription,playlist.getTracksId(),playlist.getImagePath());
+        db.getReference("playlists/").child(username).child(String.valueOf(playlistId)).setValue(newPlaylist);
+        editTitle.setEnabled(false);
+        editDescription.setEnabled(false);
+        btnSave.setVisibility(View.INVISIBLE);
     }
 }

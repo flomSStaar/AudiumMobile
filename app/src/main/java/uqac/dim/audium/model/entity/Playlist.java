@@ -3,6 +3,7 @@ package uqac.dim.audium.model.entity;
 public class Playlist extends TrackContainer {
 
     protected Long id;
+    protected String imagePath;
 
     public Long getId() {
         return id;
@@ -32,6 +33,15 @@ public class Playlist extends TrackContainer {
     public Playlist(String title, String description) {
         super(title, description);
     }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
 
     @Override
     public int compareTo(TrackContainer trackContainer) {
