@@ -3,6 +3,7 @@ package uqac.dim.audium.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
@@ -22,7 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uqac.dim.audium.R;
+import uqac.dim.audium.activity.admin.TrackListActivity;
+import uqac.dim.audium.activity.admin.TrackPageActivity;
 import uqac.dim.audium.model.entity.Playlist;
+import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.model.entity.User;
 
 public class PlaylistListActivity extends AppCompatActivity {
@@ -71,6 +75,12 @@ public class PlaylistListActivity extends AppCompatActivity {
             }
         });
 
+        gridView.setOnItemClickListener((adapter, view1, position, arg) -> {
+            Intent intent = new Intent(PlaylistListActivity.this, PlaylistPageActivity.class);
+            intent.putExtra("playlistId", ((Playlist) gridView.getItemAtPosition(position)).getId());
+            intent.putExtra("username", username);
+            startActivity(intent);
+        });
 
 
     }

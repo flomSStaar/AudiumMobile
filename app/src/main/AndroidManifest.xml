@@ -72,6 +72,9 @@
         <activity
             android:name=".activity.AddPlaylistActivity"
             android:exported="false" />
+        <activity
+            android:name=".activity.PlaylistPageActivity"
+            android:exported="false" />
         <service android:name=".MediaService" />
     </application>
 
