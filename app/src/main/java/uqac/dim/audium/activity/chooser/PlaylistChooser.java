@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -35,6 +36,7 @@ public class PlaylistChooser extends AppCompatActivity {
     private Long trackId;
     private List<Playlist> playlists;
     private DatabaseReference database;
+    private TextView tv;
 
 
     @Override
@@ -43,6 +45,7 @@ public class PlaylistChooser extends AppCompatActivity {
         setContentView(R.layout.activity_playlist_chooser);
         username = getIntent().getStringExtra("username");
         trackId = getIntent().getLongExtra("trackId",0);
+        tv = findViewById(R.id.playlist_list_title);
 
         database = FirebaseDatabase.getInstance().getReference();
 
@@ -92,12 +95,12 @@ public class PlaylistChooser extends AppCompatActivity {
                             if (p != null && !p.getTracksId().contains(trackId)) {
                                 playlists.add(p);
                             }
+                            if (playlists.isEmpty())
+                                tv.setText("No playlists");
                         }
                         listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, playlists));
-                    } else {
-                        Log.i("DIM", "There is no artist in database");
-
                     }
                 });
-    }
+            }
 }
+
