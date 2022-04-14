@@ -65,4 +65,6 @@
     <string name="error_occured">An error occured, please try again later</string>
     <string name="artist">Artist</string>
     <string name="album">album</string>
+    <string name="playlists">Playlists</string>
+    <string name="add_a_playlist">Add a playlist</string>
 </resources>

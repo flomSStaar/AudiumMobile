@@ -2,6 +2,18 @@ package uqac.dim.audium.model.entity;
 
 public class Playlist extends TrackContainer {
 
+    protected Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Playlist(){}
+
     /**
      * Constructs a new Playlist with a title.
      *
@@ -24,5 +36,14 @@ public class Playlist extends TrackContainer {
     @Override
     public int compareTo(TrackContainer trackContainer) {
         return this.title.compareTo(trackContainer.title);
+    }
+
+    @Override
+    public String toString() {
+        return "Playlist{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

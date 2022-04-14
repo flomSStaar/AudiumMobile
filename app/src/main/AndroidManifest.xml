@@ -66,6 +66,12 @@
         <activity
             android:name=".activity.admin.TrackPageActivity"
             android:exported="false" />
+        <activity
+            android:name=".activity.PlaylistListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.AddPlaylistActivity"
+            android:exported="false" />
         <service android:name=".MediaService" />
     </application>
 

@@ -1,10 +1,12 @@
 package uqac.dim.audium.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +22,10 @@ import java.util.List;
 import uqac.dim.audium.R;
 import uqac.dim.audium.SliderAdapter;
 import uqac.dim.audium.SliderItem;
+import uqac.dim.audium.activity.MainActivity;
+import uqac.dim.audium.activity.PlaylistListActivity;
+import uqac.dim.audium.activity.admin.AddArtistActivity;
+import uqac.dim.audium.activity.admin.ArtistListActivity;
 
 public class HomeFragment extends Fragment {
     private ViewPager2 viewPager2;
@@ -31,6 +37,7 @@ public class HomeFragment extends Fragment {
         }
     };
     private final List<SliderItem> sliderItems = new ArrayList<>();
+    private ImageButton imageButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,6 +77,18 @@ public class HomeFragment extends Fragment {
             }
         });
 
+
+        imageButton = root.findViewById(R.id.playlist_btn);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // New intent avec l'id du joueur
+                Intent i = new Intent(getContext(), PlaylistListActivity.class);
+                i.putExtra("username",MainActivity.user.getUsername());
+                startActivity(i);
+            }
+        });
+
         viewPager2.setPageTransformer(compositePageTransformer);
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -82,6 +101,8 @@ public class HomeFragment extends Fragment {
 
         return root;
     }
+
+
 
     //A corriger!
 //    @Override

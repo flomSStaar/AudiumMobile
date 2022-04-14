@@ -2,6 +2,7 @@ package uqac.dim.audium.model.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uqac.dim.audium.R;
+import uqac.dim.audium.activity.AddPlaylistActivity;
 import uqac.dim.audium.activity.admin.AddAlbumActivity;
 import uqac.dim.audium.model.entity.Track;
 
@@ -24,12 +26,14 @@ public class ListViewAdapter extends ArrayAdapter<Track> {
 
     private List<Track> titles;
     private Context context;
+    private String method;
 
-    public ListViewAdapter(List<Track> names, Context context) {
+    public ListViewAdapter(List<Track> names, Context context,String method) {
         super(context, R.layout.track_list_item, names);
         this.context = context;
         titles = new ArrayList<>();
         this.titles = names;
+        this.method = method;
     }
 
     @NonNull
@@ -46,10 +50,20 @@ public class ListViewAdapter extends ArrayAdapter<Track> {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 int position = (int) compoundButton.getTag();
-                if (AddAlbumActivity.idTracksSelected.contains(titles.get(position))) {
-                    AddAlbumActivity.idTracksSelected.remove(titles.get(position));
-                } else {
-                    AddAlbumActivity.idTracksSelected.add(titles.get(position).getId());
+                if(method.equals("Album")) {
+                    Log.i("DIM","Album");
+                    if (AddAlbumActivity.idTracksSelected.contains(titles.get(position))) {
+                        AddAlbumActivity.idTracksSelected.remove(titles.get(position));
+                    } else {
+                        AddAlbumActivity.idTracksSelected.add(titles.get(position).getId());
+                    }
+                }else if(method.equals("Playlist")){
+                    Log.i("DIM","Playlist");
+                    if (AddPlaylistActivity.idTracksSelected.contains(titles.get(position))) {
+                        AddPlaylistActivity.idTracksSelected.remove(titles.get(position));
+                    } else {
+                        AddPlaylistActivity.idTracksSelected.add(titles.get(position).getId());
+                    }
                 }
 
             }

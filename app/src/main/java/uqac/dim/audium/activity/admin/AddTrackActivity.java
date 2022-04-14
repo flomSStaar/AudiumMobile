@@ -21,6 +21,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import uqac.dim.audium.R;
 import uqac.dim.audium.activity.chooser.AlbumChooser;
 import uqac.dim.audium.activity.chooser.ArtistChooser;
@@ -104,7 +107,8 @@ public class AddTrackActivity extends AppCompatActivity {
 
                                             ref.getDownloadUrl()
                                                     .addOnSuccessListener(uri -> {
-                                                        FirebaseTrack track = new FirebaseTrack(trackId, trackName.trim(), uri.toString(), imagePath.trim(), artistId, albumId);
+                                                        List<Long> playlistsId = new ArrayList<>();
+                                                        FirebaseTrack track = new FirebaseTrack(trackId, trackName.trim(), uri.toString(), imagePath.trim(), artistId, albumId,playlistsId);
 
                                                         dbRef.child("tracks").child(trackId.toString()).setValue(track);
                                                         dbRef.child("ids/lastTrackId").setValue(trackId + 1);

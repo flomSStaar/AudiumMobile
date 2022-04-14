@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -26,19 +25,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.w3c.dom.Text;
-
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.activity.chooser.AlbumChooser;
-import uqac.dim.audium.firebase.FirebaseAlbum;
 import uqac.dim.audium.firebase.FirebaseTrack;
 import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
-import uqac.dim.audium.model.entity.User;
 
 public class TrackPageActivity extends AppCompatActivity {
 
@@ -149,7 +143,7 @@ public class TrackPageActivity extends AppCompatActivity {
 
 
         database = FirebaseDatabase.getInstance().getReference();
-        FirebaseTrack newTrack = new FirebaseTrack(trackId,newName,track.getPath(),newImagePath,artist.getId(),albumId);
+        FirebaseTrack newTrack = new FirebaseTrack(trackId,newName,track.getPath(),newImagePath,artist.getId(),albumId,track.getPlaylistsId());
         database.child("tracks").child(String.valueOf(trackId)).setValue(newTrack);
         database.child("albums").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override

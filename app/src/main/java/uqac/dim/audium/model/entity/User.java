@@ -12,7 +12,7 @@ public class User extends Person implements Serializable {
     protected String username;
     @PropertyName("admin")
     protected boolean isAdmin;
-    protected List<Playlist> playlists = new ArrayList<>();
+    protected List<Long> playlists = new ArrayList<>();
 
     /**
      * Construcs a new User.
@@ -62,8 +62,7 @@ public class User extends Person implements Serializable {
      *
      * @return Playlists of this user
      */
-    @Exclude
-    public List<Playlist> getPlaylists() {
+    public List<Long> getPlaylists() {
         return playlists;
     }
 
@@ -72,7 +71,7 @@ public class User extends Person implements Serializable {
      *
      * @param playlists The new list of playlist of this user
      */
-    public void setPlaylists(List<Playlist> playlists) {
+    public void setPlaylists(List<Long> playlists) {
         if (playlists != null) {
             this.playlists = playlists;
         } else {

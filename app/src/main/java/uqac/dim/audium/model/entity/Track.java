@@ -1,5 +1,6 @@
 package uqac.dim.audium.model.entity;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Track implements Comparable<Track> {
@@ -8,6 +9,16 @@ public class Track implements Comparable<Track> {
     protected String name;
     protected Long artistId;
     protected Long albumId;
+    protected List<Long> playlistsId;
+
+    public List<Long> getPlaylistsId() {
+        return playlistsId;
+    }
+
+    public void setPlaylistsId(List<Long> playlistsId) {
+        this.playlistsId = playlistsId;
+    }
+
 
     public String getPath() {
         return path;

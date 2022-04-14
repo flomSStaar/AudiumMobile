@@ -17,7 +17,7 @@ import uqac.dim.audium.fragment.SearchFragment;
 import uqac.dim.audium.model.entity.User;
 
 public class MainActivity extends AppCompatActivity {
-    private User user;
+    public static User user; ///A CHANGER !!!
     private ImageButton btnHome;
     private ImageButton btnSearch;
     private ImageButton btnSettings;
@@ -134,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Faire une vue pour les albums + gestion des albums
     }
+
 
     //// --------------------------------------------------
 
