@@ -9,25 +9,20 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.activity.admin.TrackPageActivity;
-import uqac.dim.audium.firebase.FirebaseAlbum;
 import uqac.dim.audium.firebase.FirebasePlaylist;
-import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.model.entity.User;
@@ -145,9 +140,9 @@ public class PlaylistPageActivity extends AppCompatActivity {
                         }
                     });
                 }
-                finish();
             }
         });
+        finish();
     }
 
     public void savePlaylist(View view) {
