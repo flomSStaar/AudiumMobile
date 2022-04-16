@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import uqac.dim.audium.MediaService;
 import uqac.dim.audium.R;
 import uqac.dim.audium.fragment.HomeFragment;
 import uqac.dim.audium.fragment.MediaPlayerFragment;
@@ -16,8 +17,9 @@ import uqac.dim.audium.fragment.SearchFragment;
 import uqac.dim.audium.model.entity.User;
 
 public class MainActivity extends AppCompatActivity {
-    private User user;
+    public static User user; ///A CHANGER !!!
     private ImageButton btnHome, btnSearch, btnSettings;
+    private MediaService mediaService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

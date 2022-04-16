@@ -28,7 +28,9 @@ import com.google.firebase.storage.StorageReference;
 import java.util.List;
 
 import uqac.dim.audium.R;
+import uqac.dim.audium.activity.MainActivity;
 import uqac.dim.audium.activity.chooser.AlbumChooser;
+import uqac.dim.audium.activity.chooser.PlaylistChooser;
 import uqac.dim.audium.firebase.FirebaseTrack;
 import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Artist;
@@ -143,7 +145,7 @@ public class TrackPageActivity extends AppCompatActivity {
 
 
         database = FirebaseDatabase.getInstance().getReference();
-        FirebaseTrack newTrack = new FirebaseTrack(trackId, newName, track.getUrl(), newImagePath, artist.getId(), albumId);
+        FirebaseTrack newTrack = new FirebaseTrack(trackId, newName, track.getUrl(), newImagePath, artist.getId(), albumId, track.getPlaylistsId());
         database.child("tracks").child(String.valueOf(trackId)).setValue(newTrack);
         database.child("albums").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
@@ -217,5 +219,12 @@ public class TrackPageActivity extends AppCompatActivity {
 
         trackId = null;
         finish();
+    }
+
+    public void addTrack(View view) {
+        Intent intent = new Intent(getApplicationContext(), PlaylistChooser.class);
+        intent.putExtra("username", MainActivity.user.getUsername());
+        intent.putExtra("trackId",trackId);
+        startActivity(intent);
     }
 }

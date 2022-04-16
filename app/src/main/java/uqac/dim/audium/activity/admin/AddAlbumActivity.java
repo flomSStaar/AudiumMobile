@@ -96,7 +96,7 @@ public class AddAlbumActivity extends AppCompatActivity {
                     }
                 }
                 if (tracks.size() != 0) {
-                    artistListView.setAdapter(new ListViewAdapter(tracks, c));
+                    artistListView.setAdapter(new ListViewAdapter(tracks, c,"Album"));
                 }
             }
 

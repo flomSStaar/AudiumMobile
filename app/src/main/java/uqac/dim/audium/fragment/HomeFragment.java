@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +33,10 @@ import uqac.dim.audium.MediaService;
 import uqac.dim.audium.R;
 import uqac.dim.audium.SliderAdapter;
 import uqac.dim.audium.SliderItem;
+import uqac.dim.audium.activity.MainActivity;
+import uqac.dim.audium.activity.PlaylistListActivity;
+import uqac.dim.audium.activity.admin.AddArtistActivity;
+import uqac.dim.audium.activity.admin.ArtistListActivity;
 import uqac.dim.audium.model.entity.Track;
 
 public class HomeFragment extends Fragment {
@@ -43,6 +49,7 @@ public class HomeFragment extends Fragment {
         }
     };
     private final List<SliderItem> sliderItems = new ArrayList<>();
+    private ImageButton imageButton;
 
     private final Context context;
     private MediaService mediaService;
@@ -123,6 +130,18 @@ public class HomeFragment extends Fragment {
                 float r = 1 - Math.abs(position);
                 page.setScaleY(0.85f + r * 0.15f);
 
+            }
+        });
+
+
+        imageButton = root.findViewById(R.id.playlist_btn);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // New intent avec l'id du joueur
+                Intent i = new Intent(getContext(), PlaylistListActivity.class);
+                i.putExtra("username",MainActivity.user.getUsername());
+                startActivity(i);
             }
         });
 

@@ -95,10 +95,17 @@
         android:onClick="modifyTrack"/>
 
     <Button
+        android:layout_width="200sp"
+        android:layout_height="wrap_content"
+        android:text="@string/add_to_playlist"
+        android:layout_gravity="center"
+        android:layout_marginVertical="20dp"
+        android:onClick="addTrack"/>
+
+    <Button
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="@string/delete"
         android:layout_gravity="center"
-        android:layout_marginVertical="20dp"
         android:onClick="deleteTrack"/>
 </LinearLayout>
