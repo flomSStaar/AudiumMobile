@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -26,19 +25,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.w3c.dom.Text;
-
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.activity.chooser.AlbumChooser;
-import uqac.dim.audium.firebase.FirebaseAlbum;
 import uqac.dim.audium.firebase.FirebaseTrack;
 import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
-import uqac.dim.audium.model.entity.User;
 
 public class TrackPageActivity extends AppCompatActivity {
 
@@ -64,12 +58,12 @@ public class TrackPageActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance().getReference();
 
         albumResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::getAlbumResult);
-        trackId = getIntent().getLongExtra("trackId",0);
-        albumId = getIntent().getLongExtra("albumId",0);
-        if(albumId==0)
-            albumId=null;
+        trackId = getIntent().getLongExtra("trackId", 0);
+        albumId = getIntent().getLongExtra("albumId", 0);
+        if (albumId == 0)
+            albumId = null;
 
-        if(albumId!=null) {
+        if (albumId != null) {
             database.child("albums/" + albumId).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                 @Override
                 public void onSuccess(DataSnapshot dataSnapshot) {
@@ -106,14 +100,14 @@ public class TrackPageActivity extends AppCompatActivity {
                 track = snapshot.getValue(Track.class);
                 if (track != null) {
                     editName.setText(track.getName());
-                    if(track.getAlbumId()==null)
+                    if (track.getAlbumId() == null)
                         editAlbum.setText("Not in an album");
-                    else{
+                    else {
                         albumId = track.getAlbumId();
                         editAlbum.setText(albumId.toString());
                     }
-                    editMusicPath.setText(track.getPath());
-                    editImagePath.setText(track.getImagePath());
+                    editMusicPath.setText(track.getUrl());
+                    editImagePath.setText(track.getImageUrl());
                     database.child("artists").child(track.getArtistId().toString()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
                         public void onSuccess(DataSnapshot dataSnapshot) {
@@ -136,7 +130,7 @@ public class TrackPageActivity extends AppCompatActivity {
 
     public void modifyTrack(View view) {
         btnSave.setVisibility(View.VISIBLE);
-        if(track.getAlbumId()==null)
+        if (track.getAlbumId() == null)
             btnChangeAlbum.setVisibility(View.VISIBLE);
         editName.setEnabled(true);
         editImagePath.setEnabled(true);
@@ -149,7 +143,7 @@ public class TrackPageActivity extends AppCompatActivity {
 
 
         database = FirebaseDatabase.getInstance().getReference();
-        FirebaseTrack newTrack = new FirebaseTrack(trackId,newName,track.getPath(),newImagePath,artist.getId(),albumId);
+        FirebaseTrack newTrack = new FirebaseTrack(trackId, newName, track.getUrl(), newImagePath, artist.getId(), albumId);
         database.child("tracks").child(String.valueOf(trackId)).setValue(newTrack);
         database.child("albums").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
@@ -158,7 +152,7 @@ public class TrackPageActivity extends AppCompatActivity {
                     Album a = snap.getValue(Album.class);
                     if (a != null && a.getId().equals(albumId)) {
                         album = a;
-                        if(albumId!=null) {
+                        if (albumId != null) {
                             album.getTracksId().add(newTrack.getId());
                             database.child("albums").child(albumId.toString()).child("tracksId").setValue(album.getTracksId());
                         }
@@ -208,10 +202,10 @@ public class TrackPageActivity extends AppCompatActivity {
     public void deleteTrack(View view) {
         database = FirebaseDatabase.getInstance().getReference();
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference ref = storage.getReferenceFromUrl(track.getPath());
+        StorageReference ref = storage.getReferenceFromUrl(track.getUrl());
         ref.delete();
         //Remove les ids des tracks des albums
-        if(album !=null){
+        if (album != null) {
             List<Long> tracksId = album.getTracksId();
             tracksId.remove(trackId);
             database.child("albums").child(albumId.toString()).child("tracksId").setValue(tracksId);

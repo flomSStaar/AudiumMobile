@@ -4,27 +4,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import uqac.dim.audium.MediaService;
 import uqac.dim.audium.R;
 import uqac.dim.audium.fragment.HomeFragment;
+import uqac.dim.audium.fragment.MediaPlayerFragment;
 import uqac.dim.audium.fragment.SearchFragment;
 import uqac.dim.audium.model.entity.User;
 
 public class MainActivity extends AppCompatActivity {
     private User user;
-    private ImageButton btnHome;
-    private ImageButton btnSearch;
-    private ImageButton btnSettings;
-    private Button btnPrevious;
-    private Button btnPause;
-    private Button btnSkip;
-    private MediaService mediaService;
+    private ImageButton btnHome, btnSearch, btnSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,17 +28,9 @@ public class MainActivity extends AppCompatActivity {
         btnSearch = findViewById(R.id.btn_search);
         btnSettings = findViewById(R.id.btn_settings);
 
-        btnPrevious = findViewById(R.id.previous_button);
-        btnPause = findViewById(R.id.pause_button);
-        btnSkip = findViewById(R.id.skip_button);
-
         btnHome.setOnClickListener(this::home);
         btnSearch.setOnClickListener(this::search);
         btnSettings.setOnClickListener(this::settings);
-
-        btnPrevious.setOnClickListener(this::previous);
-        btnPause.setOnClickListener(this::pause);
-        btnSkip.setOnClickListener(this::skip);
 
         initUser();
 
@@ -53,16 +38,15 @@ public class MainActivity extends AppCompatActivity {
             initAdminMenu();
         }
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, new HomeFragment())
-                    .commit();
-        }
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, new HomeFragment(getApplicationContext()))
+                .add(R.id.music_player, new MediaPlayerFragment(getApplicationContext()))
+                .commit();
     }
 
     private void home(View view) {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new HomeFragment())
+                .replace(R.id.fragment_container, new HomeFragment(getApplicationContext()))
                 .commit();
     }
 
@@ -80,21 +64,6 @@ public class MainActivity extends AppCompatActivity {
         i.putExtra("username", user.getUsername());
         i.putExtra("isAdmin", user.isAdmin());
         startActivity(i);
-    }
-
-    private void previous(View v) {
-
-    }
-
-    private void pause(View v) {
-        Intent i = new Intent(this, MediaService.class);
-        i.setAction("com.example.action.PLAY");
-        startService(i);
-
-    }
-
-    private void skip(View v) {
-
     }
 
 

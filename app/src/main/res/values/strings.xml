@@ -65,4 +65,5 @@
     <string name="error_occured">An error occured, please try again later</string>
     <string name="artist">Artist</string>
     <string name="album">album</string>
+    <string name="artist_name_error">Artist name error</string>
 </resources>

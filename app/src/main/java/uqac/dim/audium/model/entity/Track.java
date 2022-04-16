@@ -8,40 +8,29 @@ public class Track implements Comparable<Track> {
     protected String name;
     protected Long artistId;
     protected Long albumId;
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
-    protected String path;
-    protected String imagePath;
+    protected String url;
+    protected String imageUrl;
 
     private Track() {
     }
 
     /**
-     * Constructs a new Track composed of a title, the artist and an id.
+     * Constructs a new Track composed of an id, a name, the url, the artist id, the album id and the image url.
      *
-     * @param title  Title of this track
-     * @param artist Artist of this track
-     * @param id     Id of this track
+     * @param id       Id of this track
+     * @param name     Title of this track
+     * @param url      Url of this track
+     * @param artistId Artist Id of this track
+     * @param albumId  Album Id of this track
+     * @param imageUrl Image url of this track
      */
-    public Track(String title, Long artist, Long id) {
-        setName(title);
-        setArtistId(artist);
+    public Track(Long id, String name, String url, Long artistId, Long albumId, String imageUrl) {
         setId(id);
+        setName(name);
+        setUrl(url);
+        setArtistId(artistId);
+        setAlbumId(albumId);
+        setImageUrl(imageUrl);
     }
 
     /**
@@ -100,6 +89,22 @@ public class Track implements Comparable<Track> {
         } else {
             throw new IllegalArgumentException("albumId cannot be null or lower or equal than 0");
         }
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @Override

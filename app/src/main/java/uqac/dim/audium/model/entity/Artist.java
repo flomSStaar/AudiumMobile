@@ -1,7 +1,5 @@
 package uqac.dim.audium.model.entity;
 
-import com.google.firebase.database.Exclude;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,14 +9,14 @@ public class Artist extends Person {
     protected String stageName;
     protected List<Long> albumsId;
     private List<Long> tracksId;
-    private String imagePath;
+    private String imageUrl;
 
-    public String getImagePath() {
-        return imagePath;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public List<Long> getTracksId() {
@@ -178,6 +176,14 @@ public class Artist extends Person {
         }
     }
 
+    public String getPrintableName() {
+        if (stageName != null) {
+            return stageName;
+        } else {
+            return firstName + " " + lastName;
+        }
+    }
+
     /**
      * Returns a string representation of this artist.
      *
@@ -189,7 +195,7 @@ public class Artist extends Person {
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
-                ", stageNameName='" + stageName + '\'' +
+                ", stageName='" + stageName + '\'' +
                 '}';
     }
 }

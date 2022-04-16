@@ -1,7 +1,13 @@
 package uqac.dim.audium.fragment;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +20,18 @@ import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import uqac.dim.audium.MediaService;
 import uqac.dim.audium.R;
 import uqac.dim.audium.SliderAdapter;
 import uqac.dim.audium.SliderItem;
+import uqac.dim.audium.model.entity.Track;
 
 public class HomeFragment extends Fragment {
     private ViewPager2 viewPager2;
@@ -31,6 +43,30 @@ public class HomeFragment extends Fragment {
         }
     };
     private final List<SliderItem> sliderItems = new ArrayList<>();
+
+    private final Context context;
+    private MediaService mediaService;
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            mediaService = ((MediaService.MediaServiceBinder) iBinder).getService();
+            Log.i("DIM", "HomeFragment: onServiceConnected");
+            getTracks();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mediaService = null;
+            Log.i("DIM", "HomeFragment: onServiceDisconnected");
+        }
+    };
+
+    public HomeFragment(Context context) {
+        if (context == null) {
+            throw new IllegalArgumentException("context cannot be null");
+        }
+        this.context = context;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,6 +80,26 @@ public class HomeFragment extends Fragment {
         sliderItems.add(new SliderItem("https://www.hhqc.com/wp-content/uploads/2019/10/sethgueko.jpg"));
         sliderItems.add(new SliderItem("https://media2.ledevoir.com/images_galerie/nwd_881002_701874/image.jpg"));
         sliderItems.add(new SliderItem("https://www.hhqc.com/wp-content/uploads/2019/10/sethgueko.jpg"));
+
+        Intent intent = new Intent(context, MediaService.class);
+        context.bindService(intent, serviceConnection, 0);
+    }
+
+    // Méthode temporaire pour tester le media player
+    private void getTracks() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("tracks");
+        ref.get().addOnSuccessListener(dataSnapshot -> {
+            List<Track> tracks = new ArrayList<>();
+            if (dataSnapshot.exists()) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Track track = snapshot.getValue(Track.class);
+                    if (track != null) {
+                        tracks.add(track);
+                    }
+                }
+                mediaService.setTracks(tracks);
+            }
+        });
     }
 
     @Nullable
@@ -83,16 +139,15 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
-    //A corriger!
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        sliderHandler.removeCallbacks(sliderRunnable);
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        sliderHandler.postDelayed(sliderRunnable, 3000);
-//    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        sliderHandler.removeCallbacks(sliderRunnable);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        sliderHandler.postDelayed(sliderRunnable, 3000);
+    }
 }
