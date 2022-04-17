@@ -8,6 +8,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
 
@@ -46,6 +47,7 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
 
         mediaPlayer.release();
     }
+
 
     // Service
 
@@ -93,6 +95,7 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
         }
     }
 
+
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
         nextTrack();
@@ -113,6 +116,7 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
     // MediaPlayer Controls
 
     public void play() {
+
         Log.i("DIM", "MediaService.play()");
 
         if (tracks != null) {
@@ -136,6 +140,7 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
     }
 
     public void nextTrack() {
+
         Log.i("DIM", "MediaService.nextTrack()");
 
         if (tracks != null) {
@@ -145,8 +150,10 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
                     notifyPause();
                 }
                 prepareTrack(looping, nextPlayingIndex);
+
             } else {
                 prepareTrack(true, nextPlayingIndex);
+
             }
         } else {
             Log.w("DIM", "MediaService.nextTrack(): tracks is not initialized");
@@ -154,6 +161,7 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
     }
 
     public void previousTrack() {
+
         Log.i("DIM", "MediaService.previousTrack()");
 
         if (tracks != null) {
@@ -161,9 +169,11 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
             if (currentPlayingIndex == 0) {
                 if (looping) {
                     prepareTrack(true, previousPlayingIndex);
+
                 }
             } else {
                 prepareTrack(true, previousPlayingIndex);
+
             }
         } else {
             Log.w("DIM", "MediaService.previousTrack(): tracks is not initialized");
@@ -241,5 +251,14 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
         void onTrackPause();
 
         void onTrackChanged(Track track);
+    }
+
+    public int getDuration(){
+        return mediaPlayer.getDuration();
+    }
+
+    public int getCurrentPosition()
+    {
+        return mediaPlayer.getCurrentPosition();
     }
 }
