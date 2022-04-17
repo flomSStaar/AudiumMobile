@@ -150,7 +150,7 @@ public class PlaylistPageActivity extends AppCompatActivity {
         String newDescription = editDescription.getText().toString();
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-        FirebasePlaylist newPlaylist = new FirebasePlaylist(playlistId,username, newTitle, newDescription,playlist.getTracksId(),playlist.getImagePath());
+        FirebasePlaylist newPlaylist = new FirebasePlaylist(playlistId,username, newTitle, newDescription,playlist.getTracksId(),playlist.getImageUrl());
         db.getReference("playlists/").child(username).child(String.valueOf(playlistId)).setValue(newPlaylist);
         editTitle.setEnabled(false);
         editDescription.setEnabled(false);
