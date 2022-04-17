@@ -73,8 +73,15 @@ public class PlaylistChooser extends AppCompatActivity {
                 public void onSuccess(DataSnapshot dataSnapshot) {
                     if(dataSnapshot.exists()){
                         Track t = dataSnapshot.getValue(Track.class);
-                        t.getPlaylistsId().add(playlist.getId());
-                        database.child("tracks").child(String.valueOf(trackId)).child("playlistsId").setValue(t.getPlaylistsId());
+                        if(t.getPlaylistsId() !=null) {
+                            t.getPlaylistsId().add(playlist.getId());
+                            database.child("tracks").child(String.valueOf(trackId)).child("playlistsId").setValue(t.getPlaylistsId());
+                        } else{
+                            List<Long> list = new ArrayList<>();
+                            list.add(playlist.getId());
+                            database.child("tracks").child(String.valueOf(trackId)).child("playlistsId").setValue(list);
+
+                        }
                     }
                 }
             });

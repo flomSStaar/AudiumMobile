@@ -25,15 +25,19 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.activity.MainActivity;
+import uqac.dim.audium.activity.PlaylistPageActivity;
 import uqac.dim.audium.activity.chooser.AlbumChooser;
 import uqac.dim.audium.activity.chooser.PlaylistChooser;
 import uqac.dim.audium.firebase.FirebaseTrack;
 import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Artist;
+import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.Track;
 
 public class TrackPageActivity extends AppCompatActivity {
@@ -216,6 +220,29 @@ public class TrackPageActivity extends AppCompatActivity {
         artistsTracksId.remove(trackId);
         database.child("artists").child(artist.getId().toString()).child("tracksId").setValue(artistsTracksId);
         database.child("tracks").child(String.valueOf(trackId)).removeValue();
+
+        List<Long> playlistsId = track.getPlaylistsId();
+        Long id = track.getId();
+        database.child("playlists").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for (DataSnapshot snap: dataSnapshot.getChildren()) {
+                        for (DataSnapshot playlist : snap.getChildren()) {
+                            Playlist p = playlist.getValue(Playlist.class);
+                            if (playlistsId.contains(p.getId())) {
+                                p.getTracksId().remove(id);
+                                if (!p.getTracksId().isEmpty())
+                                    database.child("playlists").child(snap.getKey()).child(String.valueOf(p.getId())).child("tracksId").setValue(p.getTracksId());
+                                else
+                                    database.child("playlists").child(snap.getKey()).child(String.valueOf(p.getId())).removeValue();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        // Si derniere, supprimmer la playlist
 
         trackId = null;
         finish();

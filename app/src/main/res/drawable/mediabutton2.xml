@@ -1,0 +1,25 @@
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/white">
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#191916"
+                android:endColor="#141412" />
+            <corners android:radius="15dp" />
+        </shape>
+    </item>
+
+    <item android:id="@android:id/mask">
+        <inset
+            android:insetBottom="2dp"
+            android:insetLeft="2dp"
+            android:insetRight="2dp"
+            android:insetTop="2dp">
+            <shape android:shape="rectangle">
+                <corners android:radius="15dp" />
+                <!-- Color doesn't matter -->
+                <solid android:color="@android:color/white" />
+            </shape>
+        </inset>
+    </item>
+</ripple>

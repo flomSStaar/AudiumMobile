@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +28,7 @@ import uqac.dim.audium.R;
 import uqac.dim.audium.activity.AlbumPageActivity;
 import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Artist;
+import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.Track;
 
 public class ArtistProfileActivity extends AppCompatActivity {
@@ -46,10 +48,10 @@ public class ArtistProfileActivity extends AppCompatActivity {
         Intent intent = getIntent();
         long artistId = intent.getLongExtra("artistId", 0);
         database = FirebaseDatabase.getInstance().getReference();
-        database.child("artists").child(Long.toString(artistId)).addValueEventListener(new ValueEventListener() {
+        database.child("artists").child(Long.toString(artistId)).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                artist = snapshot.getValue(Artist.class);
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                artist = dataSnapshot.getValue(Artist.class);
                 if (artist != null) {
                     ((EditText) findViewById(R.id.tv_stage_name)).setText(artist.getStageName());
                     ((EditText) findViewById(R.id.tv_artist_first_name)).setText(artist.getFirstName());
@@ -59,24 +61,45 @@ public class ArtistProfileActivity extends AppCompatActivity {
                 idTracks = artist.getTracksId();
                 idAlbums = artist.getAlbumsId();
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
         });
-
     }
 
     private void deleteArtist(View view) {
         database = FirebaseDatabase.getInstance().getReference();
         database.child("artists").child(String.valueOf(artist.getId())).removeValue();
-        for (Long idTrack: idTracks) {
-            database.child("tracks").child(String.valueOf(idTrack)).removeValue();
+        if(idTracks!= null){
+            for (Long idTrack: idTracks) {
+                //suppression de la musique
+                database.child("tracks").child(String.valueOf(idTrack)).removeValue();
+
+                //supression de l'id de la musique dans la playlist des utilisateurs
+                database.child("playlists").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                    @Override
+                    public void onSuccess(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                                for (DataSnapshot playlist : snap.getChildren()) {
+                                    Playlist p = playlist.getValue(Playlist.class);
+                                    if (p.getTracksId().contains(idTrack)) {
+                                        p.getTracksId().remove(idTrack);
+                                        if (!p.getTracksId().isEmpty())
+                                            database.child("playlists").child(snap.getKey()).child(String.valueOf(p.getId())).child("tracksId").setValue(p.getTracksId());
+                                        else
+                                            database.child("playlists").child(snap.getKey()).child(String.valueOf(p.getId())).removeValue();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
         }
-        for(Long idAlbum : idAlbums){
-            database.child("albums").child(String.valueOf(idAlbum)).removeValue();
+        if(idAlbums!=null) {
+            for (Long idAlbum : idAlbums) {
+                database.child("albums").child(String.valueOf(idAlbum)).removeValue();
+            }
         }
+
 
 
 
