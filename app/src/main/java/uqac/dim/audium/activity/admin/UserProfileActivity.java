@@ -16,10 +16,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import uqac.dim.audium.R;
 import uqac.dim.audium.firebase.FirebaseTrack;
 import uqac.dim.audium.firebase.FirebaseUser;
 import uqac.dim.audium.model.entity.Album;
+import uqac.dim.audium.model.entity.Playlist;
+import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.model.entity.User;
 
 public class UserProfileActivity extends AppCompatActivity {
@@ -68,6 +73,33 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private void deleteUser(View view) {
         database.child("users").child(user.getUsername()).removeValue();
+        List<Long> idPlaylists = user.getPlaylists();
+
+        database.child("playlists").child(user.getUsername()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for (DataSnapshot playlist : dataSnapshot.getChildren()) {
+                        Playlist p = playlist.getValue(Playlist.class);
+                        if (idPlaylists.contains(p.getId())) {
+                            for (Long track:p.getTracksId()) {
+                                database.child("tracks").child(String.valueOf(track)).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DataSnapshot dataSnapshot) {
+                                        if(dataSnapshot.exists()){
+                                            Track t = dataSnapshot.getValue(Track.class);
+                                            t.getPlaylistsId().remove(p.getId());
+                                            database.child("tracks").child(String.valueOf(track)).child("playlistsId").setValue(t.getPlaylistsId());
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        database.child("playlists").child(user.getUsername()).removeValue();
         user = null;
         finish();
     }
