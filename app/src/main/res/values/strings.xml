@@ -19,7 +19,7 @@
     <string name="register_error">An error occured when registering</string>
     <string name="username_exists">Username already exists</string>
     <string name="invalid_age">Age must be greater than 0</string>
-    <string name="password_validation">Password must have 8 characters, contains only lowercase, uppercase and number characters, contains not spaces or special characters</string>
+    <string name="password_validation">Password must have eight characters, at least one uppercase letter, one lowercase letter, one number and one special character</string>
     <string name="last_name_validation">Last name must not contain special characters</string>
     <string name="first_name_validation">First name must not contain special characters and not start and end with spaces</string>
     <string name="username_validation">Username must contain only lowercase, uppercase and number characters, contains not spaces or special characters</string>
