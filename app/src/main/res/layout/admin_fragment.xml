@@ -2,24 +2,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="10dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/admin" />
+        android:text="@string/admin"
+        android:fontFamily="@font/montserrat"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="20sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
 
         <Button
             android:id="@+id/btn_manage_users"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/manage_users" />
+            android:text="@string/manage_users"
+            android:background="@drawable/custom_button"
+            android:textColor="@color/white"
+            android:layout_margin="10dp"/>
 
 
         <Button
@@ -27,7 +36,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/manage_artists" />
+            android:text="@string/manage_artists"
+            android:background="@drawable/custom_button"
+            android:textColor="@color/white"
+            android:layout_margin="10dp"/>
 
     </LinearLayout>
 
@@ -41,14 +53,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/manage_tracks" />
+            android:text="@string/manage_tracks"
+            android:background="@drawable/custom_button"
+            android:textColor="@color/white"
+            android:layout_margin="10dp"/>
 
         <Button
             android:id="@+id/btn_add_track"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Add track" />
+            android:text="Add track"
+            android:background="@drawable/custom_button"
+            android:textColor="@color/white"
+            android:layout_margin="10dp"/>
 
     </LinearLayout>
 

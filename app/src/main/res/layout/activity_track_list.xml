@@ -2,9 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/home">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -12,16 +13,27 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:text="@string/track_list" />
+            android:text="@string/track_list"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/custom_button"
             android:onClick="addTracks"
-            android:text="@string/add" />
-    </LinearLayout>
+            android:text="@string/add"
+            android:textColor="@color/white" />
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/tracks_list"
