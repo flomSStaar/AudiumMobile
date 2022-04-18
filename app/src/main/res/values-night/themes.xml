@@ -14,8 +14,7 @@
         <!-- Customize your theme here. -->
     </style>
     <style name="DefaultIB" parent="Widget.AppCompat.ImageButton">
-        <item name="background"> @drawable/mediabutton3</item>
-
+        <item name="android:background"> @drawable/mediabutton3</item>
     </style>
     <style name="DefaultAudiumText">
         <item name="font">@font/montserrat</item>
