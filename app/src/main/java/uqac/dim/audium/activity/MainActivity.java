@@ -25,8 +25,6 @@ public class MainActivity extends AppCompatActivity {
     private User user; ///A CHANGER !!!
     private ImageButton btnHome, btnSearch, btnSettings;
     private MediaService mediaService;
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +45,12 @@ public class MainActivity extends AppCompatActivity {
             initAdminMenu();
         }
 
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
         HomeFragment homeFragment = new HomeFragment(getApplicationContext());
         Bundle b = new Bundle();
         b.putString("username", user.getUsername());
         homeFragment.setArguments(b);
 
-        fragmentTransaction
+        getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, homeFragment)
                 .add(R.id.music_player, new MediaPlayerFragment(getApplicationContext()))
                 .commit();
@@ -66,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
         Bundle b = new Bundle();
         b.putString("username", user.getUsername());
         homeFragment.setArguments(b);
-        fragmentTransaction.replace(R.id.fragment_container, homeFragment)
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, homeFragment)
                 .commit();
     }
 

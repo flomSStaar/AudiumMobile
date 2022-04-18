@@ -72,4 +72,7 @@
     <string name="available_playlists">Available playlists</string>
     <string name="search_hint">Albums, songs, artists ...</string>
     <string name="users">Users</string>
+    <string name="user_informations">User Informations</string>
+    <string name="track_informations">Track Informations</string>
+    <string name="album_maj">Album</string>
 </resources>
