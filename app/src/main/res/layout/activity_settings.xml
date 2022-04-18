@@ -2,12 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/home">
 
     <TextView
+        android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/settings" />
+        android:text="@string/settings"
+        android:fontFamily="@font/montserrat"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="20sp"/>
 
     <Button
         android:id="@+id/btn_back"
@@ -24,6 +30,10 @@
         android:id="@+id/btn_logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/logout" />
+        android:text="@string/logout"
+        android:background="@drawable/custom_button"
+        android:textColor="@color/white"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="30dp"/>
 
 </LinearLayout>

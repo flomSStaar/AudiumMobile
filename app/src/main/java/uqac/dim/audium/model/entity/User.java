@@ -82,12 +82,15 @@ public class User extends Person implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" +
+        /*return "User{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
                 ", username='" + username + '\'' +
                 ", isAdmin=" + isAdmin +
                 '}';
+                */
+        return username;
+
     }
 }
