@@ -209,7 +209,7 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
     @Override
     public void onTrackPlay() {
         btnPlayPause.setImageResource(R.drawable.ic_outline_pause_circle_filled_24);
-        progressBar.setMax(mediaService.getDuration()/1000);
+        progressBar.setMax(mediaService.getDuration());
 
 
     }
@@ -255,10 +255,10 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
                 @Override
                 public void run() {
                     if(mediaService != null){
-                        int mCurrentPosition = mediaService.getCurrentPosition() / 1000;
+                        int mCurrentPosition = mediaService.getCurrentPosition();
                         progressBar.setProgress(mCurrentPosition);
                     }
-                    mHandler.postDelayed(this, 1000);
+                    mHandler.postDelayed(this, 100);
 
                 }
             });
