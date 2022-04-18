@@ -50,10 +50,13 @@ public class Playlist extends TrackContainer {
 
     @Override
     public String toString() {
-        return "Playlist{" +
+        /*return "Playlist{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                '}';
+                '}';/*
+
+         */
+        return title;
     }
 }

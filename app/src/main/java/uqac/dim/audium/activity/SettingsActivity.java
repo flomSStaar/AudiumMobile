@@ -14,6 +14,7 @@ import java.io.File;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.fragment.AdminFragment;
+import uqac.dim.audium.fragment.HomeFragment;
 import uqac.dim.audium.model.entity.User;
 import uqac.dim.audium.model.utils.Utils;
 
@@ -35,8 +36,12 @@ public class SettingsActivity extends AppCompatActivity {
         initUser();
 
         if (user != null && user.isAdmin()) {
+            final AdminFragment adminFragment = new AdminFragment();
+            Bundle b = new Bundle();
+            b.putString("username", user.getUsername());
+            adminFragment.setArguments(b);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.admin_fragment, new AdminFragment())
+                    .add(R.id.admin_fragment, adminFragment)
                     .commit();
         }
     }

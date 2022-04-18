@@ -36,12 +36,14 @@ public class ArtistProfileActivity extends AppCompatActivity {
     private DatabaseReference database;
     private List<Long> idTracks;
     private List<Long> idAlbums;
+    private String username;
     private Artist artist;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_artist_profile);
+        username = getIntent().getStringExtra("username");
 
         ((Button) findViewById(R.id.btn_delete_artist)).setOnClickListener(this::deleteArtist);
 
@@ -138,6 +140,7 @@ public class ArtistProfileActivity extends AppCompatActivity {
         listView.setOnItemClickListener((adapter, view1, position, arg) -> {
             Intent intent = new Intent(ArtistProfileActivity.this, AlbumPageActivity.class);
             intent.putExtra("albumId", ((Album) listView.getItemAtPosition(position)).getId());
+            intent.putExtra("username", username);
             startActivity(intent);
         });
 
@@ -173,6 +176,7 @@ public class ArtistProfileActivity extends AppCompatActivity {
             Intent intent = new Intent(ArtistProfileActivity.this, TrackPageActivity.class);
             intent.putExtra("trackId", ((Track) listView.getItemAtPosition(position)).getId());
             intent.putExtra("albumId", ((Track) listView.getItemAtPosition(position)).getAlbumId());
+            intent.putExtra("username", username);
             startActivity(intent);
         });
     }

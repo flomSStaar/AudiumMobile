@@ -91,6 +91,7 @@ public class PlaylistPageActivity extends AppCompatActivity {
             Intent intent = new Intent(PlaylistPageActivity.this, TrackPageActivity.class);
             intent.putExtra("trackId", ((Track) listView.getItemAtPosition(position)).getId());
             intent.putExtra("albumId", ((Track) listView.getItemAtPosition(position)).getAlbumId());
+            intent.putExtra("username", username);
             startActivity(intent);
         });
 

@@ -30,8 +30,6 @@ import java.util.Collections;
 import java.util.List;
 
 import uqac.dim.audium.R;
-import uqac.dim.audium.activity.MainActivity;
-import uqac.dim.audium.activity.PlaylistPageActivity;
 import uqac.dim.audium.activity.chooser.AlbumChooser;
 import uqac.dim.audium.activity.chooser.PlaylistChooser;
 import uqac.dim.audium.firebase.FirebaseTrack;
@@ -43,6 +41,7 @@ import uqac.dim.audium.model.entity.Track;
 public class TrackPageActivity extends AppCompatActivity {
 
     protected Track track;
+    protected String username;
     protected Long trackId;
     protected Album album;
     protected Long albumId;
@@ -66,6 +65,7 @@ public class TrackPageActivity extends AppCompatActivity {
         albumResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::getAlbumResult);
         trackId = getIntent().getLongExtra("trackId", 0);
         albumId = getIntent().getLongExtra("albumId", 0);
+        username = getIntent().getStringExtra("username");
         if (albumId == 0)
             albumId = null;
 
@@ -250,7 +250,7 @@ public class TrackPageActivity extends AppCompatActivity {
 
     public void addTrack(View view) {
         Intent intent = new Intent(getApplicationContext(), PlaylistChooser.class);
-        intent.putExtra("username", MainActivity.user.getUsername());
+        intent.putExtra("username", username);
         intent.putExtra("trackId",trackId);
         startActivity(intent);
     }

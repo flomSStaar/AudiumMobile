@@ -15,13 +15,16 @@ import uqac.dim.audium.R;
 import uqac.dim.audium.activity.admin.AddTrackActivity;
 import uqac.dim.audium.activity.admin.ArtistListActivity;
 import uqac.dim.audium.activity.admin.TrackListActivity;
+import uqac.dim.audium.activity.admin.TrackPageActivity;
 import uqac.dim.audium.activity.admin.UserListActivity;
+import uqac.dim.audium.model.entity.Track;
 
 public class AdminFragment extends Fragment {
     private Button btnArtists;
     private Button btnTracks;
     private Button btnUsers;
     private Button btnAddTrack;
+    private String username;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,6 +36,7 @@ public class AdminFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.admin_fragment, container, false);
 
+        username = getArguments().getString("username");
         btnArtists = root.findViewById(R.id.btn_manage_artists);
         btnUsers = root.findViewById(R.id.btn_manage_users);
         btnTracks = root.findViewById(R.id.btn_manage_tracks);
@@ -47,7 +51,9 @@ public class AdminFragment extends Fragment {
     }
 
     private void viewArtists(View view) {
-        startActivity(new Intent(getContext(), ArtistListActivity.class));
+        Intent intent = new Intent(getContext(), ArtistListActivity.class);
+        intent.putExtra("username",username);
+        startActivity(intent);
     }
 
     private void viewUsers(View view) {
@@ -55,7 +61,9 @@ public class AdminFragment extends Fragment {
     }
 
     private void viewTracks(View view) {
-        startActivity(new Intent(getContext(), TrackListActivity.class));
+        Intent intent = new Intent(getContext(), TrackListActivity.class);
+        intent.putExtra("username",username);
+        startActivity(intent);
     }
 
     private void addTrack(View view) {

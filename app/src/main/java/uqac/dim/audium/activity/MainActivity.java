@@ -10,6 +10,8 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import uqac.dim.audium.MediaService;
 import uqac.dim.audium.R;
@@ -19,9 +21,11 @@ import uqac.dim.audium.fragment.SearchFragment;
 import uqac.dim.audium.model.entity.User;
 
 public class MainActivity extends AppCompatActivity {
-    public static User user; ///A CHANGER !!!
+    private User user; ///A CHANGER !!!
     private ImageButton btnHome, btnSearch, btnSettings;
     private MediaService mediaService;
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +46,15 @@ public class MainActivity extends AppCompatActivity {
             initAdminMenu();
         }
 
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, new HomeFragment(getApplicationContext()))
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        HomeFragment homeFragment = new HomeFragment(getApplicationContext());
+        Bundle b = new Bundle();
+        b.putString("username", user.getUsername());
+        homeFragment.setArguments(b);
+
+        fragmentTransaction
+                .add(R.id.fragment_container, homeFragment)
                 .add(R.id.music_player, new MediaPlayerFragment(getApplicationContext()))
                 .commit();
 
@@ -51,8 +62,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void home(View view) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new HomeFragment(getApplicationContext()))
+        HomeFragment homeFragment = new HomeFragment(getApplicationContext());
+        Bundle b = new Bundle();
+        b.putString("username", user.getUsername());
+        homeFragment.setArguments(b);
+        fragmentTransaction.replace(R.id.fragment_container, homeFragment)
                 .commit();
     }
 

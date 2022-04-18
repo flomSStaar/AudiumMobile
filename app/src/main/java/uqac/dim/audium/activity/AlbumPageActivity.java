@@ -33,6 +33,7 @@ import uqac.dim.audium.model.entity.Track;
 
 public class AlbumPageActivity extends AppCompatActivity {
     private Long albumId;
+    private String username;
     private List<Long> tracksId;
     private Artist artist;
     private Album album;
@@ -47,6 +48,7 @@ public class AlbumPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album_page);
         albumId = getIntent().getLongExtra("albumId", 0);
+        username = getIntent().getStringExtra("username");
 
         editTitle = (EditText) findViewById(R.id.edit_album_title);
         editDescription = (EditText) findViewById(R.id.edit_album_description);
@@ -110,6 +112,7 @@ public class AlbumPageActivity extends AppCompatActivity {
             Intent intent = new Intent(AlbumPageActivity.this, TrackPageActivity.class);
             intent.putExtra("trackId", ((Track) listView.getItemAtPosition(position)).getId());
             intent.putExtra("albumId", ((Track) listView.getItemAtPosition(position)).getAlbumId());
+            intent.putExtra("username", username);
             startActivity(intent);
         });
 

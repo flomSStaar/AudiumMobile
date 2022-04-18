@@ -25,11 +25,14 @@ import uqac.dim.audium.model.entity.Track;
 
 public class TrackListActivity extends AppCompatActivity {
     private DatabaseReference database;
+    private String username;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_list);
+
+        username = getIntent().getStringExtra("username");
 
         ArrayList<Track> tracks = new ArrayList<>();
         ListView artistListView = ((ListView) findViewById(R.id.tracks_list));
@@ -55,6 +58,7 @@ public class TrackListActivity extends AppCompatActivity {
             Intent intent = new Intent(TrackListActivity.this, TrackPageActivity.class);
             intent.putExtra("trackId", ((Track) artistListView.getItemAtPosition(position)).getId());
             intent.putExtra("albumId", ((Track) artistListView.getItemAtPosition(position)).getAlbumId());
+            intent.putExtra("username",username);
             startActivity(intent);
         });
     }

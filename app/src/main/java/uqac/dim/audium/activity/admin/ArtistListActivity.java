@@ -50,6 +50,7 @@ public class ArtistListActivity extends AppCompatActivity {
         artistListView.setOnItemClickListener((adapter, view, position, arg) -> {
             Intent intent = new Intent(ArtistListActivity.this, ArtistProfileActivity.class);
             intent.putExtra("artistId", ((Artist) artistListView.getItemAtPosition(position)).getId());
+            intent.putExtra("username", getIntent().getStringExtra("username"));
             startActivity(intent);
         });
     }

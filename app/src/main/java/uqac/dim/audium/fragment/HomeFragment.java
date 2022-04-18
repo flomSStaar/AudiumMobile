@@ -40,6 +40,8 @@ import uqac.dim.audium.activity.admin.ArtistListActivity;
 import uqac.dim.audium.model.entity.Track;
 
 public class HomeFragment extends Fragment {
+
+    private String username;
     private ViewPager2 viewPager2;
     private final Handler sliderHandler = new Handler();
     private final Runnable sliderRunnable = new Runnable() {
@@ -78,6 +80,8 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        username = getArguments().getString("username");
 
         sliderItems.add(new SliderItem("https://media2.ledevoir.com/images_galerie/nwd_881002_701874/image.jpg"));
         sliderItems.add(new SliderItem("https://www.hhqc.com/wp-content/uploads/2019/10/sethgueko.jpg"));
@@ -140,7 +144,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 // New intent avec l'id du joueur
                 Intent i = new Intent(getContext(), PlaylistListActivity.class);
-                i.putExtra("username",MainActivity.user.getUsername());
+                i.putExtra("username",username);
                 startActivity(i);
             }
         });
