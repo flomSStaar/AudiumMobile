@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v4.media.session.MediaSessionCompat;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -23,6 +22,7 @@ public class CreateNotification {
     public static final String ACTION_PREVIOUS = "actionprevious";
     public static final String ACTION_PLAY = "actionplay";
     public static final String ACTION_NEXT = "actionnext";
+    public static final int NOTIFICATION_ID = 1;
 
     public static Notification notification;
 
@@ -31,7 +31,6 @@ public class CreateNotification {
     public static void createNotification(Context context, Track track, int playbutton) {
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-        MediaSessionCompat mediaSessionCompat = new MediaSessionCompat(context, "tag");
 
         try {
             URL url = new URL(track.getImageUrl());
@@ -58,15 +57,15 @@ public class CreateNotification {
                 .setOngoing(true)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                //Ajouter le bouton looping
                 .addAction(R.drawable.ic_round_skip_previous_24, "Previous", pendingIntentPrevious)
                 .addAction(playbutton, "Play", pendingIntentPlay)
                 .addAction(R.drawable.ic_round_skip_next_24, "Next", pendingIntentNext)
                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
-                        .setShowActionsInCompactView(0, 1, 2)
-                )
+                        .setShowActionsInCompactView(0, 1, 2))
                 .setLargeIcon(bm)
                 .build();
 
-        notificationManagerCompat.notify(1, notification);
+        notificationManagerCompat.notify(NOTIFICATION_ID, notification);
     }
 }

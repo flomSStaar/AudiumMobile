@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationManagerCompat;
 
 public class onClearFromRecentService extends Service {
     @Override
@@ -19,6 +20,9 @@ public class onClearFromRecentService extends Service {
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getBaseContext());
+
+        notificationManagerCompat.cancel(CreateNotification.NOTIFICATION_ID);
         stopSelf();
     }
 
