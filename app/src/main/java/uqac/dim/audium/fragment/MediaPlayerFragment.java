@@ -4,7 +4,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,11 +21,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
+
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Logger;
 
 import uqac.dim.audium.MediaService;
 import uqac.dim.audium.R;
+import uqac.dim.audium.activity.MainActivity;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
 
@@ -35,11 +49,19 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
     private TextView tvTrackName, tvArtistName;
     private ImageView ivTrack;
 
+    private boolean stop=false;
+
+    private LinearProgressIndicator progressBar;
+
+
+    private Handler mHandler;
+
     public MediaPlayerFragment(Context context) {
         if (context == null) {
             throw new IllegalArgumentException("context cannot be null");
         }
         this.context = context;
+
     }
 
     @Override
@@ -56,6 +78,15 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
             context.unbindService(serviceConnection);
             Log.e("DIM", "media service cannot be bind");
         }
+
+
+
+
+
+
+
+
+
     }
 
     @Nullable
@@ -71,6 +102,9 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
         tvArtistName = root.findViewById(R.id.tv_artist_name);
         ivTrack = root.findViewById(R.id.iv_track);
 
+        progressBar = root.findViewById(R.id.progress_bar);
+
+
         btnPrevious.setOnClickListener(this::previous);
         btnPlayPause.setOnClickListener(this::playPause);
         btnNext.setOnClickListener(this::next);
@@ -81,26 +115,56 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
         btnNext.setEnabled(false);
         btnLooping.setEnabled(false);
 
+
+
+
         return root;
     }
 
     private void previous(View view) {
         if (mediaService != null) {
             mediaService.previousTrack();
+
         }
     }
 
     private void playPause(View view) {
         if (mediaService != null && !mediaService.isPlaying()) {
             mediaService.play();
+
+
+            /*
+            progressBar.setProgress(0);
+            progressBar.setMax(mediaService.getDuration()/1000);
+            mHandler = new Handler();
+            //Make sure you update Seekbar on UI thread
+            getActivity().runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    if(mediaService != null){
+                        int mCurrentPosition = mediaService.getCurrentPosition() / 1000;
+                        progressBar.setProgress(mCurrentPosition);
+                    }
+                    mHandler.postDelayed(this, 10);
+
+                }
+            });
+            */
+
+
         } else if (mediaService != null && mediaService.isPlaying()) {
             mediaService.pause();
         }
     }
 
+
+
+
     private void next(View view) {
         if (mediaService != null) {
             mediaService.nextTrack();
+
         }
     }
 
@@ -147,6 +211,9 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
     @Override
     public void onTrackPlay() {
         btnPlayPause.setImageResource(R.drawable.ic_outline_pause_circle_filled_24);
+        progressBar.setMax(mediaService.getDuration());
+
+
     }
 
     @Override
@@ -156,7 +223,9 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
 
     @Override
     public void onTrackChanged(Track track) {
+        Log.e("DIM","onTrackChanged()");
         if (track != null) {
+
             tvTrackName.setText(track.getName());
             DatabaseReference ref = FirebaseDatabase.getInstance()
                     .getReference("artists")
@@ -178,6 +247,26 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
                         tvArtistName.setText(R.string.artist_name_error);
                     });
             //Changer la photo de la musique
+            Picasso.with(context).load(Uri.parse(track.getImageUrl())).error(R.drawable.ic_notes).into(ivTrack);
+
+
+            mHandler = new Handler();
+            //Make sure you update Seekbar on UI thread
+            getActivity().runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    if(mediaService != null){
+                        int mCurrentPosition = mediaService.getCurrentPosition();
+                        progressBar.setProgress(mCurrentPosition);
+                    }
+                    mHandler.postDelayed(this, 100);
+
+                }
+            });
+
+
+
         }
     }
 }

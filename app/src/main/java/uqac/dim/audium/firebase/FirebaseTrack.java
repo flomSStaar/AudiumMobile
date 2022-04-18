@@ -5,17 +5,17 @@ import java.util.List;
 public final class FirebaseTrack {
     private Long id;
     private String name;
-    private String path;
-    private String imagePath;
+    private String url;
+    private String imageUrl;
     private Long artistId;
     private Long albumId;
     private List<Long> playlistsId;
 
-    public FirebaseTrack(Long id, String name, String path, String imagePath, Long artistId, Long albumId, List<Long> playlistsId) {
+    public FirebaseTrack(Long id, String name, String url, String imageUrl, Long artistId, Long albumId, List<Long> playlistsId) {
         this.id = id;
         this.name = name;
-        this.path = path;
-        this.imagePath = imagePath;
+        this.url = url;
+        this.imageUrl = imageUrl;
         this.artistId = artistId;
         this.albumId = albumId;
         this.playlistsId = playlistsId;
@@ -33,12 +33,12 @@ public final class FirebaseTrack {
         return name;
     }
 
-    public String getPath() {
-        return path;
+    public String getUrl() {
+        return url;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public Long getArtistId() {

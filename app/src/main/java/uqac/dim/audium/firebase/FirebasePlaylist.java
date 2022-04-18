@@ -8,15 +8,15 @@ public class FirebasePlaylist {
     private String title;
     private String description;
     private List<Long> tracksId;
-    private String imagePath;
+    private String imageUrl;
 
-    public FirebasePlaylist(Long id, String idUser, String title, String description, List<Long> tracksId, String imagePath) {
+    public FirebasePlaylist(Long id, String idUser, String title, String description, List<Long> tracksId, String imageUrl) {
         this.id = id;
         this.username = idUser;
         this.title = title;
         this.description = description;
         this.tracksId = tracksId;
-        this.imagePath = imagePath;
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {
@@ -39,7 +39,7 @@ public class FirebasePlaylist {
         return tracksId;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public String getImageUrl() {
+        return imageUrl;
     }
 }
