@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -23,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -245,7 +247,7 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
                         tvArtistName.setText(R.string.artist_name_error);
                     });
             //Changer la photo de la musique
-
+            Picasso.with(context).load(Uri.parse(track.getImageUrl())).error(R.drawable.ic_notes).into(ivTrack);
 
 
             mHandler = new Handler();
