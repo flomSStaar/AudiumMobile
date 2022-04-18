@@ -1,6 +1,5 @@
 package uqac.dim.audium.fragment;
 
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -9,9 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -25,7 +22,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -33,18 +29,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Logger;
-
 import uqac.dim.audium.CreateNotification;
 import uqac.dim.audium.MediaService;
 import uqac.dim.audium.R;
-import uqac.dim.audium.activity.MainActivity;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.onClearFromRecentService;
@@ -58,7 +45,7 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
     private TextView tvTrackName, tvArtistName;
     private ImageView ivTrack;
 
-    private boolean stop=false;
+    private boolean stop = false;
 
     private LinearProgressIndicator progressBar;
 
@@ -66,7 +53,7 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
     private String artistName;
 
     private Handler mHandler;
-    private Track temptrack;
+    private Track currentTrack;
     private int notifPlayButton;
 
     public MediaPlayerFragment(Context context) {
@@ -92,17 +79,14 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
             Log.e("DIM", "media service cannot be bind");
         }
 
-        NotificationChannel channel = new NotificationChannel(CreateNotification.CHANNEL_ID,"NotifChan", NotificationManager.IMPORTANCE_LOW);
+        NotificationChannel channel = new NotificationChannel(CreateNotification.CHANNEL_ID, "NotifChan", NotificationManager.IMPORTANCE_LOW);
         notificationManager = getActivity().getSystemService(NotificationManager.class);
-        if(notificationManager!=null)
-        {
+        if (notificationManager != null) {
             notificationManager.createNotificationChannel(channel);
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            getActivity().registerReceiver(broadcastReceiver, new IntentFilter("TRACKS_TRACKS"));
-            getActivity().startService(new Intent(getActivity().getBaseContext(), onClearFromRecentService.class));
-        }
+        getActivity().registerReceiver(broadcastReceiver, new IntentFilter("android.intent.action.MEDIA_BUTTON"));
+        getActivity().startService(new Intent(getActivity().getBaseContext(), onClearFromRecentService.class));
 
 
     }
@@ -112,18 +96,15 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
         public void onReceive(Context context, Intent intent) {
             String action = intent.getExtras().getString("actionname");
 
-            switch (action){
+            switch (action) {
                 case CreateNotification.ACTION_PREVIOUS:
                     mediaService.previousTrack();
                     break;
                 case CreateNotification.ACTION_PLAY:
-                    Log.e("DIM","YOO!");
-                    if(mediaService.isPlaying())
-                    {
+                    Log.e("DIM", "YOO!");
+                    if (mediaService.isPlaying()) {
                         mediaService.pause();
-                    }
-                    else
-                    {
+                    } else {
                         mediaService.play();
                     }
                     break;
@@ -160,8 +141,6 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
         btnPlayPause.setEnabled(false);
         btnNext.setEnabled(false);
         btnLooping.setEnabled(false);
-
-
 
 
         return root;
@@ -204,8 +183,6 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
             mediaService.pause();
         }
     }
-
-
 
 
     private void next(View view) {
@@ -259,22 +236,19 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
     public void onTrackPlay() {
         btnPlayPause.setImageResource(R.drawable.ic_outline_pause_circle_filled_24);
         progressBar.setMax(mediaService.getDuration());
-        CreateNotification.createNotification(getContext(),temptrack,R.drawable.ic_outline_pause_circle_filled_24);
-
-
-
+        CreateNotification.createNotification(context, currentTrack, R.drawable.ic_outline_pause_circle_filled_24);
     }
 
     @Override
     public void onTrackPause() {
         btnPlayPause.setImageResource(R.drawable.ic_outline_play_circle_filled_24);
         notifPlayButton = R.drawable.ic_outline_pause_circle_filled_24;
-        CreateNotification.createNotification(getContext(),temptrack,R.drawable.ic_outline_play_circle_filled_24);
+        CreateNotification.createNotification(getContext(), currentTrack, R.drawable.ic_outline_play_circle_filled_24);
     }
 
     @Override
     public void onTrackChanged(Track track) {
-        Log.e("DIM","onTrackChanged()");
+        Log.e("DIM", "onTrackChanged()");
         if (track != null) {
 
             tvTrackName.setText(track.getName());
@@ -286,7 +260,7 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
                         if (dataSnapshot.exists()) {
                             Artist artist = dataSnapshot.getValue(Artist.class);
                             if (artist != null) {
-                                 artistName = artist.getPrintableName();
+                                artistName = artist.getPrintableName();
                                 tvArtistName.setText(artist.getPrintableName());
                             } else {
                                 tvArtistName.setText(R.string.artist_name_error);
@@ -308,7 +282,7 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
 
                 @Override
                 public void run() {
-                    if(mediaService != null){
+                    if (mediaService != null) {
                         int mCurrentPosition = mediaService.getCurrentPosition();
                         progressBar.setProgress(mCurrentPosition);
                     }
@@ -317,9 +291,8 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
                 }
             });
 
-            temptrack=track;
-            CreateNotification.createNotification(getContext(),temptrack,R.drawable.ic_outline_pause_circle_filled_24);
-
+            currentTrack = track;
+            CreateNotification.createNotification(getContext(), currentTrack, R.drawable.ic_outline_pause_circle_filled_24);
         }
     }
 }

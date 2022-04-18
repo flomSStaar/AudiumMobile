@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import uqac.dim.audium.CreateNotification;
 import uqac.dim.audium.MediaService;
 import uqac.dim.audium.R;
 import uqac.dim.audium.fragment.HomeFragment;
@@ -57,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
                 .add(R.id.fragment_container, homeFragment)
                 .add(R.id.music_player, new MediaPlayerFragment(getApplicationContext()))
                 .commit();
-
 
     }
 

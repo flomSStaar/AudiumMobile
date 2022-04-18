@@ -90,7 +90,12 @@
                 android:resource="@xml/searchable"/>
         </activity>
         <service android:name=".MediaService" />
-        <receiver android:name=".NotificationActionService"/>
+        <receiver android:name=".NotificationActionService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
         <service android:name=".onClearFromRecentService"/>
     </application>
 
