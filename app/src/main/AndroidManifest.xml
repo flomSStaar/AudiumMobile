@@ -80,6 +80,15 @@
         <activity
             android:name=".activity.chooser.PlaylistChooser"
             android:exported="false" />
+        <activity
+            android:name=".activity.SearchableActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
+        </activity>
         <service android:name=".MediaService" />
         <receiver android:name=".NotificationActionService"/>
         <service android:name=".onClearFromRecentService"/>

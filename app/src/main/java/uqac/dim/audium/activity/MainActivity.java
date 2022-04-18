@@ -57,9 +57,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void search(View view) {
+        /*
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new SearchFragment())
                 .commit();
+
+         */
+        Intent i = new Intent(getApplicationContext(), SearchableActivity.class);
+        startActivity(i);
     }
 
     private void settings(View view) {
