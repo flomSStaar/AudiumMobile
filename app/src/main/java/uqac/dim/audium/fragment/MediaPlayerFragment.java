@@ -111,6 +111,9 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
                 case CreateNotification.ACTION_NEXT:
                     mediaService.nextTrack();
                     break;
+                case CreateNotification.ACTION_LOOP:
+                    mediaService.setLooping(!mediaService.isLooping());
+                    break;
             }
         }
     };
@@ -236,19 +239,36 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
     public void onTrackPlay() {
         btnPlayPause.setImageResource(R.drawable.ic_outline_pause_circle_filled_24);
         progressBar.setMax(mediaService.getDuration());
-        CreateNotification.createNotification(context, currentTrack, R.drawable.ic_outline_pause_circle_filled_24);
+        int loopbutton;
+        if(mediaService.isLooping())
+            loopbutton = R.drawable.ic_baseline_repeat_enable_24;
+        else
+            loopbutton = R.drawable.ic_outline_play_circle_filled_24;
+
+
+        CreateNotification createNotification = new CreateNotification(context,currentTrack,R.drawable.ic_outline_pause_circle_filled_24,loopbutton);
+
+        createNotification.execute();
     }
 
     @Override
     public void onTrackPause() {
         btnPlayPause.setImageResource(R.drawable.ic_outline_play_circle_filled_24);
         notifPlayButton = R.drawable.ic_outline_pause_circle_filled_24;
-        CreateNotification.createNotification(getContext(), currentTrack, R.drawable.ic_outline_play_circle_filled_24);
+        int loopbutton;
+        if(mediaService.isLooping())
+            loopbutton = R.drawable.ic_baseline_repeat_enable_24;
+        else
+            loopbutton = R.drawable.ic_outline_play_circle_filled_24;
+
+        CreateNotification createNotification = new CreateNotification(context,currentTrack,R.drawable.ic_outline_play_circle_filled_24,loopbutton);
+        createNotification.execute();
+
     }
 
     @Override
     public void onTrackChanged(Track track) {
-        Log.e("DIM", "onTrackChanged()");
+        Log.e("DIM","onTrackChanged()");
         if (track != null) {
 
             tvTrackName.setText(track.getName());
@@ -292,7 +312,14 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
             });
 
             currentTrack = track;
-            CreateNotification.createNotification(getContext(), currentTrack, R.drawable.ic_outline_pause_circle_filled_24);
+
+            int loopbutton;
+            if(mediaService.isLooping())
+                loopbutton = R.drawable.ic_baseline_repeat_enable_24;
+            else
+                loopbutton = R.drawable.ic_outline_play_circle_filled_24;
+            CreateNotification createNotification = new CreateNotification(context,currentTrack,R.drawable.ic_outline_play_circle_filled_24,loopbutton);
+            createNotification.execute();
         }
     }
 }
