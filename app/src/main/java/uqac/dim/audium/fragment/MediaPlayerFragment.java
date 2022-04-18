@@ -1,11 +1,17 @@
 package uqac.dim.audium.fragment;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -19,6 +25,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -34,11 +41,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
+import uqac.dim.audium.CreateNotification;
 import uqac.dim.audium.MediaService;
 import uqac.dim.audium.R;
 import uqac.dim.audium.activity.MainActivity;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
+import uqac.dim.audium.onClearFromRecentService;
 
 public class MediaPlayerFragment extends Fragment implements MediaService.MediaEventListener {
     private final Context context;
@@ -53,8 +62,12 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
 
     private LinearProgressIndicator progressBar;
 
+    private NotificationManager notificationManager;
+    private String artistName;
 
     private Handler mHandler;
+    private Track temptrack;
+    private int notifPlayButton;
 
     public MediaPlayerFragment(Context context) {
         if (context == null) {
@@ -79,15 +92,48 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
             Log.e("DIM", "media service cannot be bind");
         }
 
+        NotificationChannel channel = new NotificationChannel(CreateNotification.CHANNEL_ID,"NotifChan", NotificationManager.IMPORTANCE_LOW);
+        notificationManager = getActivity().getSystemService(NotificationManager.class);
+        if(notificationManager!=null)
+        {
+            notificationManager.createNotificationChannel(channel);
+        }
 
-
-
-
-
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            getActivity().registerReceiver(broadcastReceiver, new IntentFilter("TRACKS_TRACKS"));
+            getActivity().startService(new Intent(getActivity().getBaseContext(), onClearFromRecentService.class));
+        }
 
 
     }
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getExtras().getString("actionname");
+
+            switch (action){
+                case CreateNotification.ACTION_PREVIOUS:
+                    mediaService.previousTrack();
+                    break;
+                case CreateNotification.ACTION_PLAY:
+                    Log.e("DIM","YOO!");
+                    if(mediaService.isPlaying())
+                    {
+                        mediaService.pause();
+                    }
+                    else
+                    {
+                        mediaService.play();
+                    }
+                    break;
+                case CreateNotification.ACTION_NEXT:
+                    mediaService.nextTrack();
+                    break;
+            }
+        }
+    };
+
 
     @Nullable
     @Override
@@ -131,6 +177,7 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
     private void playPause(View view) {
         if (mediaService != null && !mediaService.isPlaying()) {
             mediaService.play();
+
 
 
             /*
@@ -212,6 +259,8 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
     public void onTrackPlay() {
         btnPlayPause.setImageResource(R.drawable.ic_outline_pause_circle_filled_24);
         progressBar.setMax(mediaService.getDuration());
+        CreateNotification.createNotification(getContext(),temptrack,R.drawable.ic_outline_pause_circle_filled_24);
+
 
 
     }
@@ -219,6 +268,8 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
     @Override
     public void onTrackPause() {
         btnPlayPause.setImageResource(R.drawable.ic_outline_play_circle_filled_24);
+        notifPlayButton = R.drawable.ic_outline_pause_circle_filled_24;
+        CreateNotification.createNotification(getContext(),temptrack,R.drawable.ic_outline_play_circle_filled_24);
     }
 
     @Override
@@ -235,6 +286,7 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
                         if (dataSnapshot.exists()) {
                             Artist artist = dataSnapshot.getValue(Artist.class);
                             if (artist != null) {
+                                 artistName = artist.getPrintableName();
                                 tvArtistName.setText(artist.getPrintableName());
                             } else {
                                 tvArtistName.setText(R.string.artist_name_error);
@@ -265,7 +317,8 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
                 }
             });
 
-
+            temptrack=track;
+            CreateNotification.createNotification(getContext(),temptrack,R.drawable.ic_outline_pause_circle_filled_24);
 
         }
     }

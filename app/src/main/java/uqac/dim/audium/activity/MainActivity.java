@@ -1,6 +1,8 @@
 package uqac.dim.audium.activity;
 
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -44,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
                 .add(R.id.fragment_container, new HomeFragment(getApplicationContext()))
                 .add(R.id.music_player, new MediaPlayerFragment(getApplicationContext()))
                 .commit();
+
+
     }
 
     private void home(View view) {
