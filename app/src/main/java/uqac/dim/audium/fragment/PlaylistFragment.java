@@ -43,6 +43,13 @@ public class PlaylistFragment extends Fragment {
     private Button addButton;
     View root;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        username = getArguments().getString("username");
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,17 +65,7 @@ public class PlaylistFragment extends Fragment {
 
     @Override
     public void onResume() {
-        gridView = root.findViewById(R.id.grid_playlist);
         super.onResume();
-        actualizeList();
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        username = getArguments().getString("username");
-
         actualizeList();
     }
 
