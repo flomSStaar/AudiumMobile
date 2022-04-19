@@ -2,76 +2,123 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="20sp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/home">
 
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/title" />
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/edit_album_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginVertical="20sp"
+                android:text="Album Informations"
+                android:textSize="30sp"
+                android:fontFamily="@font/montserrat"
+                android:textColor="@color/white">
+            </TextView>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/description" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/title"
+                android:layout_marginHorizontal="20sp"
+                android:fontFamily="@font/montserrat"
+                android:textColor="@color/white"/>
 
-    <EditText
-        android:id="@+id/edit_album_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text" />
+            <EditText
+                android:id="@+id/edit_album_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:layout_marginHorizontal="20sp"
+                android:fontFamily="@font/montserrat"
+                android:textColor="@color/white"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/stage_name" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/description"
+                android:layout_marginHorizontal="20sp"
+                android:fontFamily="@font/montserrat"
+                android:textColor="@color/white"/>
 
-    <EditText
-        android:id="@+id/edit_album_stagename"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text" />
+            <EditText
+                android:id="@+id/edit_album_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:layout_marginHorizontal="20sp"
+                android:fontFamily="@font/montserrat"
+                android:textColor="@color/white"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/stage_name"
+                android:layout_marginHorizontal="20sp"
+                android:fontFamily="@font/montserrat"
+                android:textColor="@color/white"/>
+
+            <EditText
+                android:id="@+id/edit_album_stagename"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:layout_marginHorizontal="20sp"
+                android:fontFamily="@font/montserrat"
+                android:textColor="@color/white"/>
 
 
-    <ListView
-        android:id="@+id/album_page_tracks"
-        android:layout_width="match_parent"
-        android:layout_height="300sp"
-        android:layout_marginVertical="30sp" />
+            <ListView
+                android:id="@+id/album_page_tracks"
+                android:layout_width="match_parent"
+                android:layout_height="300sp"
+                android:layout_marginVertical="30sp"
+                android:layout_marginHorizontal="20sp"/>
 
-    <Button
-        android:id="@+id/btn_save_album"
-        android:layout_width="100sp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:onClick="saveAlbum"
-        android:text="@string/save" />
+            <Button
+                android:id="@+id/btn_save_album"
+                android:layout_width="100sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:onClick="saveAlbum"
+                android:text="@string/save"
+                android:background="@drawable/custom_button"
+                android:textColor="@color/white"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-        <Button
-            android:layout_width="100sp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="50sp"
-            android:onClick="modifyAlbum"
-            android:text="@string/modify" />
+                <Button
+                    android:layout_width="100sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="50sp"
+                    android:onClick="modifyAlbum"
+                    android:text="@string/modify"
+                    android:background="@drawable/custom_button"
+                    android:textColor="@color/white"/>
 
-        <Button
-            android:layout_width="100sp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="50sp"
-            android:onClick="deleteAlbum"
-            android:text="@string/delete" />
-    </LinearLayout>
+                <Button
+                    android:layout_width="100sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="50sp"
+                    android:onClick="deleteAlbum"
+                    android:text="@string/delete"
+                    android:background="@drawable/custom_button"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

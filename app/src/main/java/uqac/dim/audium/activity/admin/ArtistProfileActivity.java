@@ -1,5 +1,6 @@
 package uqac.dim.audium.activity.admin;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -30,6 +31,8 @@ import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.Track;
+import uqac.dim.audium.model.utils.ListViewAlbumAdapter;
+import uqac.dim.audium.model.utils.ListViewTrackAdapter;
 
 public class ArtistProfileActivity extends AppCompatActivity {
 
@@ -110,7 +113,7 @@ public class ArtistProfileActivity extends AppCompatActivity {
 
     public void showAlbums(View view) {
         ListView listView = ((ListView) findViewById(R.id.artist_albums_tracks_list));
-
+        Context c = this;
         ArrayList<Album> albums = new ArrayList<>();
 
 
@@ -124,8 +127,10 @@ public class ArtistProfileActivity extends AppCompatActivity {
                     if (a != null && a.getArtistId().equals(artist.getId()))
                         albums.add(a);
                 }
-                if (albums.size() != 0)
-                    listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, albums));
+                if (albums.size() != 0) {
+                    //listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, albums));
+                    listView.setAdapter(new ListViewAlbumAdapter(albums, c));
+                }
                 else {
                     Toast.makeText(getApplicationContext(), "This artist has no albums", Toast.LENGTH_SHORT).show();
                 }
@@ -148,6 +153,7 @@ public class ArtistProfileActivity extends AppCompatActivity {
     }
 
     public void showMusics(View view) {
+        Context c = this;
         ListView listView = ((ListView) findViewById(R.id.artist_albums_tracks_list));
         ArrayList<Track> tracks = new ArrayList<>();
         database = FirebaseDatabase.getInstance().getReference();
@@ -160,8 +166,10 @@ public class ArtistProfileActivity extends AppCompatActivity {
                     if (t != null && t.getArtistId().equals(artist.getId()))
                         tracks.add(t);
                 }
-                if (tracks.size() != 0)
-                    listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, tracks));
+                if (tracks.size() != 0) {
+                    //listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, tracks));
+                    listView.setAdapter(new ListViewTrackAdapter(tracks, c));
+                }
                 else {
                     Toast.makeText(getApplicationContext(), "This artist has no tracks", Toast.LENGTH_SHORT).show();
                 }

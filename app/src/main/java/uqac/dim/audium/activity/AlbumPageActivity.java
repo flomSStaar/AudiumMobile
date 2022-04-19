@@ -1,7 +1,9 @@
 package uqac.dim.audium.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -30,6 +32,7 @@ import uqac.dim.audium.firebase.FirebaseAlbum;
 import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
+import uqac.dim.audium.model.utils.ListViewTrackAdapter;
 
 public class AlbumPageActivity extends AppCompatActivity {
     private Long albumId;
@@ -49,6 +52,8 @@ public class AlbumPageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_album_page);
         albumId = getIntent().getLongExtra("albumId", 0);
         username = getIntent().getStringExtra("username");
+
+        Context c =this;
 
         editTitle = (EditText) findViewById(R.id.edit_album_title);
         editDescription = (EditText) findViewById(R.id.edit_album_description);
@@ -96,8 +101,11 @@ public class AlbumPageActivity extends AppCompatActivity {
                             tracks.add(t);
                         }
                 }
-                if (tracks.size() != 0)
-                    listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, tracks));
+                if (tracks.size() != 0) {
+                    //listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, tracks));
+                    listView.setAdapter(new ListViewTrackAdapter(tracks, c));
+                }
+
                 else {
                     Toast.makeText(getApplicationContext(), "This album has no tracks", Toast.LENGTH_SHORT).show(); ///Techniquement impossible
                 }

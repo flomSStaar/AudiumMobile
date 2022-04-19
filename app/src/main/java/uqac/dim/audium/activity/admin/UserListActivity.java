@@ -1,5 +1,6 @@
 package uqac.dim.audium.activity.admin;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.model.entity.User;
+import uqac.dim.audium.model.utils.ListViewTrackAdapter;
+import uqac.dim.audium.model.utils.ListViewUserAdapter;
 
 public class UserListActivity extends AppCompatActivity {
     private DatabaseReference database;
@@ -26,6 +29,7 @@ public class UserListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Context c = this;
         setContentView(R.layout.activity_user_list);
         ArrayList<User> l = new ArrayList<>();
         ListView userListView = ((ListView) findViewById(R.id.userList));
@@ -38,7 +42,9 @@ public class UserListActivity extends AppCompatActivity {
                     User user = snap.getValue(User.class);
                     l.add(user);
                 }
-                userListView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, l));
+                //userListView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, l));
+                userListView.setAdapter(new ListViewUserAdapter(l,c));
+
             }
 
             @Override
