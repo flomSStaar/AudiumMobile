@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -60,6 +61,8 @@ public class GridViewAlbumAdapter extends ArrayAdapter<Album> {
             }
         });
         title.setText(albumsList.get(position).getTitle());
+        Picasso.with(getContext()).load(albumsList.get(position).getImagePath()).error(R.drawable.ic_notes).into(imageView);
+
 
         //imageView.
         return row;

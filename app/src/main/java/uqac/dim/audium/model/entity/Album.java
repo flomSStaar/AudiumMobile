@@ -4,15 +4,25 @@ public class Album extends TrackContainer {
 
     protected Long id;
     protected Long artistId;
+    protected String imagePath;
 
     private Album() {
         super();
     }
 
-    public Album(String title, String description, Long id, Long artistId) {
+    public Album(String title, String description, Long id, Long artistId,String path) {
         super(title, description);
         this.id = id;
         this.artistId = artistId;
+        this.imagePath = path;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public Long getId() {
