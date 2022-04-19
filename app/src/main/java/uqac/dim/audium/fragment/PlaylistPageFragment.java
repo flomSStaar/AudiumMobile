@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -50,6 +51,16 @@ public class PlaylistPageFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        load();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        load();
+    }
+
+    private void load(){
         username = getArguments().getString("username");
         playlistId = getArguments().getLong("playlistId");
 
@@ -87,9 +98,7 @@ public class PlaylistPageFragment extends Fragment {
                 }
             }
         });
-
     }
-
 
     @Nullable
     @Override
@@ -106,12 +115,12 @@ public class PlaylistPageFragment extends Fragment {
         listView = ((ListView) root.findViewById(R.id.playlist_page_tracks));
         listView.setOnItemClickListener(this::onClickedItem);
 
-
         Button btnDelete = (Button) root.findViewById(R.id.delete_playlist);
         btnDelete.setOnClickListener(this::deletePlaylist);
 
         return root;
     }
+
 
     private void modifyPlaylist(View view) {
         editTitle.setEnabled(true);
@@ -175,10 +184,26 @@ public class PlaylistPageFragment extends Fragment {
     }
 
     private void onClickedItem(AdapterView<?> adapterView, View view, int i, long l) {
-        Intent intent = new Intent(getContext(), TrackPageActivity.class);
+        /*Intent intent = new Intent(getContext(), TrackPageActivity.class);
         intent.putExtra("trackId", ((Track) listView.getItemAtPosition(i)).getId());
         intent.putExtra("albumId", ((Track) listView.getItemAtPosition(i)).getAlbumId());
         intent.putExtra("username", username);
-        startActivity(intent);
+        startActivity(intent);*/
+
+        TrackPageFragment trackPageFragment = new TrackPageFragment();
+        Bundle b = new Bundle();
+        b.putString("username", username);
+        b.putLong("trackId",((Track) listView.getItemAtPosition(i)).getId());
+        if(((Track) listView.getItemAtPosition(i)).getAlbumId()!=null)
+            b.putLong("albumId",((Track) listView.getItemAtPosition(i)).getAlbumId());
+        else
+            b.putLong("albumId",0);
+        trackPageFragment.setArguments(b);
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, trackPageFragment)
+                .addToBackStack("playlistPage")
+                .commit();
     }
+
+
 }

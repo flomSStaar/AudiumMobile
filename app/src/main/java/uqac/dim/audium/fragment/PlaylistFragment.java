@@ -40,11 +40,12 @@ public class PlaylistFragment extends Fragment {
     String username;
     private GridView gridView;
     private Button addButton;
+    View root;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.activity_playlists_list, container, false);
+        root  = inflater.inflate(R.layout.activity_playlists_list, container, false);
 
         gridView = root.findViewById(R.id.grid_playlist);
         gridView.setOnItemClickListener(this::onItemClicked);
@@ -54,7 +55,12 @@ public class PlaylistFragment extends Fragment {
         return root;
     }
 
-
+    @Override
+    public void onResume() {
+        gridView = root.findViewById(R.id.grid_playlist);
+        super.onResume();
+        actualizeList();
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,6 +68,10 @@ public class PlaylistFragment extends Fragment {
 
         username = getArguments().getString("username");
 
+        actualizeList();
+    }
+
+    private void actualizeList(){
         database = FirebaseDatabase.getInstance().getReference();
         database.child("users").child(username).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
@@ -112,8 +122,19 @@ public class PlaylistFragment extends Fragment {
 
 
     public void addPlaylist(View view) {
+        /*
         Intent i = new Intent(getContext(), AddPlaylistActivity.class);
         i.putExtra("username",user.getUsername());
-        startActivity(i);
+        startActivity(i);/*/
+        AddPlaylistFragment addPlaylistFragment = new AddPlaylistFragment();
+        Bundle b = new Bundle();
+        b.putString("username", username);
+        addPlaylistFragment.setArguments(b);
+        FragmentManager manager = getParentFragmentManager();
+        manager.beginTransaction()
+                .replace(R.id.fragment_container, addPlaylistFragment)
+                .addToBackStack("playlistPage")
+                .commit();
+
     }
 }

@@ -20,6 +20,7 @@ import java.util.List;
 import uqac.dim.audium.R;
 import uqac.dim.audium.activity.AddPlaylistActivity;
 import uqac.dim.audium.activity.admin.AddAlbumActivity;
+import uqac.dim.audium.fragment.AddPlaylistFragment;
 import uqac.dim.audium.model.entity.Track;
 
 public class ListViewAdapter extends ArrayAdapter<Track> {
@@ -59,10 +60,10 @@ public class ListViewAdapter extends ArrayAdapter<Track> {
                     }
                 }else if(method.equals("Playlist")){
                     Log.i("DIM","Playlist");
-                    if (AddPlaylistActivity.idTracksSelected.contains(titles.get(position))) {
-                        AddPlaylistActivity.idTracksSelected.remove(titles.get(position));
+                    if (AddPlaylistFragment.idTracksSelected.contains(titles.get(position))) {
+                        AddPlaylistFragment.idTracksSelected.remove(titles.get(position));
                     } else {
-                        AddPlaylistActivity.idTracksSelected.add(titles.get(position).getId());
+                        AddPlaylistFragment.idTracksSelected.add(titles.get(position).getId());
                     }
                 }
 

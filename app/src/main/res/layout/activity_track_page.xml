@@ -4,173 +4,180 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/home">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginVertical="20sp"
-        android:text="@string/track_informations"
-        android:textSize="30sp"
-        android:fontFamily="@font/montserrat"
-        android:textColor="@color/white">
-    </TextView>
-
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/title"
-        android:layout_marginHorizontal="20sp"
-        android:fontFamily="@font/montserrat"
-        android:textColor="@color/white"/>
-    <EditText
-        android:id="@+id/edit_track_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:layout_marginHorizontal="20sp"
-        android:paddingStart="20dp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
-        android:layout_marginVertical="10sp"
-        android:background="@drawable/custom_button"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/artist"
-        android:layout_marginHorizontal="20sp"
-        android:fontFamily="@font/montserrat"
-        android:textColor="@color/white"/>
-    <EditText
-        android:id="@+id/edit_track_artist"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:layout_marginHorizontal="20sp"
-        android:paddingStart="20dp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
-        android:layout_marginVertical="10sp"
-        android:background="@drawable/custom_button"/>
-
-    <LinearLayout
-        android:layout_marginHorizontal="20sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginVertical="20sp"
+            android:text="@string/track_informations"
+            android:textSize="30sp"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/white">
+        </TextView>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/album_maj"
+            android:text="@string/title"
+            android:layout_marginHorizontal="20sp"
             android:fontFamily="@font/montserrat"
             android:textColor="@color/white"/>
-
-        <LinearLayout
+        <EditText
+            android:id="@+id/edit_track_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:inputType="text"
+            android:layout_marginHorizontal="20sp"
+            android:paddingStart="20dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:layout_marginVertical="10sp"
+            android:background="@drawable/custom_button"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/artist"
+            android:layout_marginHorizontal="20sp"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/white"/>
+        <EditText
+            android:id="@+id/edit_track_artist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:layout_marginHorizontal="20sp"
+            android:paddingStart="20dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:layout_marginVertical="10sp"
+            android:background="@drawable/custom_button"/>
+
+        <LinearLayout
+            android:layout_marginHorizontal="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/track_page_album"
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="4"
-                android:paddingStart="20dp"
-                android:paddingTop="4dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:layout_marginVertical="10sp"
-                android:background="@drawable/custom_button"/>
-
-            <Button
-                android:id="@+id/btn_choose_album_track_page"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="@string/choose_an_album"
-                android:onClick="addAlbum"
-                android:background="@drawable/custom_button"
+                android:text="@string/album_maj"
+                android:fontFamily="@font/montserrat"
                 android:textColor="@color/white"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/track_page_album"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="4"
+                    android:paddingStart="20dp"
+                    android:paddingTop="4dp"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:layout_marginVertical="10sp"
+                    android:background="@drawable/custom_button"/>
+
+                <Button
+                    android:id="@+id/btn_choose_album_track_page"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@string/choose_an_album"
+                    android:background="@drawable/custom_button"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/music_path"
-        android:layout_marginHorizontal="20sp"
-        android:fontFamily="@font/montserrat"
-        android:textColor="@color/white"/>
-    <EditText
-        android:id="@+id/edit_track_path"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:layout_marginHorizontal="20sp"
-        android:paddingStart="20dp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
-        android:layout_marginVertical="10sp"
-        android:background="@drawable/custom_button"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/music_path"
+            android:layout_marginHorizontal="20sp"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/white"/>
+        <EditText
+            android:id="@+id/edit_track_path"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:layout_marginHorizontal="20sp"
+            android:paddingStart="20dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:layout_marginVertical="10sp"
+            android:background="@drawable/custom_button"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/image_path"
-        android:layout_marginHorizontal="20sp"
-        android:fontFamily="@font/montserrat"
-        android:textColor="@color/white"/>
-    <EditText
-        android:id="@+id/edit_track_image_path"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:layout_marginHorizontal="20sp"
-        android:paddingStart="20dp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
-        android:layout_marginVertical="10sp"
-        android:background="@drawable/custom_button"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/image_path"
+            android:layout_marginHorizontal="20sp"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/white"/>
+        <EditText
+            android:id="@+id/edit_track_image_path"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:layout_marginHorizontal="20sp"
+            android:paddingStart="20dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:layout_marginVertical="10sp"
+            android:background="@drawable/custom_button"/>
 
-    <Button
-        android:id="@+id/btn_save_track"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="@string/save"
-        android:layout_gravity="center"
-        android:layout_marginVertical="20dp"
-        android:onClick="saveTrack"
-        android:background="@drawable/custom_button"
-        android:textColor="@color/white"/>
 
-    <Button
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="@string/modify"
-        android:layout_gravity="center"
-        android:onClick="modifyTrack"
-        android:background="@drawable/custom_button"
-        android:textColor="@color/white"/>
+                <Button
+                    android:id="@+id/btn_save_track"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/save"
+                    android:layout_gravity="center"
+                    android:layout_marginVertical="20dp"
+                    android:background="@drawable/custom_button"
+                    android:textColor="@color/white"/>
 
-    <Button
-        android:layout_width="200sp"
-        android:layout_height="wrap_content"
-        android:text="@string/add_to_playlist"
-        android:layout_gravity="center"
-        android:layout_marginVertical="20dp"
-        android:onClick="addTrack"
-        android:background="@drawable/custom_button"
-        android:textColor="@color/white"/>
+                <Button
+                    android:id="@+id/modifyTrack"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/modify"
+                    android:layout_gravity="center"
+                    android:background="@drawable/custom_button"
+                    android:textColor="@color/white"/>
 
-    <Button
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="@string/delete"
-        android:layout_gravity="center"
-        android:onClick="deleteTrack"
-        android:background="@drawable/custom_button"
-        android:textColor="@color/white"/>
+                <Button
+                    android:id="@+id/btn_add_to_playlist"
+                    android:layout_width="200sp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_to_playlist"
+                    android:layout_gravity="center"
+                    android:layout_marginVertical="20dp"
+                    android:background="@drawable/custom_button"
+                    android:textColor="@color/white"/>
+
+                <Button
+                    android:id="@+id/btn_delete_track"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/delete"
+                    android:layout_gravity="center"
+                    android:background="@drawable/custom_button"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+    </ScrollView>
 </LinearLayout>

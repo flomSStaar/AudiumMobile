@@ -75,4 +75,5 @@
     <string name="user_informations">User Informations</string>
     <string name="track_informations">Track Informations</string>
     <string name="album_maj">Album</string>
+    <string name="playlist_informations">Playlist Informations</string>
 </resources>

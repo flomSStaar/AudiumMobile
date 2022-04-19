@@ -1,9 +1,14 @@
-package uqac.dim.audium.activity.admin;
+package uqac.dim.audium.fragment;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,7 +19,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -25,8 +31,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import uqac.dim.audium.R;
@@ -38,7 +42,7 @@ import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.Track;
 
-public class TrackPageActivity extends AppCompatActivity {
+public class TrackPageFragment extends Fragment {
 
     protected Track track;
     protected String username;
@@ -54,21 +58,23 @@ public class TrackPageActivity extends AppCompatActivity {
     private EditText editImagePath;
     private Button btnSave;
     private Button btnChangeAlbum;
+    private ActivityResultLauncher<Intent> albumResultLauncher;
     private Button btnModify;
     private Button btnDelete;
     private Button btnAddPlaylist;
-    private ActivityResultLauncher<Intent> albumResultLauncher;
+    View root;
+
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_track_page);
+        username = getArguments().getString("username");
+        albumId = getArguments().getLong("albumId");
+        trackId = getArguments().getLong("trackId");
         database = FirebaseDatabase.getInstance().getReference();
-
         albumResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::getAlbumResult);
-        trackId = getIntent().getLongExtra("trackId", 0);
-        albumId = getIntent().getLongExtra("albumId", 0);
-        username = getIntent().getStringExtra("username");
+
+
         if (albumId == 0)
             albumId = null;
 
@@ -85,34 +91,6 @@ public class TrackPageActivity extends AppCompatActivity {
                 }
             });
         }
-
-        editName = (EditText) findViewById(R.id.edit_track_name);
-        editAlbum = (TextView) findViewById(R.id.track_page_album);
-        editArtist = (EditText) findViewById(R.id.edit_track_artist);
-        editMusicPath = (EditText) findViewById(R.id.edit_track_path);
-        editImagePath = (EditText) findViewById(R.id.edit_track_image_path);
-
-        editName.setEnabled(false);
-        editAlbum.setEnabled(false);
-        editArtist.setEnabled(false);
-        editMusicPath.setEnabled(false);
-        editImagePath.setEnabled(false);
-
-        btnSave = (Button) findViewById(R.id.btn_save_track);
-        btnSave.setVisibility(View.INVISIBLE);
-        btnSave.setOnClickListener(this::saveTrack);
-        btnChangeAlbum = (Button) findViewById(R.id.btn_choose_album_track_page);
-        btnChangeAlbum.setVisibility(View.INVISIBLE);
-        btnChangeAlbum.setOnClickListener(this::addAlbum);
-
-        btnModify = (Button) findViewById(R.id.modifyTrack);
-        btnModify.setOnClickListener(this::modifyTrack);
-
-        btnDelete= (Button) findViewById(R.id.btn_delete_track);
-        btnDelete.setOnClickListener(this::deleteTrack);
-
-        btnAddPlaylist = (Button) findViewById(R.id.btn_add_to_playlist);
-        btnAddPlaylist.setOnClickListener(this::addTrack);
 
         database.child("tracks").child(String.valueOf(trackId)).addValueEventListener(new ValueEventListener() {
             @Override
@@ -145,7 +123,45 @@ public class TrackPageActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        root = inflater.inflate(R.layout.activity_track_page, container, false);
+
+        editName = (EditText) root.findViewById(R.id.edit_track_name);
+        editAlbum = (TextView) root.findViewById(R.id.track_page_album);
+        editArtist = (EditText) root.findViewById(R.id.edit_track_artist);
+        editMusicPath = (EditText) root.findViewById(R.id.edit_track_path);
+        editImagePath = (EditText) root.findViewById(R.id.edit_track_image_path);
+
+        editName.setEnabled(false);
+        editAlbum.setEnabled(false);
+        editArtist.setEnabled(false);
+        editMusicPath.setEnabled(false);
+        editImagePath.setEnabled(false);
+
+        btnSave = (Button) root.findViewById(R.id.btn_save_track);
+        btnSave.setVisibility(View.INVISIBLE);
+        btnSave.setOnClickListener(this::saveTrack);
+
+        btnChangeAlbum = (Button) root.findViewById(R.id.btn_choose_album_track_page);
+        btnChangeAlbum.setVisibility(View.INVISIBLE);
+        btnChangeAlbum.setOnClickListener(this::addAlbum);
+
+        btnModify = (Button) root.findViewById(R.id.modifyTrack);
+        btnModify.setOnClickListener(this::modifyTrack);
+        /// Check si admin a faire
+
+        btnDelete= (Button) root.findViewById(R.id.btn_delete_track);
+        btnDelete.setOnClickListener(this::deleteTrack);
+        /// Check si admin a faire
+
+        btnAddPlaylist = (Button) root.findViewById(R.id.btn_add_to_playlist);
+        btnAddPlaylist.setOnClickListener(this::addTrack);
+
+        return root;
     }
 
     public void modifyTrack(View view) {
@@ -200,7 +216,7 @@ public class TrackPageActivity extends AppCompatActivity {
             } else if (activityResult.getResultCode() == RESULT_CANCELED) {
                 if (activityResult.getData() != null && activityResult.getData().hasExtra("error")) {
                     Log.e("DIM", "An error occured with the album chooser");
-                    Toast.makeText(getApplicationContext(), "An error occured with the album chooser", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "An error occured with the album chooser", Toast.LENGTH_SHORT).show();
                     throw new Exception();
                 }
             } else {
@@ -213,7 +229,7 @@ public class TrackPageActivity extends AppCompatActivity {
     }
 
     public void addAlbum(View view) {
-        Intent intent = new Intent(getApplicationContext(), AlbumChooser.class);
+        Intent intent = new Intent(getContext(), AlbumChooser.class);
         intent.putExtra("artistId", track.getArtistId());
         intent.putExtra("artistName", artist.getStageName());
         albumResultLauncher.launch(intent);
@@ -259,13 +275,14 @@ public class TrackPageActivity extends AppCompatActivity {
         // Si derniere, supprimmer la playlist
 
         trackId = null;
-        finish();
+        getParentFragmentManager().popBackStack();
     }
 
     public void addTrack(View view) {
-        Intent intent = new Intent(getApplicationContext(), PlaylistChooser.class);
+        /*Intent intent = new Intent(getContext(), PlaylistChooser.class);
         intent.putExtra("username", username);
         intent.putExtra("trackId",trackId);
-        startActivity(intent);
+        startActivity(intent);*/
+        getParentFragmentManager().popBackStack();
     }
 }

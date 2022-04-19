@@ -4,34 +4,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="20sp">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/title" />
+        android:layout_marginVertical="5sp"
+        android:gravity="center"
+        android:text="@string/playlist_informations"
+        android:textSize="20sp"
+        android:fontFamily="@font/montserrat"
+        android:textColor="@color/white"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title"
+        android:textColor="@color/white" />
     <EditText
         android:id="@+id/edit_playlist_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text" />
+        android:inputType="text"
+        android:textColor="@color/white" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/description" />
+        android:text="@string/description"
+        android:textColor="@color/white" />
 
     <EditText
         android:id="@+id/edit_playlist_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text" />
+        android:inputType="text"
+        android:textColor="@color/white" />
 
 
 
     <ListView
         android:id="@+id/playlist_page_tracks"
         android:layout_width="match_parent"
-        android:layout_height="400sp"
+        android:layout_height="250sp"
         android:layout_marginVertical="30sp" />
 
     <Button
@@ -40,7 +54,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:onClick="savePlaylist"
-        android:text="@string/save" />
+        android:text="@string/save"
+        android:background="@drawable/custom_button"
+        android:textColor="@color/white"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,7 +70,9 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="50sp"
             android:onClick="modifyPlaylist"
-            android:text="@string/modify" />
+            android:text="@string/modify"
+            android:background="@drawable/custom_button"
+            android:textColor="@color/white"/>
 
         <Button
             android:id="@+id/delete_playlist"
@@ -62,6 +80,8 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="50sp"
             android:onClick="deletePlaylist"
-            android:text="@string/delete"/>
+            android:text="@string/delete"
+            android:background="@drawable/custom_button"
+            android:textColor="@color/white"/>
     </LinearLayout>
 </LinearLayout>
