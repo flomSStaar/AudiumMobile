@@ -37,7 +37,6 @@
     <string name="hide">Hide</string>
     <string name="registertext">Not registered yet ? Please </string>
     <string name="artist_informations">Artist Informations</string>
-    <string name="albums">Albums</string>
     <string name="musics">Musics</string>
     <string name="track_list">Track List</string>
     <string name="app_name_capital" translatable="false">AUDIUM</string>
@@ -76,4 +75,5 @@
     <string name="track_informations">Track Informations</string>
     <string name="album_maj">Album</string>
     <string name="playlist_informations">Playlist Informations</string>
+    <string name="albums">Albums</string>
 </resources>

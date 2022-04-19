@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
@@ -43,6 +44,7 @@ import uqac.dim.audium.model.entity.Track;
 public class HomeFragment extends Fragment {
 
     private String username;
+    private ImageButton btnSeeAlbums;
     private ViewPager2 viewPager2;
     private final Handler sliderHandler = new Handler();
     private final Runnable sliderRunnable = new Runnable() {
@@ -138,6 +140,21 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        btnSeeAlbums = root.findViewById(R.id.btn_see_albums);
+        btnSeeAlbums.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlbumsFragment albumsFragment = new AlbumsFragment();
+                Bundle b = new Bundle();
+                b.putString("username", username);
+                albumsFragment.setArguments(b);
+                FragmentManager manager = getParentFragmentManager();
+                manager.beginTransaction()
+                        .replace(R.id.fragment_container, albumsFragment)
+                        .addToBackStack("playlist")
+                        .commit();
+            }
+        });
 
         imageButton = root.findViewById(R.id.playlist_btn);
         imageButton.setOnClickListener(new View.OnClickListener() {
