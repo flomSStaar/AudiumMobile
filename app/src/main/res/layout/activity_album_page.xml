@@ -13,6 +13,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -23,6 +24,22 @@
                 android:fontFamily="@font/montserrat"
                 android:textColor="@color/white">
             </TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:scaleType="centerCrop"
+                    android:id="@+id/image_album"
+                    android:layout_width="150sp"
+                    android:layout_height="150sp"
+                    android:layout_margin="10dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center" >
 
             <TextView
                 android:layout_width="match_parent"
@@ -74,12 +91,13 @@
                 android:layout_marginHorizontal="20sp"
                 android:fontFamily="@font/montserrat"
                 android:textColor="@color/white"/>
-
+                </LinearLayout>
+            </LinearLayout>
 
             <ListView
                 android:id="@+id/album_page_tracks"
                 android:layout_width="match_parent"
-                android:layout_height="300sp"
+                android:layout_height="180dp"
                 android:layout_marginVertical="30sp"
                 android:layout_marginHorizontal="20sp"/>
 
@@ -100,19 +118,19 @@
                 android:orientation="horizontal">
 
                 <Button
+                    android:id="@+id/edit_album"
                     android:layout_width="100sp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="50sp"
-                    android:onClick="modifyAlbum"
                     android:text="@string/modify"
                     android:background="@drawable/custom_button"
                     android:textColor="@color/white"/>
 
                 <Button
+                    android:id="@+id/delete_album"
                     android:layout_width="100sp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="50sp"
-                    android:onClick="deleteAlbum"
                     android:text="@string/delete"
                     android:background="@drawable/custom_button"
                     android:textColor="@color/white"/>

@@ -97,15 +97,15 @@ public class AlbumsFragment extends Fragment {
     }
 
     private void onItemClicked(AdapterView<?> adapterView, View view, int i, long l) {
-        /*PlaylistPageFragment playlistPageFragment = new PlaylistPageFragment();
+        AlbumPageFragment albumPageFragment = new AlbumPageFragment();
         Bundle b = new Bundle();
         b.putString("username", username);
-        b.putLong("playlistId",((Playlist) gridView.getItemAtPosition(i)).getId());
-        playlistPageFragment.setArguments(b);
+        b.putLong("albumId",((Album) gridView.getItemAtPosition(i)).getId());
+        albumPageFragment.setArguments(b);
         FragmentManager manager = getParentFragmentManager();
         manager.beginTransaction()
-                .replace(R.id.fragment_container, playlistPageFragment)
+                .replace(R.id.fragment_container, albumPageFragment)
                 .addToBackStack("playlistPage")
-                .commit();*/
+                .commit();
     }
 }
