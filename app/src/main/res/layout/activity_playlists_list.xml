@@ -12,24 +12,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/playlists"
+            android:layout_marginLeft="20dp"
             android:textSize="30dp"
-            />
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/white"/>
 
         <Button
             android:id="@+id/add_playlist_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:text="@string/add"
-            android:layout_marginLeft="190dp"
+            android:layout_marginLeft="120dp"
             android:onClick="addPlaylist"
-            />
+            android:background="@drawable/custom_button"
+            android:textColor="@color/white"/>
     </LinearLayout>
 
     <GridView
         android:id="@+id/grid_playlist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="3">
+        android:numColumns="3"
+        android:layout_margin="20dp">
 
     </GridView>
 

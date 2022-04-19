@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
@@ -143,9 +144,19 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // New intent avec l'id du joueur
-                Intent i = new Intent(getContext(), PlaylistListActivity.class);
+                PlaylistFragment homeFragment = new PlaylistFragment();
+                Bundle b = new Bundle();
+                b.putString("username", username);
+                homeFragment.setArguments(b);
+                FragmentManager manager = getParentFragmentManager();
+                manager.beginTransaction()
+                        .replace(R.id.fragment_container, homeFragment)
+                        .addToBackStack("playlist")
+                        .commit();
+
+                /*Intent i = new Intent(getContext(), PlaylistListActivity.class);
                 i.putExtra("username",username);
-                startActivity(i);
+                startActivity(i);*/
             }
         });
 
