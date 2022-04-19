@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,7 @@ public class PlaylistPageFragment extends Fragment {
     private Button btnSave;
     private DatabaseReference database;
     private ListView listView;
+    private ImageView imageView;
     private Button btnEdit;
     View root;
 
@@ -70,6 +73,9 @@ public class PlaylistPageFragment extends Fragment {
                     editTitle.setEnabled(false);
                     editDescription.setText(playlist.getDescription());
                     editDescription.setEnabled(false);
+                    imageView = root.findViewById(R.id.image_playlist);
+                    Picasso.with(getContext()).load(playlist.getImageUrl()).error(R.drawable.ic_notes).into(imageView);
+
                 }
             }
         });

@@ -7,10 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +39,9 @@ public class GridViewAdapter extends ArrayAdapter<Playlist> {
         LayoutInflater inflater = ((Activity)context).getLayoutInflater();
         View row = inflater.inflate(R.layout.grid_view_item,parent,false);
         TextView tv = row.findViewById(R.id.gv_playlist_name);
+        ImageView imageView = row.findViewById(R.id.playlist_image);
         tv.setText(playlistsList.get(position).getTitle());
-
+        Picasso.with(getContext()).load(playlistsList.get(position).getImageUrl()).error(R.drawable.ic_notes).into(imageView);
         return row;
     }
 }

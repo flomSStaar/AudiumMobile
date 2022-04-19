@@ -6,6 +6,7 @@ public class Playlist extends TrackContainer {
     protected String imageUrl;
     private String username;
 
+
     public Playlist(){}
 
     /**
@@ -16,6 +17,8 @@ public class Playlist extends TrackContainer {
     public Playlist(String title) {
         this(title, null);
     }
+
+
 
     /**
      * Constructs a new Playlist with a title and a description.

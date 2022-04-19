@@ -1,5 +1,6 @@
 package uqac.dim.audium.fragment;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -10,9 +11,12 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -22,18 +26,24 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.firebase.FirebasePlaylist;
+import uqac.dim.audium.firebase.FirebaseUtils;
 import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.model.entity.User;
 import uqac.dim.audium.model.utils.ListViewAdapter;
 
 public class AddPlaylistFragment extends Fragment {
 
+    private final StorageReference storeRef = FirebaseStorage.getInstance().getReference();
     private String username;
     View root;
     private User user;
@@ -44,6 +54,11 @@ public class AddPlaylistFragment extends Fragment {
     private DatabaseReference database;
     Button add;
 
+    private Button chooseImg;
+    private ImageView image;
+    private Uri localFileImageUri;
+    private ActivityResultLauncher<String> imageResultLauncher;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -53,6 +68,9 @@ public class AddPlaylistFragment extends Fragment {
         listView.setMultiChoiceModeListener(modeListener);
         add = ((Button)root.findViewById(R.id.add_playlist_frag));
         add.setOnClickListener(this::addPlaylist);
+        chooseImg = root.findViewById(R.id.btn_choose_playlist_image_file);
+        chooseImg.setOnClickListener(this::addImage);
+        image = root.findViewById(R.id.playlist_image_path);
         return root;
     }
 
@@ -62,6 +80,11 @@ public class AddPlaylistFragment extends Fragment {
         username = getArguments().getString("username");
         idTracksSelected = new ArrayList<>();
         ActionMode actionMode = null;
+
+
+
+        imageResultLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), this::getImageResult);
+
 
         database = FirebaseDatabase.getInstance().getReference();
         database.child("users").child(username).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
@@ -123,41 +146,62 @@ public class AddPlaylistFragment extends Fragment {
 
     }
 
+    private void getImageResult(Uri uri) {
+        if (uri != null) {
+            localFileImageUri = uri;
+            Picasso.with(getContext()).load(localFileImageUri).error(R.drawable.ic_notes).into(image);
+        }
+    }
+
+
+    private void addImage(View view) {
+        imageResultLauncher.launch("image/*");
+    }
 
     public void addPlaylist(View view) {
         if (idTracksSelected.size() != 0) {
             String title = ((EditText) root.findViewById(R.id.playlist_title)).getText().toString();
             String description = ((EditText) root.findViewById(R.id.playlist_description)).getText().toString();
-            String imagePath = ((EditText) root.findViewById(R.id.playlist_image_path)).getText().toString();
 
             FirebaseDatabase db = FirebaseDatabase.getInstance();
             db.getReference("ids/lastPlaylistId").get()
                     .addOnSuccessListener(dataSnapshot -> {
                         Long lastPlaylistId = dataSnapshot.getValue(Long.class);
                         if (lastPlaylistId != null) {
-                            FirebasePlaylist playlist = new FirebasePlaylist(lastPlaylistId,username, title, description,idTracksSelected, imagePath);
-                            db.getReference("playlists/").child(username).child(String.valueOf(lastPlaylistId)).setValue(playlist);
-
-                            /// Ajouter l'id de la playlist a la track - A FAIRE
-
+                            StorageReference imageRef = storeRef.child(FirebaseUtils.PLAYLIST_IMAGE_FILE_PATH).child(String.valueOf(lastPlaylistId));
                             Long finalLastPlaylistId = lastPlaylistId;
-                            db.getReference("tracks").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-                                @Override
-                                public void onSuccess(DataSnapshot dataSnapshot) {
-                                    for (DataSnapshot data: dataSnapshot.getChildren()) {
-                                        Track t = data.getValue(Track.class);
-                                        if(idTracksSelected.contains(t.getId())){
-                                            if(t.getPlaylistsId()==null) {
-                                                List<Long> playlistsID = new ArrayList<>();
-                                                playlistsID.add(finalLastPlaylistId);
-                                                db.getReference("tracks/").child(String.valueOf(t.getId())).child("playlistsId").setValue(playlistsID);
-                                            }else{
-                                                t.getPlaylistsId().add(finalLastPlaylistId);
-                                                db.getReference("tracks/").child(String.valueOf(t.getId())).child("playlistsId").setValue(t.getPlaylistsId());
-                                            }
-                                        }
-                                    }
-                                }
+                            imageRef.putFile(localFileImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                 @Override
+                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                     imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                         @Override
+                                         public void onSuccess(Uri uri) {
+                                             FirebasePlaylist playlist = new FirebasePlaylist(finalLastPlaylistId, username, title, description, idTracksSelected, uri.toString());
+                                             db.getReference("playlists/").child(username).child(String.valueOf(finalLastPlaylistId)).setValue(playlist);
+
+                                             /// Ajouter l'id de la playlist a la track - A FAIRE
+
+                                             db.getReference("tracks").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                                 @Override
+                                                 public void onSuccess(DataSnapshot dataSnapshot) {
+                                                     for (DataSnapshot data: dataSnapshot.getChildren()) {
+                                                         Track t = data.getValue(Track.class);
+                                                         if(idTracksSelected.contains(t.getId())){
+                                                             if(t.getPlaylistsId()==null) {
+                                                                 List<Long> playlistsID = new ArrayList<>();
+                                                                 playlistsID.add(finalLastPlaylistId);
+                                                                 db.getReference("tracks/").child(String.valueOf(t.getId())).child("playlistsId").setValue(playlistsID);
+                                                             }else{
+                                                                 t.getPlaylistsId().add(finalLastPlaylistId);
+                                                                 db.getReference("tracks/").child(String.valueOf(t.getId())).child("playlistsId").setValue(t.getPlaylistsId());
+                                                             }
+                                                         }
+                                                     }
+                                                 }
+                                             });
+                                         }
+                                     });
+                                 }
                             });
 
                             ////
