@@ -1,5 +1,6 @@
 package uqac.dim.audium.activity.admin;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -20,11 +21,13 @@ import java.util.ArrayList;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.model.entity.Artist;
+import uqac.dim.audium.model.utils.ListViewArtistAdapter;
 
 public class ArtistListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Context c = this;
         setContentView(R.layout.activity_artist_list);
         ArrayList<Artist> l = new ArrayList<>();
         ListView artistListView = ((ListView) findViewById(R.id.artists_list));
@@ -39,7 +42,8 @@ public class ArtistListActivity extends AppCompatActivity {
                         l.add(a);
                     }
                 }
-                artistListView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, l));
+                //artistListView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, l));
+                artistListView.setAdapter(new ListViewArtistAdapter(l, c));
             }
 
             @Override

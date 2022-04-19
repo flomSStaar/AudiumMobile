@@ -8,7 +8,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/choose_an_artist" />
+        android:text="@string/choose_an_artist"
+        android:fontFamily="@font/montserrat"
+        android:textColor="@color/white"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +23,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="9"
-            android:hint="@string/search" />
+            android:hint="@string/search"
+            />
 
         <!-- A changer en bouton + -->
         <Button

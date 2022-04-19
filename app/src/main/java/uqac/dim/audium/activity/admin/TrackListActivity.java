@@ -1,5 +1,6 @@
 package uqac.dim.audium.activity.admin;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +23,7 @@ import uqac.dim.audium.R;
 import uqac.dim.audium.activity.AlbumPageActivity;
 import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Track;
+import uqac.dim.audium.model.utils.ListViewTrackAdapter;
 
 public class TrackListActivity extends AppCompatActivity {
     private DatabaseReference database;
@@ -31,7 +33,7 @@ public class TrackListActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_list);
-
+        Context c =this;
         username = getIntent().getStringExtra("username");
 
         ArrayList<Track> tracks = new ArrayList<>();
@@ -45,7 +47,9 @@ public class TrackListActivity extends AppCompatActivity {
                     Track t = snap.getValue(Track.class);
                     tracks.add(t);
                 }
-                artistListView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, tracks));
+                //artistListView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, tracks));
+                artistListView.setAdapter(new ListViewTrackAdapter(tracks,c));
+
             }
 
             @Override
