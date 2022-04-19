@@ -113,7 +113,7 @@ public class AddTrackActivity extends AppCompatActivity {
                             Long trackId = dataSnapshot.getValue(Long.class);
                             if (trackId != null) {
 
-                                StorageReference imageRef = storeRef.child(FirebaseUtils.IMAGE_FILE_PATH).child(trackId.toString());
+                                StorageReference imageRef = storeRef.child(FirebaseUtils.TRACK_IMAGE_FILE_PATH).child(trackId.toString());
                                 imageRef.putFile(localFileImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                     @Override
                                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
