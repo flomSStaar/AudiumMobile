@@ -41,6 +41,7 @@ import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.Track;
+import uqac.dim.audium.model.entity.User;
 
 public class TrackPageFragment extends Fragment {
 
@@ -62,6 +63,7 @@ public class TrackPageFragment extends Fragment {
     private Button btnModify;
     private Button btnDelete;
     private Button btnAddPlaylist;
+    private User user;
     View root;
 
 
@@ -121,6 +123,20 @@ public class TrackPageFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+
+        database.child("users").child(username).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    user = dataSnapshot.getValue(User.class);
+                    if (!user.isAdmin()){
+                        btnDelete.setVisibility(View.INVISIBLE);
+                        btnSave.setVisibility(View.INVISIBLE);
+                        btnModify.setVisibility(View.INVISIBLE);
+                    }
+                }
             }
         });
     }
@@ -279,10 +295,9 @@ public class TrackPageFragment extends Fragment {
     }
 
     public void addTrack(View view) {
-        /*Intent intent = new Intent(getContext(), PlaylistChooser.class);
+        Intent intent = new Intent(getContext(), PlaylistChooser.class);
         intent.putExtra("username", username);
         intent.putExtra("trackId",trackId);
-        startActivity(intent);*/
-        getParentFragmentManager().popBackStack();
+        startActivity(intent);
     }
 }

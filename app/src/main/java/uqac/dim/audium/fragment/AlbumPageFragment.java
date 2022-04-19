@@ -33,6 +33,7 @@ import uqac.dim.audium.firebase.FirebaseAlbum;
 import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
+import uqac.dim.audium.model.entity.User;
 import uqac.dim.audium.model.utils.ListViewTrackAdapter;
 
 public class AlbumPageFragment extends Fragment {
@@ -52,6 +53,7 @@ public class AlbumPageFragment extends Fragment {
     private Button btnSave;
     private Button btnEdit;
     private Button btnDelete;
+    private User user;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +61,9 @@ public class AlbumPageFragment extends Fragment {
         username = getArguments().getString("username");
         albumId = getArguments().getLong("albumId");
 
+    }
+
+    private void load(){
         database = FirebaseDatabase.getInstance().getReference();
         database.child("albums").child(String.valueOf(albumId)).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
@@ -115,11 +120,25 @@ public class AlbumPageFragment extends Fragment {
             }
         });
 
+        database.child("users").child(username).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    user = dataSnapshot.getValue(User.class);
+                    if (!user.isAdmin()){
+                        btnEdit.setVisibility(View.INVISIBLE);
+                        btnDelete.setVisibility(View.INVISIBLE);
+                        btnSave.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        load();
     }
 
     @Nullable
@@ -139,7 +158,6 @@ public class AlbumPageFragment extends Fragment {
         btnDelete.setOnClickListener(this::deleteAlbum);
 
 
-
         return root;
     }
 
@@ -149,6 +167,21 @@ public class AlbumPageFragment extends Fragment {
         intent.putExtra("albumId", ((Track) listView.getItemAtPosition(i)).getAlbumId());
         intent.putExtra("username", username);
         startActivity(intent);*/
+
+
+        TrackPageFragment trackPageFragment = new TrackPageFragment();
+        Bundle b = new Bundle();
+        b.putString("username", username);
+        b.putLong("trackId",((Track) listView.getItemAtPosition(i)).getId());
+        if(((Track) listView.getItemAtPosition(i)).getAlbumId()!=null)
+            b.putLong("albumId",album.getId());
+        else
+            b.putLong("albumId",0);
+        trackPageFragment.setArguments(b);
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, trackPageFragment)
+                .addToBackStack("playlistPage")
+                .commit();
     }
 
     public void modifyAlbum(View view) {
@@ -162,7 +195,7 @@ public class AlbumPageFragment extends Fragment {
         String newDescription = editDescription.getText().toString();
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-        FirebaseAlbum newAlbum = new FirebaseAlbum(albumId, newTitle, newDescription, album.getDescription(), album.getArtistId(), album.getTracksId());
+        FirebaseAlbum newAlbum = new FirebaseAlbum(albumId, newTitle, newDescription, album.getImagePath(), album.getArtistId(), album.getTracksId());
         db.getReference("albums/").child(String.valueOf(albumId)).setValue(newAlbum);
         editTitle.setEnabled(false);
         editDescription.setEnabled(false);

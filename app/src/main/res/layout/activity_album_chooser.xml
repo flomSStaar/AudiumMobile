@@ -8,12 +8,17 @@
     <TextView
         android:id="@+id/tv_artist_info"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat"
+        android:textColor="@color/white"
+        android:layout_marginTop="20sp"
+        android:layout_marginHorizontal="20sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_margin="20sp">
 
         <!-- SearchBar à la place d'EditText -->
         <EditText
@@ -21,7 +26,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="9"
-            android:hint="@string/search" />
+            android:hint="@string/search"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/white"/>
 
         <!-- A changer en bouton + -->
         <Button
@@ -36,6 +43,7 @@
     <ListView
         android:id="@+id/list_artists"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20sp"/>
 
 </LinearLayout>

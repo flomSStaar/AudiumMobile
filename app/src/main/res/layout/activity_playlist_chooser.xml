@@ -11,10 +11,13 @@
         android:layout_height="wrap_content"
         android:text="@string/available_playlists"
         android:textSize="20sp"
-        android:layout_margin="10dp"
+        android:layout_margin="20dp"
+        android:fontFamily="@font/montserrat"
+        android:textColor="@color/white"
         />
     <ListView
         android:id="@+id/list_playlists"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20sp"/>
 </LinearLayout>

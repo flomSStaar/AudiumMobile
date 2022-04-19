@@ -1,5 +1,6 @@
 package uqac.dim.audium.activity.chooser;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,7 @@ import java.util.List;
 import uqac.dim.audium.R;
 import uqac.dim.audium.activity.admin.AddAlbumActivity;
 import uqac.dim.audium.model.entity.Album;
+import uqac.dim.audium.model.utils.ListViewAlbumAdapter;
 
 public class AlbumChooser extends AppCompatActivity {
     private TextView tvArtistInfo;
@@ -64,7 +66,7 @@ public class AlbumChooser extends AppCompatActivity {
 
     private void loadAlbums(Long artistId) {
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
-
+        Context c = this;
         dbRef.child("artists/" + artistId + "/albumsId").get()
                 .addOnSuccessListener(dataSnapshot -> {
                     if (dataSnapshot.exists()) {
@@ -86,7 +88,8 @@ public class AlbumChooser extends AppCompatActivity {
                                                     }
                                                 }
                                             }
-                                            listViewAlbums.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, albums));
+                                            //listViewAlbums.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, albums));
+                                            listViewAlbums.setAdapter(new ListViewAlbumAdapter(albums, c));
                                         }
                                     });
                         } else {

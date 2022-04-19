@@ -1,5 +1,6 @@
 package uqac.dim.audium.activity.chooser;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,13 +29,13 @@ import uqac.dim.audium.activity.admin.ArtistProfileActivity;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.Track;
+import uqac.dim.audium.model.utils.ListViewPlaylistAdapter;
 
 public class PlaylistChooser extends AppCompatActivity {
 
     private ListView listView;
     private String username;
     private Long trackId;
-    private List<Playlist> playlists;
     private DatabaseReference database;
     private TextView tv;
 
@@ -92,7 +93,7 @@ public class PlaylistChooser extends AppCompatActivity {
 
     private void loadPlaylists() {
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
-
+        Context c = this;
         dbRef.child("playlists").child(username).get()
                 .addOnSuccessListener(dataSnapshot -> {
                     if (dataSnapshot.exists()) {
@@ -105,7 +106,8 @@ public class PlaylistChooser extends AppCompatActivity {
                             if (playlists.isEmpty())
                                 tv.setText("No playlists");
                         }
-                        listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, playlists));
+                        //listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, playlists));
+                        listView.setAdapter(new ListViewPlaylistAdapter(playlists,c));
                     }
                 });
             }

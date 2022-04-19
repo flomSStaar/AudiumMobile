@@ -4,6 +4,7 @@ public class Playlist extends TrackContainer {
 
     protected Long id;
     protected String imageUrl;
+    private String username;
 
     public Playlist(){}
 
@@ -24,6 +25,14 @@ public class Playlist extends TrackContainer {
      */
     public Playlist(String title, String description) {
         super(title, description);
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Long getId() {

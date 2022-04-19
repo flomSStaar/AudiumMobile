@@ -1,5 +1,6 @@
 package uqac.dim.audium.activity.chooser;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,7 @@ import java.util.List;
 import uqac.dim.audium.R;
 import uqac.dim.audium.activity.admin.AddArtistActivity;
 import uqac.dim.audium.model.entity.Artist;
+import uqac.dim.audium.model.utils.ListViewArtistAdapter;
 
 public class ArtistChooser extends AppCompatActivity {
     private ListView listViewArtists;
@@ -46,7 +48,7 @@ public class ArtistChooser extends AppCompatActivity {
 
     private void loadArtists() {
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
-
+        Context c = this;
         dbRef.child("artists").get()
                 .addOnSuccessListener(dataSnapshot -> {
                     if (dataSnapshot.exists()) {
@@ -57,7 +59,8 @@ public class ArtistChooser extends AppCompatActivity {
                                 artists.add(a);
                             }
                         }
-                        listViewArtists.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, artists));
+                        //listViewArtists.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, artists));
+                        listViewArtists.setAdapter(new ListViewArtistAdapter(artists,c));
                     } else {
                         Log.i("DIM", "There is no artist in database");
 

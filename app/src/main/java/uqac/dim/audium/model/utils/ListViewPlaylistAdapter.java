@@ -20,20 +20,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uqac.dim.audium.R;
-import uqac.dim.audium.model.entity.Artist;
-import uqac.dim.audium.model.entity.User;
+import uqac.dim.audium.model.entity.Playlist;
 
-public class ListViewArtistAdapter extends ArrayAdapter<Artist> {
-    private List<Artist> artistList;
+public class ListViewPlaylistAdapter extends ArrayAdapter<Playlist> {
+    private List<Playlist> playlists;
     private Context context;
-    private Artist artist;
+    private String playlistTitle;
     private DatabaseReference database;
 
-    public ListViewArtistAdapter(List<Artist> artists, Context context){
-        super(context, R.layout.list_view_track_item,artists);
+    public ListViewPlaylistAdapter(List<Playlist> playlists, Context context){
+        super(context, R.layout.list_view_track_item,playlists);
         this.context = context;
-        artistList = new ArrayList<>();
-        this.artistList = artists;
+        this.playlists = new ArrayList<>();
+        this.playlists = playlists;
 
     }
 
@@ -44,15 +43,16 @@ public class ListViewArtistAdapter extends ArrayAdapter<Artist> {
         View row = inflater.inflate(R.layout.list_view_track_item,parent,false);
         TextView tv = row.findViewById(R.id.track_infos);
         database = FirebaseDatabase.getInstance().getReference();
-        database.child("artists").child(String.valueOf(artistList.get(position).getId())).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+        database.child("playlists").child(String.valueOf(playlists.get(position).getUsername())).child(String.valueOf(playlists.get(position).getId())).child("title").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    artist = dataSnapshot.getValue(Artist.class);
-                    tv.setText(artist.getStageName() + " - " + artist.getFirstName() + " " + artist.getLastName());
+                    playlistTitle = dataSnapshot.getValue(String.class);
+                    tv.setText(playlistTitle);
                 }
             }
         });
+
         return row;
     }
 }
