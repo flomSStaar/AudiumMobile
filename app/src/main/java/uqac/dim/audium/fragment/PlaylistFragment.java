@@ -31,6 +31,7 @@ import uqac.dim.audium.activity.PlaylistListActivity;
 import uqac.dim.audium.activity.PlaylistPageActivity;
 import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.User;
+import uqac.dim.audium.model.utils.GridViewAdapter;
 
 public class PlaylistFragment extends Fragment {
 
@@ -88,7 +89,8 @@ public class PlaylistFragment extends Fragment {
                                     playlists.add(p);
                                 }
                                 if(playlists!=null)
-                                    gridView.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, playlists));
+                                    //gridView.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, playlists));
+                                    gridView.setAdapter(new GridViewAdapter(playlists,getContext()));
                             }
                         }
 

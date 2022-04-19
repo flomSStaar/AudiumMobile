@@ -32,6 +32,7 @@ import uqac.dim.audium.firebase.FirebasePlaylist;
 import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.model.entity.User;
+import uqac.dim.audium.model.utils.ListViewTrackAdapter;
 
 public class PlaylistPageFragment extends Fragment {
 
@@ -92,7 +93,8 @@ public class PlaylistPageFragment extends Fragment {
                         }
                 }
                 if (tracks.size() != 0)
-                    listView.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, tracks));
+                    //listView.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, tracks));
+                    listView.setAdapter(new ListViewTrackAdapter(tracks,getContext()));
                 else {
                     Toast.makeText(getContext(), "This playlist has no tracks", Toast.LENGTH_SHORT).show(); ///Techniquement impossible
                 }
