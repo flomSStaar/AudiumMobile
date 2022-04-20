@@ -49,10 +49,11 @@
             android:scrollbars="none">
 
             <LinearLayout
+                android:id="@+id/albums_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-
+            <!--->
                 <Button
                     android:layout_width="130dp"
                     android:layout_height="100dp"
@@ -82,6 +83,7 @@
                     android:layout_height="100dp"
                     android:layout_margin="5dp"
                     android:background="@drawable/mediabutton" />
+                    <!-->
             </LinearLayout>
         </HorizontalScrollView>
 
@@ -117,28 +119,32 @@
             android:layout_marginTop="-30dp"
             android:scrollbars="none">
 
+
+
             <LinearLayout
+                android:id="@+id/playlists_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+                <!-->
+                                <Button
+                                    android:layout_width="130dp"
+                                    android:layout_height="100dp"
+                                    android:layout_margin="5dp"
+                                    android:background="@drawable/mediabutton" />
 
-                <Button
-                    android:layout_width="130dp"
-                    android:layout_height="100dp"
-                    android:layout_margin="5dp"
-                    android:background="@drawable/mediabutton" />
+                                <Button
+                                    android:layout_width="130dp"
+                                    android:layout_height="100dp"
+                                    android:layout_margin="5dp"
+                                    android:background="@drawable/mediabutton" />
 
-                <Button
-                    android:layout_width="130dp"
-                    android:layout_height="100dp"
-                    android:layout_margin="5dp"
-                    android:background="@drawable/mediabutton" />
-
-                <Button
-                    android:layout_width="130dp"
-                    android:layout_height="100dp"
-                    android:layout_margin="5dp"
-                    android:background="@drawable/mediabutton" />
+                                <Button
+                                    android:layout_width="130dp"
+                                    android:layout_height="100dp"
+                                    android:layout_margin="5dp"
+                                    android:background="@drawable/mediabutton" />
+                                    <!-->
             </LinearLayout>
         </HorizontalScrollView>
 

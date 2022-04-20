@@ -1,6 +1,7 @@
 package uqac.dim.audium.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,6 @@ public class PlaylistPageFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        load();
     }
 
     @Override
@@ -76,31 +76,32 @@ public class PlaylistPageFragment extends Fragment {
                     imageView = root.findViewById(R.id.image_playlist);
                     Picasso.with(getContext()).load(playlist.getImageUrl()).error(R.drawable.ic_notes).into(imageView);
 
-                }
-            }
-        });
 
-        ArrayList<Track> tracks = new ArrayList<>();
+                    ArrayList<Track> tracks = new ArrayList<>();
 
-        database.child("tracks").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-            @Override
-            public void onSuccess(DataSnapshot dataSnapshot) {
-                tracks.clear();
-                for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                    Track t = snap.getValue(Track.class);
-                    if (t != null)
-                        if (playlist.getTracksId().contains(t.getId())) {
-                            tracks.add(t);
+                    database.child("tracks").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                        @Override
+                        public void onSuccess(DataSnapshot dataSnapshot) {
+                            tracks.clear();
+                            for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                                Track t = snap.getValue(Track.class);
+                                if (t != null)
+                                    if (playlist.getTracksId().contains(t.getId())) {
+                                        tracks.add(t);
+                                    }
+                            }
+                            if (tracks.size() != 0)
+                                //listView.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, tracks));
+                                listView.setAdapter(new ListViewTrackAdapter(tracks,getContext()));
+                            else {
+                                Toast.makeText(getContext(), "This playlist has no tracks", Toast.LENGTH_SHORT).show(); ///Techniquement impossible
+                            }
                         }
-                }
-                if (tracks.size() != 0)
-                    //listView.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, tracks));
-                    listView.setAdapter(new ListViewTrackAdapter(tracks,getContext()));
-                else {
-                    Toast.makeText(getContext(), "This playlist has no tracks", Toast.LENGTH_SHORT).show(); ///Techniquement impossible
+                    });
                 }
             }
         });
+
     }
 
     @Nullable
