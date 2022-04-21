@@ -207,11 +207,15 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
     }
 
     private void createNotification(@DrawableRes int playPauseButtonId) {
+        if (mediaService == null || currentTrack == null) {
+            return;
+        }
         int loopButton;
-        if (mediaService.isLooping())
+        if (mediaService.isLooping()) {
             loopButton = R.drawable.ic_baseline_repeat_enable_24;
-        else
+        } else {
             loopButton = R.drawable.ic_outline_play_circle_filled_24;
+        }
         CreateNotification createNotification = new CreateNotification(context, currentTrack, playPauseButtonId, loopButton);
         createNotification.execute();
     }

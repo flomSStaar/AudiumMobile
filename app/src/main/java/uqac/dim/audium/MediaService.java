@@ -162,6 +162,7 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
         Log.i("DIM", "MediaService.stop()");
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
+            notifyStop();
         }
         currentTrack = null;
         isPrepared = false;
@@ -175,7 +176,7 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
             int nextPlayingIndex = (currentPlayingIndex + 1) % maxPlayingIndex;
             if (currentPlayingIndex == maxPlayingIndex - 1) {
                 if (!looping) {
-                    notifyPause();
+                    notifyStop();
                 }
                 prepareTrack(looping, nextPlayingIndex);
 
@@ -193,14 +194,15 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
         Log.i("DIM", "MediaService.previousTrack()");
 
         if (tracks != null) {
-            int previousPlayingIndex = (currentPlayingIndex - 1) % maxPlayingIndex;
+            int previousPlayingIndex = (currentPlayingIndex - 1 + maxPlayingIndex) % maxPlayingIndex;
             if (currentPlayingIndex == 0) {
                 if (looping) {
                     prepareTrack(true, previousPlayingIndex);
+                } else {
+                    notifyStop();
                 }
             } else {
                 prepareTrack(true, previousPlayingIndex);
-
             }
         } else {
             Log.w("DIM", "MediaService.previousTrack(): tracks is not initialized");
@@ -215,6 +217,8 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
                 if (isPlayingRequested) {
                     mediaPlayer.start();
                     notifyPlay();
+                } else {
+                    notifyStop();
                 }
                 return;
             }
