@@ -26,7 +26,7 @@ import java.util.List;
 import uqac.dim.audium.R;
 import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.User;
-import uqac.dim.audium.view.adapter.GridViewAlbumAdapter;
+import uqac.dim.audium.adapter.GridViewAlbumAdapter;
 
 public class AlbumsFragment extends Fragment {
     private DatabaseReference database;

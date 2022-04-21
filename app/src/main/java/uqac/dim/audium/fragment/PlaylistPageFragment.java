@@ -35,7 +35,7 @@ import uqac.dim.audium.activity.ModifyPlaylist;
 import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.model.entity.User;
-import uqac.dim.audium.view.adapter.ListViewTrackAdapter;
+import uqac.dim.audium.adapter.ListViewTrackAdapter;
 
 public class PlaylistPageFragment extends Fragment {
     private String username;

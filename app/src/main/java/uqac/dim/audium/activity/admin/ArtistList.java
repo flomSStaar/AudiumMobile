@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.model.entity.Artist;
-import uqac.dim.audium.view.adapter.ListViewArtistAdapter;
+import uqac.dim.audium.adapter.ListViewArtistAdapter;
 
 public class ArtistList extends AppCompatActivity {
     @Override

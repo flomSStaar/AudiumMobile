@@ -22,7 +22,7 @@ import java.util.List;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.model.entity.Track;
-import uqac.dim.audium.view.adapter.ListViewTrackAdapter;
+import uqac.dim.audium.adapter.ListViewTrackAdapter;
 
 public class TrackList extends AppCompatActivity {
     private final DatabaseReference database = FirebaseDatabase.getInstance().getReference();

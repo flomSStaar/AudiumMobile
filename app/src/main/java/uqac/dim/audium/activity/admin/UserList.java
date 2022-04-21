@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.model.entity.User;
-import uqac.dim.audium.view.adapter.ListViewUserAdapter;
+import uqac.dim.audium.adapter.ListViewUserAdapter;
 
 public class UserList extends AppCompatActivity {
     private DatabaseReference database;

@@ -24,7 +24,7 @@ import java.util.List;
 import uqac.dim.audium.R;
 import uqac.dim.audium.activity.admin.AddArtist;
 import uqac.dim.audium.model.entity.Artist;
-import uqac.dim.audium.view.adapter.ListViewArtistAdapter;
+import uqac.dim.audium.adapter.ListViewArtistAdapter;
 
 public class ArtistChooser extends AppCompatActivity {
     private ListView listViewArtists;

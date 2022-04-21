@@ -1,4 +1,4 @@
-package uqac.dim.audium.view.adapter;
+package uqac.dim.audium.adapter;
 
 import android.content.Context;
 import android.content.Intent;

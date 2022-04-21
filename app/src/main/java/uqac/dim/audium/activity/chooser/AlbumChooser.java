@@ -25,7 +25,7 @@ import java.util.List;
 import uqac.dim.audium.R;
 import uqac.dim.audium.activity.admin.AddAlbum;
 import uqac.dim.audium.model.entity.Album;
-import uqac.dim.audium.view.adapter.ListViewAlbumAdapter;
+import uqac.dim.audium.adapter.ListViewAlbumAdapter;
 
 public class AlbumChooser extends AppCompatActivity {
     private TextView tvArtistInfo;

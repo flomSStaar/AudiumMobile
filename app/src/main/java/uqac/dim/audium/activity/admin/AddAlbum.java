@@ -40,7 +40,7 @@ import uqac.dim.audium.firebase.FirebaseAlbum;
 import uqac.dim.audium.firebase.FirebaseUtils;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
-import uqac.dim.audium.view.adapter.ListViewAdapter;
+import uqac.dim.audium.adapter.ListViewAdapter;
 
 public class AddAlbum extends AppCompatActivity {
     private final StorageReference storeRef = FirebaseStorage.getInstance().getReference();

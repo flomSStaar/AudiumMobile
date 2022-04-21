@@ -32,10 +32,10 @@ import com.squareup.picasso.Picasso;
 
 import uqac.dim.audium.CreateNotification;
 import uqac.dim.audium.MediaService;
+import uqac.dim.audium.OnClearFromRecentService;
 import uqac.dim.audium.R;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
-import uqac.dim.audium.OnClearFromRecentService;
 
 public class MediaPlayerFragment extends Fragment implements MediaService.MediaEventListener {
     private final Context context;
