@@ -20,6 +20,7 @@ import java.util.List;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.activity.admin.TrackPage;
+import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
 
 public class ListViewTrackAdapter extends ArrayAdapter<Track> {
@@ -75,16 +76,15 @@ public class ListViewTrackAdapter extends ArrayAdapter<Track> {
         }
         tvTrackNumber.setText(String.valueOf(position + 1));
         tvTrackName.setText(track.getName());
-        Picasso.with(context).load(track.getImageUrl()).error(R.drawable.ic_notes).into(ivTrack);
+        Picasso.with(context).load(track.getImageUrl()).placeholder(R.drawable.ic_notes).error(R.drawable.ic_notes).into(ivTrack);
 
         database.child("artists")
-                .child(String.valueOf(trackList.get(position).getArtistId()))
-                .child("stageName").get()
+                .child(String.valueOf(track.getArtistId())).get()
                 .addOnSuccessListener(dataSnapshot -> {
                     if (dataSnapshot.exists()) {
-                        String artistName = dataSnapshot.getValue(String.class);
-                        if (artistName != null) {
-                            tvArtistName.setText(artistName);
+                        Artist artist = dataSnapshot.getValue(Artist.class);
+                        if (artist != null) {
+                            tvArtistName.setText(artist.getPrintableName());
                         } else {
                             tvArtistName.setText("");
                         }

@@ -85,7 +85,7 @@ public class ModifyPlaylist extends AppCompatActivity {
                 if (playlist != null) {
                     editTitle.setText(playlist.getTitle());
                     editDescription.setText(playlist.getDescription());
-                    Picasso.with(getApplicationContext()).load(playlist.getImageUrl()).error(R.drawable.ic_notes).into(ivPlaylist);
+                    Picasso.with(getApplicationContext()).load(playlist.getImageUrl()).placeholder(R.drawable.ic_notes).error(R.drawable.ic_notes).into(ivPlaylist);
 
                     database.child("tracks").get().addOnSuccessListener(trackSnapshot -> {
                         playlistTracks.clear();
@@ -171,7 +171,7 @@ public class ModifyPlaylist extends AppCompatActivity {
     private void getImageResult(Uri uri) {
         if (uri != null) {
             localFileImageUri = uri;
-            Picasso.with(getApplicationContext()).load(localFileImageUri).error(R.drawable.ic_notes).into(ivPlaylist);
+            Picasso.with(getApplicationContext()).load(localFileImageUri).placeholder(R.drawable.ic_notes).error(R.drawable.ic_notes).into(ivPlaylist);
         }
     }
 }

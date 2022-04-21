@@ -81,7 +81,7 @@ public class AlbumPage extends AppCompatActivity {
                     editDescription.setEnabled(false);
                     editArtist.setText(album.getArtistId().toString());
                     editArtist.setEnabled(false);
-                    Picasso.with(getApplicationContext()).load(album.getImagePath()).error(R.drawable.ic_notes).into(imageView);
+                    Picasso.with(getApplicationContext()).load(album.getImageUrl()).placeholder(R.drawable.ic_notes).error(R.drawable.ic_notes).into(imageView);
 
                     database.child("artists/" + album.getArtistId()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
@@ -144,7 +144,7 @@ public class AlbumPage extends AppCompatActivity {
         String newDescription = editDescription.getText().toString();
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-        FirebaseAlbum newAlbum = new FirebaseAlbum(albumId, newTitle, newDescription, album.getImagePath(), album.getArtistId(), album.getTracksId());
+        FirebaseAlbum newAlbum = new FirebaseAlbum(albumId, newTitle, newDescription, album.getImageUrl(), album.getArtistId(), album.getTracksId());
         db.getReference("albums/").child(String.valueOf(albumId)).setValue(newAlbum);
         editTitle.setEnabled(false);
         editDescription.setEnabled(false);

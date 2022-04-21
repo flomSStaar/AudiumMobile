@@ -37,7 +37,7 @@ public class GridViewAdapter extends ArrayAdapter<Playlist> {
         TextView tv = row.findViewById(R.id.gv_playlist_name);
         ImageView imageView = row.findViewById(R.id.playlist_image);
         tv.setText(playlistsList.get(position).getTitle());
-        Picasso.with(getContext()).load(playlistsList.get(position).getImageUrl()).error(R.drawable.ic_notes).into(imageView);
+        Picasso.with(getContext()).load(playlistsList.get(position).getImageUrl()).placeholder(R.drawable.ic_notes).error(R.drawable.ic_notes).into(imageView);
         return row;
     }
 }

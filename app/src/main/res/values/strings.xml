@@ -22,7 +22,7 @@
     <string name="password_validation">Password must have eight characters, at least one uppercase letter, one lowercase letter, one number and one special character</string>
     <string name="last_name_validation">Last name must not contain special characters</string>
     <string name="first_name_validation">First name must not contain special characters and not start and end with spaces</string>
-    <string name="username_validation">Username must contain only lowercase, uppercase and number characters, contains not spaces or special characters</string>
+    <string name="username_validation">Username must have only lowercase, uppercase and number characters or \'-\'</string>
     <string name="invalid_state">You have not the permissions to access to this page</string>
     <string name="logout">Logout</string>
     <string name="manage_users">Manage users</string>
@@ -85,4 +85,9 @@
     <string name="empty_title">Title cannot be empty</string>
     <string name="cannot_modify_playlist">Cannot modify the playlist</string>
     <string name="playlist_has_no_track">This playlist has no track</string>
+    <string name="album_image">album_image</string>
+    <string name="print_age">years old</string>
+    <string name="no_album">No album</string>
+    <string name="track_infos">track_infos</string>
+    <string name="no_playlist">No playlist</string>
 </resources>

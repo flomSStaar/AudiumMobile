@@ -265,7 +265,7 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
                         tvArtistName.setText(R.string.artist_name_error);
                     });
             //Changer la photo de la musique
-            Picasso.with(context).load(Uri.parse(track.getImageUrl())).error(R.drawable.ic_notes).into(ivTrack);
+            Picasso.with(context).load(Uri.parse(track.getImageUrl())).placeholder(R.drawable.ic_notes).error(R.drawable.ic_notes).into(ivTrack);
 
 
             Handler mHandler = new Handler();

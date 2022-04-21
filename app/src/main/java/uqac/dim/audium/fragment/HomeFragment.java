@@ -26,7 +26,6 @@ import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -40,6 +39,7 @@ import uqac.dim.audium.R;
 import uqac.dim.audium.SliderAdapter;
 import uqac.dim.audium.SliderItem;
 import uqac.dim.audium.model.entity.Album;
+import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.Track;
 
@@ -64,7 +64,7 @@ public class HomeFragment extends Fragment {
 
     private final Context context;
     private MediaService mediaService;
-    private ServiceConnection serviceConnection = new ServiceConnection() {
+    private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             mediaService = ((MediaService.MediaServiceBinder) iBinder).getService();
@@ -109,7 +109,6 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_home, container, false);
-
 
         //ViewPager
         viewPager2 = root.findViewById(R.id.viewPagerImageSlider);
@@ -199,50 +198,44 @@ public class HomeFragment extends Fragment {
 
     private void getPlaylistsButtons() {
         database = FirebaseDatabase.getInstance().getReference();
-        database.child("playlists").child(username).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-            @Override
-            public void onSuccess(DataSnapshot dataSnapshot) {
-                List<Playlist> playlists = new ArrayList<>();
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot data : dataSnapshot.getChildren()) {
-                        Playlist p = data.getValue(Playlist.class);
-                        playlists.add(p);
-                    }
-                    for (int i = playlists.size() - 1; i > playlists.size() - 5; i--) {
-                        int index = i;
-                        if (index >= 0 && playlists.get(index) != null) {
-                            View view = getLayoutInflater().inflate(R.layout.grid_view_item, linearLayoutPlaylists, false);
-                            ((TextView) view.findViewById(R.id.gv_playlist_name)).setText(playlists.get(index).getTitle());
-                            Picasso.with(getContext()).load(playlists.get(index).getImageUrl()).error(R.drawable.ic_notes).into((ImageView) view.findViewById(R.id.playlist_image));
-                            //ImageButton b = new ImageButton(getContext());
-                            //b.setLayoutParams((new ViewGroup.LayoutParams(300, 300)));
-                            //Picasso.with(getContext()).load(playlists.get(index).getImageUrl()).error(R.drawable.ic_notes).into(b);
-                            view.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    PlaylistPageFragment playlistPageFragment = new PlaylistPageFragment(context);
-                                    Bundle b = new Bundle();
-                                    b.putString("username", username);
-                                    b.putLong("playlistId", playlists.get(index).getId());
-                                    playlistPageFragment.setArguments(b);
-                                    FragmentManager manager = getParentFragmentManager();
-                                    manager.beginTransaction()
-                                            .replace(R.id.fragment_container, playlistPageFragment)
-                                            .addToBackStack("mainPage")
-                                            .commit();
-                                }
-                            });
-                            linearLayoutPlaylists.addView(view);
-                        }
+        database.child("playlists").child(username).get().addOnSuccessListener(dataSnapshot -> {
+            if (dataSnapshot.exists()) {
+                linearLayoutPlaylists.removeAllViews();
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    Playlist playlist = data.getValue(Playlist.class);
+                    if (playlist != null) {
+                        View view = getLayoutInflater().inflate(R.layout.grid_view_item, linearLayoutPlaylists, false);
+                        TextView tvPlaylistName = view.findViewById(R.id.gv_playlist_name);
+                        ImageView ivPlaylist = view.findViewById(R.id.playlist_image);
 
+                        tvPlaylistName.setText(playlist.getTitle());
+                        Picasso.with(getContext())
+                                .load(playlist.getImageUrl())
+                                .placeholder(R.drawable.ic_notes)
+                                .error(R.drawable.ic_notes)
+                                .into(ivPlaylist);
+
+                        view.setOnClickListener(view1 -> {
+                            PlaylistPageFragment playlistPageFragment = new PlaylistPageFragment(context);
+                            Bundle b = new Bundle();
+                            b.putString("username", username);
+                            b.putLong("playlistId", playlist.getId());
+                            playlistPageFragment.setArguments(b);
+                            FragmentManager manager = getParentFragmentManager();
+                            manager.beginTransaction()
+                                    .replace(R.id.fragment_container, playlistPageFragment)
+                                    .addToBackStack("mainPage")
+                                    .commit();
+                        });
+                        linearLayoutPlaylists.addView(view);
                     }
-                } else {
-                    TextView noPlaylists = new TextView(getContext());
-                    noPlaylists.setText("No playlists");
-                    noPlaylists.setTextColor(Color.WHITE);
-                    noPlaylists.setLayoutParams((new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)));
-                    linearLayoutPlaylists.addView(noPlaylists);
                 }
+            } else {
+                TextView noPlaylists = new TextView(getContext());
+                noPlaylists.setText(R.string.no_playlist);
+                noPlaylists.setTextColor(Color.WHITE);
+                noPlaylists.setLayoutParams((new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)));
+                linearLayoutPlaylists.addView(noPlaylists);
             }
         });
 
@@ -250,54 +243,60 @@ public class HomeFragment extends Fragment {
 
     private void getAlbumsButtons() {
         database = FirebaseDatabase.getInstance().getReference();
-        database.child("albums").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-            @Override
-            public void onSuccess(DataSnapshot dataSnapshot) {
-                List<Album> albums = new ArrayList<>();
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot data : dataSnapshot.getChildren()) {
-                        Album a = data.getValue(Album.class);
-                        albums.add(a);
-                    }
-                    for (int i = albums.size() - 1; i > albums.size() - 5; i--) {
-                        int index = i;
-                        if (index >= 0 && albums.get(index) != null) {
+        database.child("albums").limitToLast(5).get().addOnSuccessListener(dataSnapshot -> {
+            if (dataSnapshot.exists()) {
+                linearLayoutAlbums.removeAllViews();
 
-                            View view = getLayoutInflater().inflate(R.layout.grid_view_album_item, linearLayoutAlbums, false);
-                            ((TextView) view.findViewById(R.id.gv_album_name)).setText(albums.get(index).getTitle());
-                            ((TextView) view.findViewById(R.id.gv_artist_name)).setText(albums.get(index).getArtistId().toString());
-                            Picasso.with(getContext()).load(albums.get(index).getImagePath()).error(R.drawable.ic_notes).into((ImageView) view.findViewById(R.id.gv_album_image));
-                            //ImageButton b = new ImageButton(getContext());
-                            //b.setLayoutParams((new ViewGroup.LayoutParams(300, 300)));
-                            //Picasso.with(getContext()).load(albums.get(index).getImagePath()).error(R.drawable.ic_notes).into(b);
-                            //b.setOnClickListener(new View.OnClickListener() {
-                            view.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    AlbumPageFragment albumPageFragment = new AlbumPageFragment();
-                                    Bundle b = new Bundle();
-                                    b.putString("username", username);
-                                    b.putLong("albumId", albums.get(index).getId());
-                                    albumPageFragment.setArguments(b);
-                                    FragmentManager manager = getParentFragmentManager();
-                                    manager.beginTransaction()
-                                            .replace(R.id.fragment_container, albumPageFragment)
-                                            .addToBackStack("playlistPage")
-                                            .commit();
-                                }
-                            });
-                            linearLayoutAlbums.addView(view);
-                        }
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    Album album = data.getValue(Album.class);
+                    if (album != null) {
+                        View view = getLayoutInflater().inflate(R.layout.grid_view_album_item, linearLayoutAlbums, false);
+                        TextView tvAlbumName = view.findViewById(R.id.gv_album_name);
+                        TextView tvArtistName = view.findViewById(R.id.gv_artist_name);
+                        ImageView ivAlbum = view.findViewById(R.id.gv_album_image);
+
+                        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+                        database.child("artists")
+                                .child(String.valueOf(album.getArtistId())).get()
+                                .addOnSuccessListener(artistSnapshot -> {
+                                    if (artistSnapshot.exists()) {
+                                        Artist artist = artistSnapshot.getValue(Artist.class);
+                                        if (artist != null) {
+                                            tvArtistName.setText(artist.getPrintableName());
+                                        } else {
+                                            tvArtistName.setText("");
+                                        }
+                                    }
+                                });
+                        tvAlbumName.setText(album.getTitle());
+                        Picasso.with(context)
+                                .load(album.getImageUrl())
+                                .placeholder(R.drawable.ic_notes)
+                                .error(R.drawable.ic_notes)
+                                .into(ivAlbum);
+
+                        view.setOnClickListener(view1 -> {
+                            AlbumPageFragment albumPageFragment = new AlbumPageFragment();
+                            Bundle b = new Bundle();
+                            b.putString("username", username);
+                            b.putLong("albumId", album.getId());
+                            albumPageFragment.setArguments(b);
+                            FragmentManager manager = getParentFragmentManager();
+                            manager.beginTransaction()
+                                    .replace(R.id.fragment_container, albumPageFragment)
+                                    .addToBackStack("playlistPage")
+                                    .commit();
+                        });
+                        linearLayoutAlbums.addView(view);
                     }
-                } else {
-                    TextView noAlbums = new TextView(getContext());
-                    noAlbums.setText("No albums");
-                    noAlbums.setLayoutParams((new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)));
-                    linearLayoutAlbums.addView(noAlbums);
                 }
+            } else {
+                TextView noAlbums = new TextView(getContext());
+                noAlbums.setText(R.string.no_album);
+                noAlbums.setLayoutParams((new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)));
+                linearLayoutAlbums.addView(noAlbums);
             }
         });
-
     }
 
     // Méthode temporaire pour tester le media player

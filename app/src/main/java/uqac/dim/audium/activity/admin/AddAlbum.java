@@ -147,7 +147,7 @@ public class AddAlbum extends AppCompatActivity {
     private void getImageResult(Uri uri) {
         if (uri != null) {
             localFileImageUri = uri;
-            Picasso.with(this).load(localFileImageUri).error(R.drawable.ic_notes).into(image);
+            Picasso.with(this).load(localFileImageUri).placeholder(R.drawable.ic_notes).error(R.drawable.ic_notes).into(image);
         }
     }
 

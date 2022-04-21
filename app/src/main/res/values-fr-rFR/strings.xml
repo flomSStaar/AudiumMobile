@@ -22,7 +22,7 @@
     <string name="password_validation">Le mot de passe doit avoir 8 caractères minumum, une majuscule, une minuscule, un chiffre et un caractère spécial</string>
     <string name="last_name_validation">Le nom ne doit pas contenir de caractères spéciaux</string>
     <string name="first_name_validation">Le prénom ne doit pas contenir de caractères spéciaux et ne doit pas commencer et finir par des espaces</string>
-    <string name="username_validation">Le nom d\'utilisateur doit contenir seulement des lettres minuscules ou majuscules non accentuées, des chiffres, ne pas contenir des espaces ou des caractères spéciaux</string>
+    <string name="username_validation">Le nom d\'utilisateur doit contenir seulement des lettres minuscules ou majuscules non accentuées, des chiffres ou \'-\'</string>
     <string name="invalid_state">Vous n\\\'avez pas le droit d\\\'accder à cette page</string>
     <string name="logout">Déconnexion</string>
     <string name="invalid_password">Mot de passe invalide</string>
@@ -47,4 +47,5 @@
     <string name="search_hint">Albums, musiques, artistes ...</string>
     <string name="options">Options</string>
     <string name="user_informations">Informations de l\'utilisateur</string>
+    <string name="print_age">ans</string>
 </resources>

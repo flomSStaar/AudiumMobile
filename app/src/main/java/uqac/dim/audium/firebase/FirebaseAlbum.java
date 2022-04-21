@@ -6,15 +6,15 @@ public final class FirebaseAlbum {
     private Long id;
     private String title;
     private String description;
-    private String imagePath;
+    private String imageUrl;
     private Long artistId;
     private List<Long> tracksId;
 
-    public FirebaseAlbum(Long id, String title, String description, String imagePath, Long artistId, List<Long> tracksId) {
+    public FirebaseAlbum(Long id, String title, String description, String imageUrl, Long artistId, List<Long> tracksId) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.imagePath = imagePath;
+        this.imageUrl = imageUrl;
         this.artistId = artistId;
         this.tracksId = tracksId;
     }
@@ -31,8 +31,8 @@ public final class FirebaseAlbum {
         return description;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public Long getArtistId() {

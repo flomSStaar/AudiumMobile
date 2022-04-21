@@ -117,7 +117,7 @@ public class PlaylistPageFragment extends Fragment {
                 if (playlist != null) {
                     tvTitle.setText(playlist.getTitle());
                     tvDescription.setText(playlist.getDescription());
-                    Picasso.with(getContext()).load(playlist.getImageUrl()).error(R.drawable.ic_notes).into(imageView);
+                    Picasso.with(getContext()).load(playlist.getImageUrl()).placeholder(R.drawable.ic_notes).error(R.drawable.ic_notes).into(imageView);
 
                     database.child("tracks").get().addOnSuccessListener(trackSnapshot -> {
                         playlistTracks.clear();

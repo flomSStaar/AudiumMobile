@@ -75,7 +75,7 @@ public class AlbumPageFragment extends Fragment {
                     editArtist.setText(album.getArtistId().toString());
                     editArtist.setEnabled(false);
                     imageView = root.findViewById(R.id.image_album);
-                    Picasso.with(getContext()).load(album.getImagePath()).error(R.drawable.ic_notes).into(imageView);
+                    Picasso.with(getContext()).load(album.getImageUrl()).placeholder(R.drawable.ic_notes).error(R.drawable.ic_notes).into(imageView);
 
                     database.child("artists/" + album.getArtistId()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
@@ -190,7 +190,7 @@ public class AlbumPageFragment extends Fragment {
         String newDescription = editDescription.getText().toString();
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-        FirebaseAlbum newAlbum = new FirebaseAlbum(albumId, newTitle, newDescription, album.getImagePath(), album.getArtistId(), album.getTracksId());
+        FirebaseAlbum newAlbum = new FirebaseAlbum(albumId, newTitle, newDescription, album.getImageUrl(), album.getArtistId(), album.getTracksId());
         db.getReference("albums/").child(String.valueOf(albumId)).setValue(newAlbum);
         editTitle.setEnabled(false);
         editDescription.setEnabled(false);

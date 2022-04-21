@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="120sp"
     android:layout_height="wrap_content"
+    android:maxHeight="200sp"
     android:orientation="vertical"
-    android:layout_margin="10dp">
+    android:padding="10dp">
 
     <ImageView
         android:id="@+id/gv_album_image"
-        android:layout_width="100sp"
+        android:layout_width="match_parent"
         android:layout_height="100sp"
-        android:scaleType="centerCrop"
+        android:contentDescription="@string/album_image"
         android:gravity="center"
-        />
+        android:scaleType="centerCrop" />
+
     <TextView
         android:id="@+id/gv_album_name"
-        android:layout_width="100sp"
+        style="@style/Theme.Audium.SubSubTitle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/montserrat"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textAlignment="center"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:textAlignment="center" />
+
     <TextView
         android:id="@+id/gv_artist_name"
-        android:layout_width="100sp"
+        style="@style/Theme.Audium.SubSubText"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/montserrat"
-        android:textColor="#B7FFFFFF"
-        android:textAlignment="center"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:textAlignment="center" />
 
 </LinearLayout>

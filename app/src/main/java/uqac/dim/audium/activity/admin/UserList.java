@@ -1,6 +1,5 @@
 package uqac.dim.audium.activity.admin;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -18,30 +17,28 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import uqac.dim.audium.R;
-import uqac.dim.audium.model.entity.User;
 import uqac.dim.audium.adapter.ListViewUserAdapter;
+import uqac.dim.audium.model.entity.User;
 
 public class UserList extends AppCompatActivity {
-    private DatabaseReference database;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Context c = this;
         setContentView(R.layout.activity_user_list);
-        ArrayList<User> l = new ArrayList<>();
+        ArrayList<User> users = new ArrayList<>();
         ListView userListView = ((ListView) findViewById(R.id.userList));
-        database = FirebaseDatabase.getInstance().getReference();
+
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         database.child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                l.clear();
+                users.clear();
                 for (DataSnapshot snap : snapshot.getChildren()) {
                     User user = snap.getValue(User.class);
-                    l.add(user);
+                    users.add(user);
                 }
-                //userListView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, l));
-                userListView.setAdapter(new ListViewUserAdapter(l,c));
+                userListView.setAdapter(new ListViewUserAdapter(users, getApplicationContext()));
 
             }
 
@@ -51,7 +48,7 @@ public class UserList extends AppCompatActivity {
             }
         });
         userListView.setOnItemClickListener((adapter, view, position, arg) -> {
-            Intent intent = new Intent(UserList.this, UserProfile.class);
+            Intent intent = new Intent(getApplicationContext(), UserProfile.class);
             intent.putExtra("username", ((User) userListView.getItemAtPosition(position)).getUsername());
             startActivity(intent);
         });
