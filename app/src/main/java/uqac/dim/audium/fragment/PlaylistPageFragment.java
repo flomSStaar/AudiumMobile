@@ -95,7 +95,7 @@ public class PlaylistPageFragment extends Fragment {
         btnPlay.setOnClickListener(this::playPlaylist);
         btnDelete.setOnClickListener(this::deletePlaylist);
         btnModify.setOnClickListener(this::modifyPlaylist);
-        listView.setOnItemClickListener(this::onClickedItem);
+        listView.setOnItemClickListener(this::onTrackClicked);
 
         return root;
     }
@@ -129,8 +129,7 @@ public class PlaylistPageFragment extends Fragment {
                                 }
                         }
                         if (playlistTracks.size() != 0)
-                            //listView.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, tracks));
-                            listView.setAdapter(new ListViewTrackAdapter(playlistTracks, getContext()));
+                            listView.setAdapter(new ListViewTrackAdapter(playlistTracks, getContext(), username));
                         else {
                             Toast.makeText(getContext(), "This playlist has no tracks", Toast.LENGTH_SHORT).show(); ///Techniquement impossible
                         }
@@ -146,6 +145,7 @@ public class PlaylistPageFragment extends Fragment {
         if (!playlistTracks.isEmpty()) {
             if (mediaService != null) {
                 mediaService.setTracks(playlistTracks);
+                mediaService.stop();
                 mediaService.play();
             } else {
                 Log.w("DIM", "Media service is not initialized");
@@ -197,19 +197,17 @@ public class PlaylistPageFragment extends Fragment {
         startActivity(modifyIntent);
     }
 
-    private void onClickedItem(AdapterView<?> adapterView, View view, int i, long l) {
-        TrackPageFragment trackPageFragment = new TrackPageFragment();
-        Bundle b = new Bundle();
-        b.putString("username", username);
-        b.putLong("trackId", ((Track) listView.getItemAtPosition(i)).getId());
-        if (((Track) listView.getItemAtPosition(i)).getAlbumId() != null)
-            b.putLong("albumId", ((Track) listView.getItemAtPosition(i)).getAlbumId());
-        else
-            b.putLong("albumId", 0);
-        trackPageFragment.setArguments(b);
-        getParentFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, trackPageFragment)
-                .addToBackStack("playlistPage")
-                .commit();
+    private void onTrackClicked(AdapterView<?> adapterView, View view, int position, long l) {
+        if (!playlistTracks.isEmpty()) {
+            if (mediaService != null) {
+                mediaService.setTracks(playlistTracks, position);
+                mediaService.stop();
+                mediaService.play();
+            } else {
+                Log.w("DIM", "Media service is not initialized");
+            }
+        } else {
+            Log.e("DIM", "No track available for the playlist");
+        }
     }
 }

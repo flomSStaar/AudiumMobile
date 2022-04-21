@@ -97,7 +97,7 @@ public class ModifyPlaylistActivity extends AppCompatActivity {
                                 }
                         }
                         if (playlistTracks.size() != 0)
-                            listPlaylistTracks.setAdapter(new ListViewTrackAdapter(playlistTracks, getApplicationContext()));
+                            listPlaylistTracks.setAdapter(new ListViewTrackAdapter(playlistTracks, getApplicationContext(), username));
                         else {
                             Toast.makeText(getApplicationContext(), getString(R.string.playlist_has_no_track), Toast.LENGTH_SHORT).show(); ///Techniquement impossible
                         }

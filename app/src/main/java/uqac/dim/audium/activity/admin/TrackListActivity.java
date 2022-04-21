@@ -50,7 +50,7 @@ public class TrackListActivity extends AppCompatActivity {
                     Track t = snap.getValue(Track.class);
                     tracks.add(t);
                 }
-                lvTracks.setAdapter(new ListViewTrackAdapter(tracks, getApplicationContext()));
+                lvTracks.setAdapter(new ListViewTrackAdapter(tracks, getApplicationContext(), username, "Admin"));
             }
 
             @Override

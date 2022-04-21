@@ -20,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -40,21 +41,15 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
     private final Context context;
     private MediaService mediaService;
     private ServiceConnection serviceConnection;
+    private BroadcastReceiver broadcastReceiver;
 
     private ImageButton btnPrevious, btnPlayPause, btnNext, btnLooping;
     private TextView tvTrackName, tvArtistName;
     private ImageView ivTrack;
 
-    private boolean stop = false;
-
     private LinearProgressIndicator progressBar;
 
-    private NotificationManager notificationManager;
-    private String artistName;
-
-    private Handler mHandler;
     private Track currentTrack;
-    private int notifPlayButton;
 
     public MediaPlayerFragment(Context context) {
         if (context == null) {
@@ -69,6 +64,7 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
         super.onCreate(savedInstanceState);
 
         setServiceConnection();
+        setBroadcastReceiver();
         Intent mediaServiceIntent = new Intent(context, MediaService.class);
         boolean successBind = context.bindService(mediaServiceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
         if (successBind) {
@@ -79,45 +75,15 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
             Log.e("DIM", "media service cannot be bind");
         }
 
-        NotificationChannel channel = new NotificationChannel(CreateNotification.CHANNEL_ID, "NotifChan", NotificationManager.IMPORTANCE_LOW);
-        notificationManager = getActivity().getSystemService(NotificationManager.class);
+        NotificationChannel channel = new NotificationChannel(CreateNotification.CHANNEL_ID, CreateNotification.CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
+        NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
         if (notificationManager != null) {
             notificationManager.createNotificationChannel(channel);
         }
 
         getActivity().registerReceiver(broadcastReceiver, new IntentFilter("android.intent.action.MEDIA_BUTTON"));
         getActivity().startService(new Intent(getActivity().getBaseContext(), onClearFromRecentService.class));
-
-
     }
-
-    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getExtras().getString("actionname");
-
-            switch (action) {
-                case CreateNotification.ACTION_PREVIOUS:
-                    mediaService.previousTrack();
-                    break;
-                case CreateNotification.ACTION_PLAY:
-                    Log.e("DIM", "YOO!");
-                    if (mediaService.isPlaying()) {
-                        mediaService.pause();
-                    } else {
-                        mediaService.play();
-                    }
-                    break;
-                case CreateNotification.ACTION_NEXT:
-                    mediaService.nextTrack();
-                    break;
-                case CreateNotification.ACTION_LOOP:
-                    mediaService.setLooping(!mediaService.isLooping());
-                    break;
-            }
-        }
-    };
-
 
     @Nullable
     @Override
@@ -159,29 +125,6 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
     private void playPause(View view) {
         if (mediaService != null && !mediaService.isPlaying()) {
             mediaService.play();
-
-
-
-            /*
-            progressBar.setProgress(0);
-            progressBar.setMax(mediaService.getDuration()/1000);
-            mHandler = new Handler();
-            //Make sure you update Seekbar on UI thread
-            getActivity().runOnUiThread(new Runnable() {
-
-                @Override
-                public void run() {
-                    if(mediaService != null){
-                        int mCurrentPosition = mediaService.getCurrentPosition() / 1000;
-                        progressBar.setProgress(mCurrentPosition);
-                    }
-                    mHandler.postDelayed(this, 10);
-
-                }
-            });
-            */
-
-
         } else if (mediaService != null && mediaService.isPlaying()) {
             mediaService.pause();
         }
@@ -191,7 +134,6 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
     private void next(View view) {
         if (mediaService != null) {
             mediaService.nextTrack();
-
         }
     }
 
@@ -235,40 +177,67 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
         };
     }
 
+    private void setBroadcastReceiver() {
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getExtras().getString("actionname");
+
+                switch (action) {
+                    case CreateNotification.ACTION_PREVIOUS:
+                        mediaService.previousTrack();
+                        break;
+                    case CreateNotification.ACTION_PLAY:
+                        Log.e("DIM", "YOO!");
+                        if (mediaService.isPlaying()) {
+                            mediaService.pause();
+                        } else {
+                            mediaService.play();
+                        }
+                        break;
+                    case CreateNotification.ACTION_NEXT:
+                        mediaService.nextTrack();
+                        break;
+                    case CreateNotification.ACTION_LOOP:
+                        mediaService.setLooping(!mediaService.isLooping());
+                        break;
+                }
+            }
+        };
+    }
+
+    private void createNotification(@DrawableRes int playPauseButtonId) {
+        int loopButton;
+        if (mediaService.isLooping())
+            loopButton = R.drawable.ic_baseline_repeat_enable_24;
+        else
+            loopButton = R.drawable.ic_outline_play_circle_filled_24;
+        CreateNotification createNotification = new CreateNotification(context, currentTrack, playPauseButtonId, loopButton);
+        createNotification.execute();
+    }
+
     @Override
     public void onTrackPlay() {
         btnPlayPause.setImageResource(R.drawable.ic_outline_pause_circle_filled_24);
         progressBar.setMax(mediaService.getDuration());
-        int loopbutton;
-        if(mediaService.isLooping())
-            loopbutton = R.drawable.ic_baseline_repeat_enable_24;
-        else
-            loopbutton = R.drawable.ic_outline_play_circle_filled_24;
-
-
-        CreateNotification createNotification = new CreateNotification(context,currentTrack,R.drawable.ic_outline_pause_circle_filled_24,loopbutton);
-
-        createNotification.execute();
+        createNotification(R.drawable.ic_outline_pause_circle_filled_24);
     }
 
     @Override
     public void onTrackPause() {
         btnPlayPause.setImageResource(R.drawable.ic_outline_play_circle_filled_24);
-        notifPlayButton = R.drawable.ic_outline_pause_circle_filled_24;
-        int loopbutton;
-        if(mediaService.isLooping())
-            loopbutton = R.drawable.ic_baseline_repeat_enable_24;
-        else
-            loopbutton = R.drawable.ic_outline_play_circle_filled_24;
+        createNotification(R.drawable.ic_outline_play_circle_filled_24);
+    }
 
-        CreateNotification createNotification = new CreateNotification(context,currentTrack,R.drawable.ic_outline_play_circle_filled_24,loopbutton);
-        createNotification.execute();
-
+    @Override
+    public void onTrackStop() {
+        btnPlayPause.setImageResource(R.drawable.ic_outline_play_circle_filled_24);
+        createNotification(R.drawable.ic_outline_play_circle_filled_24);
     }
 
     @Override
     public void onTrackChanged(Track track) {
-        Log.e("DIM","onTrackChanged()");
+        Log.i("DIM", "onTrackChanged()");
         if (track != null) {
 
             tvTrackName.setText(track.getName());
@@ -280,7 +249,6 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
                         if (dataSnapshot.exists()) {
                             Artist artist = dataSnapshot.getValue(Artist.class);
                             if (artist != null) {
-                                artistName = artist.getPrintableName();
                                 tvArtistName.setText(artist.getPrintableName());
                             } else {
                                 tvArtistName.setText(R.string.artist_name_error);
@@ -296,10 +264,9 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
             Picasso.with(context).load(Uri.parse(track.getImageUrl())).error(R.drawable.ic_notes).into(ivTrack);
 
 
-            mHandler = new Handler();
+            Handler mHandler = new Handler();
             //Make sure you update Seekbar on UI thread
             getActivity().runOnUiThread(new Runnable() {
-
                 @Override
                 public void run() {
                     if (mediaService != null) {
@@ -307,19 +274,12 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
                         progressBar.setProgress(mCurrentPosition);
                     }
                     mHandler.postDelayed(this, 100);
-
                 }
             });
 
             currentTrack = track;
 
-            int loopbutton;
-            if(mediaService.isLooping())
-                loopbutton = R.drawable.ic_baseline_repeat_enable_24;
-            else
-                loopbutton = R.drawable.ic_outline_play_circle_filled_24;
-            CreateNotification createNotification = new CreateNotification(context,currentTrack,R.drawable.ic_outline_play_circle_filled_24,loopbutton);
-            createNotification.execute();
+            createNotification(R.drawable.ic_outline_play_circle_filled_24);
         }
     }
 }

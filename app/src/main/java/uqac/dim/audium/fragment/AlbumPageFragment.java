@@ -61,7 +61,7 @@ public class AlbumPageFragment extends Fragment {
 
     }
 
-    private void load(){
+    private void load() {
         database = FirebaseDatabase.getInstance().getReference();
         database.child("albums").child(String.valueOf(albumId)).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
@@ -80,7 +80,7 @@ public class AlbumPageFragment extends Fragment {
                     database.child("artists/" + album.getArtistId()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
                         public void onSuccess(DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.exists())
+                            if (dataSnapshot.exists())
                                 artist = dataSnapshot.getValue(Artist.class);
                             else {
                                 // A faire
@@ -103,11 +103,8 @@ public class AlbumPageFragment extends Fragment {
                         }
                 }
                 if (tracks.size() != 0) {
-                    //listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, tracks));
-                    listView.setAdapter(new ListViewTrackAdapter(tracks, getContext()));
-                }
-
-                else {
+                    listView.setAdapter(new ListViewTrackAdapter(tracks, getContext(), username));
+                } else {
                     Toast.makeText(getContext(), "This album has no tracks", Toast.LENGTH_SHORT).show(); ///Techniquement impossible
                 }
             }
@@ -121,9 +118,9 @@ public class AlbumPageFragment extends Fragment {
         database.child("users").child(username).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     user = dataSnapshot.getValue(User.class);
-                    if (!user.isAdmin()){
+                    if (!user.isAdmin()) {
                         btnEdit.setVisibility(View.INVISIBLE);
                         btnDelete.setVisibility(View.INVISIBLE);
                         btnSave.setVisibility(View.INVISIBLE);
@@ -144,7 +141,7 @@ public class AlbumPageFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.activity_album_page, container, false);
         listView = ((ListView) root.findViewById(R.id.album_page_tracks));
-        listView.setOnItemClickListener(this::OnItenClicked);
+        listView.setOnItemClickListener(this::OnItemClicked);
         editTitle = (EditText) root.findViewById(R.id.edit_album_title);
         editDescription = (EditText) root.findViewById(R.id.edit_album_description);
         editArtist = (EditText) root.findViewById(R.id.edit_album_stagename);
@@ -159,7 +156,7 @@ public class AlbumPageFragment extends Fragment {
         return root;
     }
 
-    private void OnItenClicked(AdapterView<?> adapterView, View view, int i, long l) {
+    private void OnItemClicked(AdapterView<?> adapterView, View view, int i, long l) {
         /*Intent intent = new Intent(AlbumPageActivity.this, TrackPageActivity.class);
         intent.putExtra("trackId", ((Track) listView.getItemAtPosition(i)).getId());
         intent.putExtra("albumId", ((Track) listView.getItemAtPosition(i)).getAlbumId());
@@ -170,11 +167,11 @@ public class AlbumPageFragment extends Fragment {
         TrackPageFragment trackPageFragment = new TrackPageFragment();
         Bundle b = new Bundle();
         b.putString("username", username);
-        b.putLong("trackId",((Track) listView.getItemAtPosition(i)).getId());
-        if(((Track) listView.getItemAtPosition(i)).getAlbumId()!=null)
-            b.putLong("albumId",album.getId());
+        b.putLong("trackId", ((Track) listView.getItemAtPosition(i)).getId());
+        if (((Track) listView.getItemAtPosition(i)).getAlbumId() != null)
+            b.putLong("albumId", album.getId());
         else
-            b.putLong("albumId",0);
+            b.putLong("albumId", 0);
         trackPageFragment.setArguments(b);
         getParentFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, trackPageFragment)
@@ -215,9 +212,9 @@ public class AlbumPageFragment extends Fragment {
                         database.child("tracks").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                             @Override
                             public void onSuccess(DataSnapshot dataSnapshot) {
-                                for (DataSnapshot snap: dataSnapshot.getChildren()) {
+                                for (DataSnapshot snap : dataSnapshot.getChildren()) {
                                     Track t = snap.getValue(Track.class);
-                                    if(tracksId.contains(t.getId())){
+                                    if (tracksId.contains(t.getId())) {
                                         t.setAlbumId(null);
                                         database.child("tracks").child(String.valueOf(t.getId())).setValue(t);
                                         List<Long> artistAlbumsId = artist.getAlbumsId();

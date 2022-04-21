@@ -70,8 +70,8 @@ public class ArtistProfileActivity extends AppCompatActivity {
     private void deleteArtist(View view) {
         database = FirebaseDatabase.getInstance().getReference();
         database.child("artists").child(String.valueOf(artist.getId())).removeValue();
-        if(idTracks!= null){
-            for (Long idTrack: idTracks) {
+        if (idTracks != null) {
+            for (Long idTrack : idTracks) {
                 //suppression de la musique
                 database.child("tracks").child(String.valueOf(idTrack)).removeValue();
 
@@ -97,13 +97,11 @@ public class ArtistProfileActivity extends AppCompatActivity {
                 });
             }
         }
-        if(idAlbums!=null) {
+        if (idAlbums != null) {
             for (Long idAlbum : idAlbums) {
                 database.child("albums").child(String.valueOf(idAlbum)).removeValue();
             }
         }
-
-
 
 
         artist = null;
@@ -126,10 +124,8 @@ public class ArtistProfileActivity extends AppCompatActivity {
                         albums.add(a);
                 }
                 if (albums.size() != 0) {
-                    //listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, albums));
                     listView.setAdapter(new ListViewAlbumAdapter(albums, c));
-                }
-                else {
+                } else {
                     Toast.makeText(getApplicationContext(), "This artist has no albums", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -165,10 +161,8 @@ public class ArtistProfileActivity extends AppCompatActivity {
                         tracks.add(t);
                 }
                 if (tracks.size() != 0) {
-                    //listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, tracks));
-                    listView.setAdapter(new ListViewTrackAdapter(tracks, c));
-                }
-                else {
+                    listView.setAdapter(new ListViewTrackAdapter(tracks, c, username));
+                } else {
                     Toast.makeText(getApplicationContext(), "This artist has no tracks", Toast.LENGTH_SHORT).show();
                 }
             }

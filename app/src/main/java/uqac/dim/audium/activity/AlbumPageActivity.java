@@ -55,7 +55,7 @@ public class AlbumPageActivity extends AppCompatActivity {
         albumId = getIntent().getLongExtra("albumId", 0);
         username = getIntent().getStringExtra("username");
 
-        Context c =this;
+        Context c = this;
 
         editTitle = (EditText) findViewById(R.id.edit_album_title);
         editDescription = (EditText) findViewById(R.id.edit_album_description);
@@ -68,10 +68,6 @@ public class AlbumPageActivity extends AppCompatActivity {
         btnDelete = (Button) findViewById(R.id.delete_album);
         btnDelete.setOnClickListener(this::deleteAlbum);
         imageView = findViewById(R.id.image_album);
-
-
-
-
 
         database = FirebaseDatabase.getInstance().getReference();
         database.child("albums").child(String.valueOf(albumId)).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
@@ -90,10 +86,10 @@ public class AlbumPageActivity extends AppCompatActivity {
                     database.child("artists/" + album.getArtistId()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
                         public void onSuccess(DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.exists())
+                            if (dataSnapshot.exists())
                                 artist = dataSnapshot.getValue(Artist.class);
                             else {
-                                // A faire
+                                //TODO A faire
                             }
                         }
                     });
@@ -115,11 +111,8 @@ public class AlbumPageActivity extends AppCompatActivity {
                         }
                 }
                 if (tracks.size() != 0) {
-                    //listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, tracks));
-                    listView.setAdapter(new ListViewTrackAdapter(tracks, c));
-                }
-
-                else {
+                    listView.setAdapter(new ListViewTrackAdapter(tracks, c, username));
+                } else {
                     Toast.makeText(getApplicationContext(), "This album has no tracks", Toast.LENGTH_SHORT).show(); ///Techniquement impossible
                 }
             }
@@ -173,9 +166,9 @@ public class AlbumPageActivity extends AppCompatActivity {
                         database.child("tracks").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                             @Override
                             public void onSuccess(DataSnapshot dataSnapshot) {
-                                for (DataSnapshot snap: dataSnapshot.getChildren()) {
+                                for (DataSnapshot snap : dataSnapshot.getChildren()) {
                                     Track t = snap.getValue(Track.class);
-                                    if(tracksId.contains(t.getId())){
+                                    if (tracksId.contains(t.getId())) {
                                         t.setAlbumId(null);
                                         database.child("tracks").child(String.valueOf(t.getId())).setValue(t);
                                         List<Long> artistAlbumsId = artist.getAlbumsId();

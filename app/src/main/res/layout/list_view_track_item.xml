@@ -48,4 +48,13 @@
             android:textSize="15sp" />
     </RelativeLayout>
 
+    <ImageView
+        android:id="@+id/iv_track_infos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="10sp"
+        android:background="@drawable/mediabutton3"
+        android:src="@drawable/ic_infos" />
+
 </LinearLayout>

@@ -106,7 +106,25 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
         if (tracks != null && tracks.size() > 0) {
             //Creates a copy of the track list
             this.tracks = new ArrayList<>(tracks);
+            this.currentPlayingIndex = 0;
             this.maxPlayingIndex = this.tracks.size();
+        } else {
+            throw new IllegalArgumentException("tracks cannot be null or empty");
+        }
+    }
+
+    public void setTracks(List<Track> tracks, int index) {
+        Log.i("DIM", "MediaService.setTracks()");
+
+        if (tracks != null && tracks.size() > 0) {
+            if (index >= 0 && index < tracks.size()) {
+                //Creates a copy of the track list
+                this.tracks = new ArrayList<>(tracks);
+                this.currentPlayingIndex = index;
+                this.maxPlayingIndex = this.tracks.size();
+            } else {
+                throw new IllegalArgumentException("index is out of range");
+            }
         } else {
             throw new IllegalArgumentException("tracks cannot be null or empty");
         }
@@ -120,7 +138,7 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
 
         if (tracks != null) {
             if (currentTrack == null) {
-                prepareTrack(true, 0);
+                prepareTrack(true, currentPlayingIndex);
             } else if (isPrepared) {
                 mediaPlayer.start();
                 notifyPlay();
@@ -134,8 +152,19 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
 
     public void pause() {
         Log.i("DIM", "MediaService.pause()");
-        mediaPlayer.pause();
-        notifyPause();
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+            notifyPause();
+        }
+    }
+
+    public void stop() {
+        Log.i("DIM", "MediaService.stop()");
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+        }
+        currentTrack = null;
+        isPrepared = false;
     }
 
     public void nextTrack() {
@@ -168,7 +197,6 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
             if (currentPlayingIndex == 0) {
                 if (looping) {
                     prepareTrack(true, previousPlayingIndex);
-
                 }
             } else {
                 prepareTrack(true, previousPlayingIndex);
@@ -218,6 +246,14 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
         this.looping = looping;
     }
 
+    public int getDuration() {
+        return mediaPlayer.getDuration();
+    }
+
+    public int getCurrentPosition() {
+        return mediaPlayer.getCurrentPosition();
+    }
+
     // Events
 
     private final List<MediaEventListener> listeners = new ArrayList<>();
@@ -240,6 +276,10 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
         listeners.forEach(MediaEventListener::onTrackPause);
     }
 
+    private void notifyStop() {
+        listeners.forEach(MediaEventListener::onTrackStop);
+    }
+
     private void notifyTrackChanged() {
         listeners.forEach(listener -> listener.onTrackChanged(currentTrack));
     }
@@ -249,15 +289,8 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
 
         void onTrackPause();
 
+        void onTrackStop();
+
         void onTrackChanged(Track track);
-    }
-
-    public int getDuration(){
-        return mediaPlayer.getDuration();
-    }
-
-    public int getCurrentPosition()
-    {
-        return mediaPlayer.getCurrentPosition();
     }
 }
