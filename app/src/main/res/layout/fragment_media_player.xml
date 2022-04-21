@@ -43,15 +43,12 @@
 
                 <TextView
                     android:id="@+id/tv_track_name"
-
-                    style="@style/DefaultAudiumText"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:text="testName" />
 
                 <TextView
                     android:id="@+id/tv_artist_name"
-                    style="@style/DefaultAudiumText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="testArtiste" />

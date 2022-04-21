@@ -31,9 +31,9 @@ import uqac.dim.audium.firebase.FirebasePlaylist;
 import uqac.dim.audium.firebase.FirebaseUtils;
 import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.Track;
-import uqac.dim.audium.model.utils.ListViewTrackAdapter;
+import uqac.dim.audium.view.adapter.ListViewTrackAdapter;
 
-public class ModifyPlaylistActivity extends AppCompatActivity {
+public class ModifyPlaylist extends AppCompatActivity {
     private EditText editTitle, editDescription;
     private ImageView ivPlaylist;
     private ListView listPlaylistTracks;

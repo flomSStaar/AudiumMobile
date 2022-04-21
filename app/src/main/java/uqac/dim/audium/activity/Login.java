@@ -31,7 +31,7 @@ import uqac.dim.audium.model.entity.User;
 import uqac.dim.audium.model.utils.HashPassword;
 import uqac.dim.audium.model.utils.Utils;
 
-public class LoginActivity extends AppCompatActivity {
+public class Login extends AppCompatActivity {
     private ActivityResultLauncher<Intent> activityResultLauncher;
     private EditText editUsername;
     private EditText editPassword;
@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void register(View view) {
-        Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+        Intent i = new Intent(getApplicationContext(), Register.class);
         activityResultLauncher.launch(i);
     }
 
@@ -144,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         //Start the main activity
-        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        Intent i = new Intent(getApplicationContext(), Main.class);
         i.putExtra("firstName", user.getFirstName());
         i.putExtra("lastName", user.getLastName());
         i.putExtra("age", user.getAge());

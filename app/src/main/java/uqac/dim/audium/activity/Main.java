@@ -15,7 +15,7 @@ import uqac.dim.audium.fragment.HomeFragment;
 import uqac.dim.audium.fragment.MediaPlayerFragment;
 import uqac.dim.audium.model.entity.User;
 
-public class MainActivity extends AppCompatActivity {
+public class Main extends AppCompatActivity {
     private User user; ///A CHANGER !!!
     private ImageButton btnHome, btnSearch, btnSettings;
     private MediaService mediaService;
@@ -68,12 +68,12 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
 
          */
-        Intent i = new Intent(getApplicationContext(), SearchableActivity.class);
+        Intent i = new Intent(getApplicationContext(), Searchable.class);
         startActivity(i);
     }
 
     private void settings(View view) {
-        Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
+        Intent i = new Intent(getApplicationContext(), Settings.class);
         i.putExtra("firstName", user.getFirstName());
         i.putExtra("lastName", user.getLastName());
         i.putExtra("age", user.getAge());
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), R.string.invalid_state, Toast.LENGTH_SHORT).show();
             Log.e("DIM", "Invalid state");
             e.printStackTrace();
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            startActivity(new Intent(getApplicationContext(), Login.class));
             finish();
         }
     }

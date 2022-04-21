@@ -39,7 +39,7 @@ import uqac.dim.audium.firebase.FirebasePlaylist;
 import uqac.dim.audium.firebase.FirebaseUtils;
 import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.model.entity.User;
-import uqac.dim.audium.model.utils.ListViewAdapter;
+import uqac.dim.audium.view.adapter.ListViewAdapter;
 
 public class AddPlaylistFragment extends Fragment {
 

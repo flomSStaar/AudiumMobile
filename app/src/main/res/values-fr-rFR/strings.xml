@@ -46,4 +46,5 @@
     <string name="album_id">Id de l\'album</string>
     <string name="search_hint">Albums, musiques, artistes ...</string>
     <string name="options">Options</string>
+    <string name="user_informations">Informations de l\'utilisateur</string>
 </resources>

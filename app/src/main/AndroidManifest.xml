@@ -16,7 +16,7 @@
         android:theme="@style/Theme.Audium"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".activity.Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,40 +24,40 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.Main"
             android:exported="false" />
         <activity
-            android:name=".activity.RegisterActivity"
+            android:name=".activity.Register"
             android:exported="false" />
         <activity
-            android:name=".activity.SettingsActivity"
+            android:name=".activity.Settings"
             android:exported="false" />
         <activity
-            android:name=".activity.admin.UserListActivity"
+            android:name=".activity.admin.UserList"
             android:exported="false" />
         <activity
-            android:name=".activity.admin.UserProfileActivity"
+            android:name=".activity.admin.UserProfile"
             android:exported="false" />
         <activity
-            android:name=".activity.admin.ArtistListActivity"
+            android:name=".activity.admin.ArtistList"
             android:exported="false" />
         <activity
-            android:name=".activity.admin.ArtistProfileActivity"
+            android:name=".activity.admin.ArtistProfile"
             android:exported="false" />
         <activity
-            android:name=".activity.admin.TrackListActivity"
+            android:name=".activity.admin.TrackList"
             android:exported="false" />
         <activity
-            android:name=".activity.admin.AddArtistActivity"
+            android:name=".activity.admin.AddArtist"
             android:exported="false" />
         <activity
-            android:name=".activity.admin.AddAlbumActivity"
+            android:name=".activity.admin.AddAlbum"
             android:exported="false" />
         <activity
-            android:name=".activity.admin.AddTrackActivity"
+            android:name=".activity.admin.AddTrack"
             android:exported="false" />
         <activity
-            android:name=".activity.AlbumPageActivity"
+            android:name=".activity.AlbumPage"
             android:exported="false" />
         <activity
             android:name=".activity.chooser.ArtistChooser"
@@ -66,19 +66,19 @@
             android:name=".activity.chooser.AlbumChooser"
             android:exported="false" />
         <activity
-            android:name=".activity.admin.TrackPageActivity"
+            android:name=".activity.admin.TrackPage"
             android:exported="false" />
         <activity
-            android:name=".activity.AddPlaylistActivity"
+            android:name=".activity.AddPlaylist"
             android:exported="false" />
         <activity
             android:name=".activity.chooser.PlaylistChooser"
             android:exported="false" />
         <activity
-            android:name=".activity.ModifyPlaylistActivity"
+            android:name=".activity.ModifyPlaylist"
             android:exported="false" />
         <activity
-            android:name=".activity.SearchableActivity"
+            android:name=".activity.Searchable"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -96,7 +96,7 @@
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
-        <service android:name=".onClearFromRecentService" />
+        <service android:name=".OnClearFromRecentService" />
     </application>
 
 </manifest>

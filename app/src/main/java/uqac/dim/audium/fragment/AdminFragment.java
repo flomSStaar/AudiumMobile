@@ -12,10 +12,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import uqac.dim.audium.R;
-import uqac.dim.audium.activity.admin.AddTrackActivity;
-import uqac.dim.audium.activity.admin.ArtistListActivity;
-import uqac.dim.audium.activity.admin.TrackListActivity;
-import uqac.dim.audium.activity.admin.UserListActivity;
+import uqac.dim.audium.activity.admin.AddTrack;
+import uqac.dim.audium.activity.admin.ArtistList;
+import uqac.dim.audium.activity.admin.TrackList;
+import uqac.dim.audium.activity.admin.UserList;
 
 public class AdminFragment extends Fragment {
     private Button btnArtists;
@@ -49,22 +49,22 @@ public class AdminFragment extends Fragment {
     }
 
     private void viewArtists(View view) {
-        Intent intent = new Intent(getContext(), ArtistListActivity.class);
+        Intent intent = new Intent(getContext(), ArtistList.class);
         intent.putExtra("username",username);
         startActivity(intent);
     }
 
     private void viewUsers(View view) {
-        startActivity(new Intent(getContext(), UserListActivity.class));
+        startActivity(new Intent(getContext(), UserList.class));
     }
 
     private void viewTracks(View view) {
-        Intent intent = new Intent(getContext(), TrackListActivity.class);
+        Intent intent = new Intent(getContext(), TrackList.class);
         intent.putExtra("username",username);
         startActivity(intent);
     }
 
     private void addTrack(View view) {
-        startActivity(new Intent(getContext(), AddTrackActivity.class));
+        startActivity(new Intent(getContext(), AddTrack.class));
     }
 }

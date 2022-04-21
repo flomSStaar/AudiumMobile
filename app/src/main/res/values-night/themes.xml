@@ -12,12 +12,12 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-    </style>
-    <style name="DefaultIB" parent="Widget.AppCompat.ImageButton">
-        <item name="android:background"> @drawable/mediabutton3</item>
-    </style>
-    <style name="DefaultAudiumText">
-        <item name="font">@font/montserrat</item>
+
+        <item name="android:fontFamily">@font/montserrat</item>
         <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="DefaultIB" parent="Widget.AppCompat.ImageButton">
+        <item name="android:background">@drawable/mediabutton3</item>
     </style>
 </resources>

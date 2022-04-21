@@ -7,7 +7,7 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationManagerCompat;
 
-public class onClearFromRecentService extends Service {
+public class OnClearFromRecentService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return START_NOT_STICKY;

@@ -35,7 +35,7 @@ import uqac.dim.audium.MediaService;
 import uqac.dim.audium.R;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
-import uqac.dim.audium.onClearFromRecentService;
+import uqac.dim.audium.OnClearFromRecentService;
 
 public class MediaPlayerFragment extends Fragment implements MediaService.MediaEventListener {
     private final Context context;
@@ -82,7 +82,7 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
         }
 
         getActivity().registerReceiver(broadcastReceiver, new IntentFilter("android.intent.action.MEDIA_BUTTON"));
-        getActivity().startService(new Intent(getActivity().getBaseContext(), onClearFromRecentService.class));
+        getActivity().startService(new Intent(getActivity().getBaseContext(), OnClearFromRecentService.class));
     }
 
     @Nullable

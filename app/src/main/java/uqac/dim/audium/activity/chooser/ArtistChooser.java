@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uqac.dim.audium.R;
-import uqac.dim.audium.activity.admin.AddArtistActivity;
+import uqac.dim.audium.activity.admin.AddArtist;
 import uqac.dim.audium.model.entity.Artist;
-import uqac.dim.audium.model.utils.ListViewArtistAdapter;
+import uqac.dim.audium.view.adapter.ListViewArtistAdapter;
 
 public class ArtistChooser extends AppCompatActivity {
     private ListView listViewArtists;
@@ -77,7 +77,7 @@ public class ArtistChooser extends AppCompatActivity {
     }
 
     private void createArtist(View view) {
-        Intent intent = new Intent(getApplicationContext(), AddArtistActivity.class);
+        Intent intent = new Intent(getApplicationContext(), AddArtist.class);
         artistResultLauncher.launch(intent);
     }
 

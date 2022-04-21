@@ -31,11 +31,11 @@ import java.util.List;
 
 import uqac.dim.audium.MediaService;
 import uqac.dim.audium.R;
-import uqac.dim.audium.activity.ModifyPlaylistActivity;
+import uqac.dim.audium.activity.ModifyPlaylist;
 import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.model.entity.User;
-import uqac.dim.audium.model.utils.ListViewTrackAdapter;
+import uqac.dim.audium.view.adapter.ListViewTrackAdapter;
 
 public class PlaylistPageFragment extends Fragment {
     private String username;
@@ -191,7 +191,7 @@ public class PlaylistPageFragment extends Fragment {
     }
 
     private void modifyPlaylist(View view) {
-        Intent modifyIntent = new Intent(getActivity(), ModifyPlaylistActivity.class);
+        Intent modifyIntent = new Intent(getActivity(), ModifyPlaylist.class);
         modifyIntent.putExtra("username", username);
         modifyIntent.putExtra("playlistId", playlistId);
         startActivity(modifyIntent);

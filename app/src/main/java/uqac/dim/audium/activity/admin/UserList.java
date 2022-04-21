@@ -19,9 +19,9 @@ import java.util.ArrayList;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.model.entity.User;
-import uqac.dim.audium.model.utils.ListViewUserAdapter;
+import uqac.dim.audium.view.adapter.ListViewUserAdapter;
 
-public class UserListActivity extends AppCompatActivity {
+public class UserList extends AppCompatActivity {
     private DatabaseReference database;
 
     @Override
@@ -51,7 +51,7 @@ public class UserListActivity extends AppCompatActivity {
             }
         });
         userListView.setOnItemClickListener((adapter, view, position, arg) -> {
-            Intent intent = new Intent(UserListActivity.this, UserProfileActivity.class);
+            Intent intent = new Intent(UserList.this, UserProfile.class);
             intent.putExtra("username", ((User) userListView.getItemAtPosition(position)).getUsername());
             startActivity(intent);
         });

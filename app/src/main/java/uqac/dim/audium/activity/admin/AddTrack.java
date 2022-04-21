@@ -34,7 +34,7 @@ import uqac.dim.audium.activity.chooser.ArtistChooser;
 import uqac.dim.audium.firebase.FirebaseTrack;
 import uqac.dim.audium.firebase.FirebaseUtils;
 
-public class AddTrackActivity extends AppCompatActivity {
+public class AddTrack extends AppCompatActivity {
     private final StorageReference storeRef = FirebaseStorage.getInstance().getReference();
     private final DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
 
@@ -147,7 +147,7 @@ public class AddTrackActivity extends AppCompatActivity {
 
                                                                         Log.i("DIM", "track " + trackId + " has been added in database");
                                                                         Toast.makeText(getApplicationContext(), "Track has been added successfully", Toast.LENGTH_SHORT).show();
-                                                                        startActivity(new Intent(getApplicationContext(), TrackListActivity.class));
+                                                                        startActivity(new Intent(getApplicationContext(), TrackList.class));
                                                                         finish();
                                                                     })
                                                                     .addOnFailureListener(e -> {

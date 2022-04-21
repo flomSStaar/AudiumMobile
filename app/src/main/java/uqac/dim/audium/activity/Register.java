@@ -18,7 +18,7 @@ import uqac.dim.audium.firebase.FirebaseUser;
 import uqac.dim.audium.model.utils.HashPassword;
 import uqac.dim.audium.model.utils.Utils;
 
-public class RegisterActivity extends AppCompatActivity {
+public class Register extends AppCompatActivity {
     private EditText editFirstName;
     private EditText editLastName;
     private EditText editAge;

@@ -23,9 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uqac.dim.audium.R;
-import uqac.dim.audium.activity.admin.AddAlbumActivity;
+import uqac.dim.audium.activity.admin.AddAlbum;
 import uqac.dim.audium.model.entity.Album;
-import uqac.dim.audium.model.utils.ListViewAlbumAdapter;
+import uqac.dim.audium.view.adapter.ListViewAlbumAdapter;
 
 public class AlbumChooser extends AppCompatActivity {
     private TextView tvArtistInfo;
@@ -110,7 +110,7 @@ public class AlbumChooser extends AppCompatActivity {
     }
 
     private void createAlbum(View view) {
-        Intent intent = new Intent(getApplicationContext(), AddAlbumActivity.class);
+        Intent intent = new Intent(getApplicationContext(), AddAlbum.class);
         intent.putExtra("artistId", artistId);
         albumResultLauncher.launch(intent);
     }

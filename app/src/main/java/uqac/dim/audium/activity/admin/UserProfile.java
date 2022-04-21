@@ -21,7 +21,7 @@ import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.model.entity.User;
 
-public class UserProfileActivity extends AppCompatActivity {
+public class UserProfile extends AppCompatActivity {
     private DatabaseReference database;
     private User user;
     private EditText username;

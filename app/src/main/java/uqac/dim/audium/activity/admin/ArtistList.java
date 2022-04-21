@@ -20,9 +20,9 @@ import java.util.ArrayList;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.model.entity.Artist;
-import uqac.dim.audium.model.utils.ListViewArtistAdapter;
+import uqac.dim.audium.view.adapter.ListViewArtistAdapter;
 
-public class ArtistListActivity extends AppCompatActivity {
+public class ArtistList extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +51,7 @@ public class ArtistListActivity extends AppCompatActivity {
             }
         });
         artistListView.setOnItemClickListener((adapter, view, position, arg) -> {
-            Intent intent = new Intent(ArtistListActivity.this, ArtistProfileActivity.class);
+            Intent intent = new Intent(ArtistList.this, ArtistProfile.class);
             intent.putExtra("artistId", ((Artist) artistListView.getItemAtPosition(position)).getId());
             intent.putExtra("username", getIntent().getStringExtra("username"));
             startActivity(intent);
@@ -59,7 +59,7 @@ public class ArtistListActivity extends AppCompatActivity {
     }
 
     public void addArtist(View view) {
-        Intent intent = new Intent(getApplicationContext(), AddArtistActivity.class);
+        Intent intent = new Intent(getApplicationContext(), AddArtist.class);
         startActivity(intent);
     }
 

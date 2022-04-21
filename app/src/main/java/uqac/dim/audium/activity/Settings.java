@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -17,9 +19,8 @@ import uqac.dim.audium.fragment.AdminFragment;
 import uqac.dim.audium.model.entity.User;
 import uqac.dim.audium.model.utils.Utils;
 
-public class SettingsActivity extends AppCompatActivity {
-    private Button btnLogout;
-    private Button btnBack;
+public class Settings extends AppCompatActivity {
+    private TextView tvFirstName, tvLastName, tvUsername, tvAge;
     private User user;
 
     @Override
@@ -27,14 +28,27 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        btnLogout = findViewById(R.id.btn_logout);
-        btnBack = findViewById(R.id.btn_back);
+        Button btnLogout = findViewById(R.id.btn_logout);
+        ImageButton btnBack = findViewById(R.id.btn_back);
+        tvFirstName = findViewById(R.id.tv_first_name);
+        tvLastName = findViewById(R.id.tv_last_name);
+        tvUsername = findViewById(R.id.tv_username);
+        tvAge = findViewById(R.id.tv_age);
+
         btnLogout.setOnClickListener(this::deconnection);
         btnBack.setOnClickListener(this::back);
 
         initUser();
 
-        if (user != null && user.isAdmin()) {
+        if (user == null) {
+            return;
+        }
+        tvFirstName.setText(user.getFirstName());
+        tvLastName.setText(user.getLastName());
+        tvUsername.setText(user.getUsername());
+        tvAge.setText(String.valueOf(user.getAge()));
+
+        if (user.isAdmin()) {
             final AdminFragment adminFragment = new AdminFragment();
             Bundle b = new Bundle();
             b.putString("username", user.getUsername());
@@ -74,7 +88,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
 
-        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        Intent intent = new Intent(getApplicationContext(), Login.class);
         intent.putExtra("username", user.getUsername());
         startActivity(intent);
         finish();
