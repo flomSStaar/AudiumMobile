@@ -21,7 +21,6 @@ import java.util.List;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.model.entity.Artist;
-import uqac.dim.audium.model.entity.User;
 
 public class ListViewArtistAdapter extends ArrayAdapter<Artist> {
     private List<Artist> artistList;
@@ -29,8 +28,8 @@ public class ListViewArtistAdapter extends ArrayAdapter<Artist> {
     private Artist artist;
     private DatabaseReference database;
 
-    public ListViewArtistAdapter(List<Artist> artists, Context context){
-        super(context, R.layout.list_view_track_item,artists);
+    public ListViewArtistAdapter(List<Artist> artists, Context context) {
+        super(context, R.layout.list_view_track_item, artists);
         this.context = context;
         artistList = new ArrayList<>();
         this.artistList = artists;
@@ -40,14 +39,14 @@ public class ListViewArtistAdapter extends ArrayAdapter<Artist> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-        View row = inflater.inflate(R.layout.list_view_track_item,parent,false);
-        TextView tv = row.findViewById(R.id.track_infos);
+        LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+        View row = inflater.inflate(R.layout.list_view_track_item, parent, false);
+        TextView tv = row.findViewById(R.id.tv_track_name);
         database = FirebaseDatabase.getInstance().getReference();
         database.child("artists").child(String.valueOf(artistList.get(position).getId())).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     artist = dataSnapshot.getValue(Artist.class);
                     tv.setText(artist.getStageName() + " - " + artist.getFirstName() + " " + artist.getLastName());
                 }

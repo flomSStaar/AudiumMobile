@@ -1,8 +1,6 @@
 package uqac.dim.audium.activity;
 
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,15 +8,11 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import uqac.dim.audium.CreateNotification;
 import uqac.dim.audium.MediaService;
 import uqac.dim.audium.R;
 import uqac.dim.audium.fragment.HomeFragment;
 import uqac.dim.audium.fragment.MediaPlayerFragment;
-import uqac.dim.audium.fragment.SearchFragment;
 import uqac.dim.audium.model.entity.User;
 
 public class MainActivity extends AppCompatActivity {

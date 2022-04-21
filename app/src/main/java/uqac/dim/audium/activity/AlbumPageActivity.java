@@ -3,9 +3,7 @@ package uqac.dim.audium.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -28,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uqac.dim.audium.R;
-import uqac.dim.audium.activity.admin.TrackListActivity;
 import uqac.dim.audium.activity.admin.TrackPageActivity;
 import uqac.dim.audium.firebase.FirebaseAlbum;
 import uqac.dim.audium.model.entity.Album;

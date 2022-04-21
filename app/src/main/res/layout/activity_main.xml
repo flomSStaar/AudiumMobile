@@ -13,21 +13,21 @@
         android:padding="25dp">
 
         <ImageButton
-            android:background="@drawable/mediabutton3"
             android:id="@+id/btn_home"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/mediabutton3"
             android:src="@drawable/ic_home" />
 
 
         <ImageButton
             android:id="@+id/btn_search"
-            android:background="@drawable/mediabutton3"
-            android:layout_marginLeft="20dp"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:layout_weight="1"
+            android:background="@drawable/mediabutton3"
             android:src="@drawable/ic_search" />
 
         <TextView
@@ -41,12 +41,12 @@
             android:textSize="20sp" />
 
         <ImageButton
-            android:background="@drawable/mediabutton3"
-            android:layout_marginRight="20dp"
-
             android:layout_width="40dp"
             android:layout_height="wrap_content"
+
+            android:layout_marginEnd="20dp"
             android:layout_weight="1"
+            android:background="@drawable/mediabutton3"
             android:src="@drawable/ic_profile" />
 
         <ImageButton

@@ -8,7 +8,6 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
-import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
 

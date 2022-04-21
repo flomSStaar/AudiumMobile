@@ -1,17 +1,10 @@
 package uqac.dim.audium.activity.chooser;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,9 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uqac.dim.audium.R;
-import uqac.dim.audium.activity.admin.ArtistListActivity;
-import uqac.dim.audium.activity.admin.ArtistProfileActivity;
-import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.model.utils.ListViewPlaylistAdapter;

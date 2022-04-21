@@ -38,7 +38,6 @@ import java.util.List;
 import uqac.dim.audium.R;
 import uqac.dim.audium.firebase.FirebaseAlbum;
 import uqac.dim.audium.firebase.FirebaseUtils;
-import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.model.utils.ListViewAdapter;

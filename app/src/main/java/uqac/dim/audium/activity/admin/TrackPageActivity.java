@@ -25,8 +25,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import uqac.dim.audium.R;

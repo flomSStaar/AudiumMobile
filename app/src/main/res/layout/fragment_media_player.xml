@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:progressTint="@color/white"
+        app:indicatorColor="@color/purple_500"
+        app:trackColor="@color/black" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/layout_track_infos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_track"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/mediabutton" />
+
+            <LinearLayout
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_track_name"
+
+                    style="@style/DefaultAudiumText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="testName" />
+
+                <TextView
+                    android:id="@+id/tv_artist_name"
+                    style="@style/DefaultAudiumText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="testArtiste" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/layout_track_infos"
+            android:orientation="horizontal">
+
+            <ImageButton
+
+                android:id="@+id/btn_looping"
+                style="@style/DefaultIB"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_baseline_repeat_disable_24" />
+
+            <ImageButton
+                android:id="@+id/btn_previous"
+                style="@style/DefaultIB"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_round_skip_previous_24" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/btn_play_pause"
+                style="@style/DefaultIB"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_outline_play_circle_filled_24" />
+
+            <ImageButton
+                android:id="@+id/btn_next"
+                style="@style/DefaultIB"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_round_skip_next_24" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uqac.dim.audium.R;
-import uqac.dim.audium.activity.AddPlaylistActivity;
 import uqac.dim.audium.activity.admin.AddAlbumActivity;
 import uqac.dim.audium.fragment.AddPlaylistFragment;
 import uqac.dim.audium.model.entity.Track;

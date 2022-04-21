@@ -106,7 +106,7 @@ public class AddTrackActivity extends AppCompatActivity {
         String trackName = editTrackName.getText().toString();
 
 
-        if (localFileImageUri!=null && localFileUri != null && artistId != null && !trackName.trim().isEmpty()) {
+        if (localFileImageUri != null && localFileUri != null && artistId != null && !trackName.trim().isEmpty()) {
             dbRef.child("ids/lastTrackId").get()
                     .addOnSuccessListener(dataSnapshot -> {
                         if (dataSnapshot.exists()) {
@@ -128,7 +128,7 @@ public class AddTrackActivity extends AppCompatActivity {
                                                             trackRef.getDownloadUrl()
                                                                     .addOnSuccessListener(trackUri -> {
                                                                         List<Long> playlistsId = new ArrayList<>();
-                                                                        FirebaseTrack track = new FirebaseTrack(trackId, trackName.trim(), trackUri.toString(), imageUri.toString(), artistId, albumId,playlistsId);
+                                                                        FirebaseTrack track = new FirebaseTrack(trackId, trackName.trim(), trackUri.toString(), imageUri.toString(), artistId, albumId, playlistsId);
 
                                                                         dbRef.child("tracks").child(trackId.toString()).setValue(track);
                                                                         dbRef.child("ids/lastTrackId").setValue(trackId + 1);

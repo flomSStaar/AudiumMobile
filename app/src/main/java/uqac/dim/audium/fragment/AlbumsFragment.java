@@ -25,9 +25,7 @@ import java.util.List;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.model.entity.Album;
-import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.User;
-import uqac.dim.audium.model.utils.GridViewAdapter;
 import uqac.dim.audium.model.utils.GridViewAlbumAdapter;
 
 public class AlbumsFragment extends Fragment {

@@ -3,7 +3,6 @@ package uqac.dim.audium.activity.admin;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -20,7 +19,6 @@ import java.util.ArrayList;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.model.entity.User;
-import uqac.dim.audium.model.utils.ListViewTrackAdapter;
 import uqac.dim.audium.model.utils.ListViewUserAdapter;
 
 public class UserListActivity extends AppCompatActivity {

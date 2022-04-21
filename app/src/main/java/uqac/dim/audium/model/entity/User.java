@@ -1,6 +1,5 @@
 package uqac.dim.audium.model.entity;
 
-import com.google.firebase.database.Exclude;
 import com.google.firebase.database.PropertyName;
 
 import java.io.Serializable;

@@ -28,8 +28,8 @@ public class ListViewPlaylistAdapter extends ArrayAdapter<Playlist> {
     private String playlistTitle;
     private DatabaseReference database;
 
-    public ListViewPlaylistAdapter(List<Playlist> playlists, Context context){
-        super(context, R.layout.list_view_track_item,playlists);
+    public ListViewPlaylistAdapter(List<Playlist> playlists, Context context) {
+        super(context, R.layout.list_view_track_item, playlists);
         this.context = context;
         this.playlists = new ArrayList<>();
         this.playlists = playlists;
@@ -39,14 +39,14 @@ public class ListViewPlaylistAdapter extends ArrayAdapter<Playlist> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-        View row = inflater.inflate(R.layout.list_view_track_item,parent,false);
-        TextView tv = row.findViewById(R.id.track_infos);
+        LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+        View row = inflater.inflate(R.layout.list_view_track_item, parent, false);
+        TextView tv = row.findViewById(R.id.tv_track_name);
         database = FirebaseDatabase.getInstance().getReference();
         database.child("playlists").child(String.valueOf(playlists.get(position).getUsername())).child(String.valueOf(playlists.get(position).getId())).child("title").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     playlistTitle = dataSnapshot.getValue(String.class);
                     tv.setText(playlistTitle);
                 }

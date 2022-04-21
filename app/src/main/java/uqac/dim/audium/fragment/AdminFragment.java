@@ -15,9 +15,7 @@ import uqac.dim.audium.R;
 import uqac.dim.audium.activity.admin.AddTrackActivity;
 import uqac.dim.audium.activity.admin.ArtistListActivity;
 import uqac.dim.audium.activity.admin.TrackListActivity;
-import uqac.dim.audium.activity.admin.TrackPageActivity;
 import uqac.dim.audium.activity.admin.UserListActivity;
-import uqac.dim.audium.model.entity.Track;
 
 public class AdminFragment extends Fragment {
     private Button btnArtists;
@@ -34,7 +32,7 @@ public class AdminFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.admin_fragment, container, false);
+        View root = inflater.inflate(R.layout.fragment_admin, container, false);
 
         username = getArguments().getString("username");
         btnArtists = root.findViewById(R.id.btn_manage_artists);

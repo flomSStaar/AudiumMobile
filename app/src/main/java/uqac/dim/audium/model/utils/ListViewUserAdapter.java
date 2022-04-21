@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uqac.dim.audium.R;
-import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.User;
 
 public class ListViewUserAdapter extends ArrayAdapter<User> {
@@ -29,8 +28,8 @@ public class ListViewUserAdapter extends ArrayAdapter<User> {
     private User user;
     private DatabaseReference database;
 
-    public ListViewUserAdapter(List<User> users, Context context){
-        super(context, R.layout.list_view_track_item,users);
+    public ListViewUserAdapter(List<User> users, Context context) {
+        super(context, R.layout.list_view_track_item, users);
         this.context = context;
         userList = new ArrayList<>();
         this.userList = users;
@@ -40,14 +39,14 @@ public class ListViewUserAdapter extends ArrayAdapter<User> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-        View row = inflater.inflate(R.layout.list_view_track_item,parent,false);
-        TextView tv = row.findViewById(R.id.track_infos);
+        LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+        View row = inflater.inflate(R.layout.list_view_track_item, parent, false);
+        TextView tv = row.findViewById(R.id.tv_track_name);
         database = FirebaseDatabase.getInstance().getReference();
         database.child("users").child(String.valueOf(userList.get(position).getUsername())).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     user = dataSnapshot.getValue(User.class);
                     tv.setText(user.getUsername() + " - " + user.getFirstName() + " " + user.getLastName());
                 }

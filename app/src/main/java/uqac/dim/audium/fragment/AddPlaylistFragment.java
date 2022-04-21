@@ -217,7 +217,7 @@ public class AddPlaylistFragment extends Fragment {
                             }
 
                             db.getReference("ids/lastPlaylistId").setValue(++lastPlaylistId);
-                            PlaylistFragment homeFragment = new PlaylistFragment();
+                            PlaylistFragment homeFragment = new PlaylistFragment(getContext());
                             Bundle b = new Bundle();
                             b.putString("username", username);
                             homeFragment.setArguments(b);

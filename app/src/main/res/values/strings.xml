@@ -77,4 +77,12 @@
     <string name="playlist_informations">Playlist Informations</string>
     <string name="albums">Albums</string>
     <string name="image">Image</string>
+    <string name="options">Options</string>
+    <string name="track_image">track_image</string>
+    <string name="change_image">Change image</string>
+    <string name="modify_playlist">Modify playlist</string>
+    <string name="update_successsful">Update successful</string>
+    <string name="empty_title">Title cannot be empty</string>
+    <string name="cannot_modify_playlist">Cannot modify the playlist</string>
+    <string name="playlist_has_no_track">This playlist has no track</string>
 </resources>

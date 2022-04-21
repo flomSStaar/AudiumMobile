@@ -122,7 +122,7 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.media_player_fragment, container, false);
+        View root = inflater.inflate(R.layout.fragment_media_player, container, false);
 
         btnPrevious = root.findViewById(R.id.btn_previous);
         btnPlayPause = root.findViewById(R.id.btn_play_pause);

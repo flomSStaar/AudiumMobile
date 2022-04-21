@@ -12,13 +12,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ActionMenuView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -47,7 +45,7 @@ import uqac.dim.audium.model.entity.Track;
 
 public class HomeFragment extends Fragment {
 
-    private DatabaseReference database;
+    private DatabaseReference database = FirebaseDatabase.getInstance().getReference();
     private String username;
     private View root;
     private ImageButton btnSeeAlbums;
@@ -88,10 +86,29 @@ public class HomeFragment extends Fragment {
         this.context = context;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        username = getArguments().getString("username");
+
+        sliderItems.add(new SliderItem("https://media2.ledevoir.com/images_galerie/nwd_881002_701874/image.jpg"));
+        sliderItems.add(new SliderItem("https://www.hhqc.com/wp-content/uploads/2019/10/sethgueko.jpg"));
+        sliderItems.add(new SliderItem("https://media2.ledevoir.com/images_galerie/nwd_881002_701874/image.jpg"));
+        sliderItems.add(new SliderItem("https://www.hhqc.com/wp-content/uploads/2019/10/sethgueko.jpg"));
+        sliderItems.add(new SliderItem("https://media2.ledevoir.com/images_galerie/nwd_881002_701874/image.jpg"));
+        sliderItems.add(new SliderItem("https://www.hhqc.com/wp-content/uploads/2019/10/sethgueko.jpg"));
+        sliderItems.add(new SliderItem("https://media2.ledevoir.com/images_galerie/nwd_881002_701874/image.jpg"));
+        sliderItems.add(new SliderItem("https://www.hhqc.com/wp-content/uploads/2019/10/sethgueko.jpg"));
+
+        Intent intent = new Intent(context, MediaService.class);
+        context.bindService(intent, serviceConnection, 0);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.home_fragment, container, false);
+        root = inflater.inflate(R.layout.fragment_home, container, false);
 
 
         //ViewPager
@@ -112,8 +129,6 @@ public class HomeFragment extends Fragment {
 
             }
         });
-
-
 
         btnSeeAlbums = root.findViewById(R.id.btn_see_albums);
         btnSeeAlbums.setOnClickListener(new View.OnClickListener() {
@@ -136,7 +151,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // New intent avec l'id du joueur
-                PlaylistFragment homeFragment = new PlaylistFragment();
+                PlaylistFragment homeFragment = new PlaylistFragment(context);
                 Bundle b = new Bundle();
                 b.putString("username", username);
                 homeFragment.setArguments(b);
@@ -165,51 +180,63 @@ public class HomeFragment extends Fragment {
         linearLayoutAlbums = root.findViewById(R.id.albums_list);
         linearLayoutPlaylists = root.findViewById(R.id.playlists_list);
 
-
         return root;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        sliderHandler.removeCallbacks(sliderRunnable);
+    }
 
-    private void getPlaylistsButtons(){
+    @Override
+    public void onResume() {
+        super.onResume();
+        sliderHandler.postDelayed(sliderRunnable, 3000);
+        getPlaylistsButtons();
+        getAlbumsButtons();
+    }
+
+    private void getPlaylistsButtons() {
         database = FirebaseDatabase.getInstance().getReference();
         database.child("playlists").child(username).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
                 List<Playlist> playlists = new ArrayList<>();
-                if(dataSnapshot.exists()){
-                    for (DataSnapshot data:dataSnapshot.getChildren()) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot data : dataSnapshot.getChildren()) {
                         Playlist p = data.getValue(Playlist.class);
                         playlists.add(p);
                     }
-                        for (int i = playlists.size() - 1; i > playlists.size() - 5; i--) {
-                            int index = i;
-                            if(index>=0 && playlists.get(index)!=null ) {
-                                View view = getLayoutInflater().inflate(R.layout.grid_view_item,linearLayoutPlaylists,false);
-                                ((TextView) view.findViewById(R.id.gv_playlist_name)).setText(playlists.get(index).getTitle());
-                                Picasso.with(getContext()).load(playlists.get(index).getImageUrl()).error(R.drawable.ic_notes).into((ImageView) view.findViewById(R.id.playlist_image));
-                                //ImageButton b = new ImageButton(getContext());
-                                //b.setLayoutParams((new ViewGroup.LayoutParams(300, 300)));
-                                //Picasso.with(getContext()).load(playlists.get(index).getImageUrl()).error(R.drawable.ic_notes).into(b);
-                                view.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        PlaylistPageFragment playlistPageFragment = new PlaylistPageFragment();
-                                        Bundle b = new Bundle();
-                                        b.putString("username", username);
-                                        b.putLong("playlistId",playlists.get(index).getId());
-                                        playlistPageFragment.setArguments(b);
-                                        FragmentManager manager = getParentFragmentManager();
-                                        manager.beginTransaction()
-                                                .replace(R.id.fragment_container, playlistPageFragment)
-                                                .addToBackStack("mainPage")
-                                                .commit();
-                                    }
-                                });
-                                linearLayoutPlaylists.addView(view);
-                            }
+                    for (int i = playlists.size() - 1; i > playlists.size() - 5; i--) {
+                        int index = i;
+                        if (index >= 0 && playlists.get(index) != null) {
+                            View view = getLayoutInflater().inflate(R.layout.grid_view_item, linearLayoutPlaylists, false);
+                            ((TextView) view.findViewById(R.id.gv_playlist_name)).setText(playlists.get(index).getTitle());
+                            Picasso.with(getContext()).load(playlists.get(index).getImageUrl()).error(R.drawable.ic_notes).into((ImageView) view.findViewById(R.id.playlist_image));
+                            //ImageButton b = new ImageButton(getContext());
+                            //b.setLayoutParams((new ViewGroup.LayoutParams(300, 300)));
+                            //Picasso.with(getContext()).load(playlists.get(index).getImageUrl()).error(R.drawable.ic_notes).into(b);
+                            view.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    PlaylistPageFragment playlistPageFragment = new PlaylistPageFragment(context);
+                                    Bundle b = new Bundle();
+                                    b.putString("username", username);
+                                    b.putLong("playlistId", playlists.get(index).getId());
+                                    playlistPageFragment.setArguments(b);
+                                    FragmentManager manager = getParentFragmentManager();
+                                    manager.beginTransaction()
+                                            .replace(R.id.fragment_container, playlistPageFragment)
+                                            .addToBackStack("mainPage")
+                                            .commit();
+                                }
+                            });
+                            linearLayoutPlaylists.addView(view);
+                        }
 
                     }
-                }else {
+                } else {
                     TextView noPlaylists = new TextView(getContext());
                     noPlaylists.setText("No playlists");
                     noPlaylists.setTextColor(Color.WHITE);
@@ -221,48 +248,48 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void getAlbumsButtons(){
+    private void getAlbumsButtons() {
         database = FirebaseDatabase.getInstance().getReference();
         database.child("albums").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
                 List<Album> albums = new ArrayList<>();
-                if(dataSnapshot.exists()){
-                    for (DataSnapshot data:dataSnapshot.getChildren()) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot data : dataSnapshot.getChildren()) {
                         Album a = data.getValue(Album.class);
                         albums.add(a);
                     }
-                        for (int i = albums.size() - 1; i > albums.size() - 5; i--) {
-                            int index = i;
-                            if(index>=0 && albums.get(index)!=null ) {
+                    for (int i = albums.size() - 1; i > albums.size() - 5; i--) {
+                        int index = i;
+                        if (index >= 0 && albums.get(index) != null) {
 
-                                View view = getLayoutInflater().inflate(R.layout.grid_view_album_item,linearLayoutAlbums,false);
-                                ((TextView) view.findViewById(R.id.gv_album_name)).setText(albums.get(index).getTitle());
-                                ((TextView) view.findViewById(R.id.gv_artist_name)).setText(albums.get(index).getArtistId().toString());
-                                Picasso.with(getContext()).load(albums.get(index).getImagePath()).error(R.drawable.ic_notes).into((ImageView) view.findViewById(R.id.gv_album_image));
-                                //ImageButton b = new ImageButton(getContext());
-                                //b.setLayoutParams((new ViewGroup.LayoutParams(300, 300)));
-                                //Picasso.with(getContext()).load(albums.get(index).getImagePath()).error(R.drawable.ic_notes).into(b);
-                                //b.setOnClickListener(new View.OnClickListener() {
-                                view.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        AlbumPageFragment albumPageFragment = new AlbumPageFragment();
-                                        Bundle b = new Bundle();
-                                        b.putString("username", username);
-                                        b.putLong("albumId", albums.get(index).getId());
-                                        albumPageFragment.setArguments(b);
-                                        FragmentManager manager = getParentFragmentManager();
-                                        manager.beginTransaction()
-                                                .replace(R.id.fragment_container, albumPageFragment)
-                                                .addToBackStack("playlistPage")
-                                                .commit();
-                                    }
-                                });
+                            View view = getLayoutInflater().inflate(R.layout.grid_view_album_item, linearLayoutAlbums, false);
+                            ((TextView) view.findViewById(R.id.gv_album_name)).setText(albums.get(index).getTitle());
+                            ((TextView) view.findViewById(R.id.gv_artist_name)).setText(albums.get(index).getArtistId().toString());
+                            Picasso.with(getContext()).load(albums.get(index).getImagePath()).error(R.drawable.ic_notes).into((ImageView) view.findViewById(R.id.gv_album_image));
+                            //ImageButton b = new ImageButton(getContext());
+                            //b.setLayoutParams((new ViewGroup.LayoutParams(300, 300)));
+                            //Picasso.with(getContext()).load(albums.get(index).getImagePath()).error(R.drawable.ic_notes).into(b);
+                            //b.setOnClickListener(new View.OnClickListener() {
+                            view.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    AlbumPageFragment albumPageFragment = new AlbumPageFragment();
+                                    Bundle b = new Bundle();
+                                    b.putString("username", username);
+                                    b.putLong("albumId", albums.get(index).getId());
+                                    albumPageFragment.setArguments(b);
+                                    FragmentManager manager = getParentFragmentManager();
+                                    manager.beginTransaction()
+                                            .replace(R.id.fragment_container, albumPageFragment)
+                                            .addToBackStack("playlistPage")
+                                            .commit();
+                                }
+                            });
                             linearLayoutAlbums.addView(view);
-                            }
+                        }
                     }
-                }else{
+                } else {
                     TextView noAlbums = new TextView(getContext());
                     noAlbums.setText("No albums");
                     noAlbums.setLayoutParams((new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)));
@@ -271,26 +298,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-    }
-
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        username = getArguments().getString("username");
-
-        sliderItems.add(new SliderItem("https://media2.ledevoir.com/images_galerie/nwd_881002_701874/image.jpg"));
-        sliderItems.add(new SliderItem("https://www.hhqc.com/wp-content/uploads/2019/10/sethgueko.jpg"));
-        sliderItems.add(new SliderItem("https://media2.ledevoir.com/images_galerie/nwd_881002_701874/image.jpg"));
-        sliderItems.add(new SliderItem("https://www.hhqc.com/wp-content/uploads/2019/10/sethgueko.jpg"));
-        sliderItems.add(new SliderItem("https://media2.ledevoir.com/images_galerie/nwd_881002_701874/image.jpg"));
-        sliderItems.add(new SliderItem("https://www.hhqc.com/wp-content/uploads/2019/10/sethgueko.jpg"));
-        sliderItems.add(new SliderItem("https://media2.ledevoir.com/images_galerie/nwd_881002_701874/image.jpg"));
-        sliderItems.add(new SliderItem("https://www.hhqc.com/wp-content/uploads/2019/10/sethgueko.jpg"));
-
-        Intent intent = new Intent(context, MediaService.class);
-        context.bindService(intent, serviceConnection, 0);
     }
 
     // Méthode temporaire pour tester le media player
@@ -308,21 +315,5 @@ public class HomeFragment extends Fragment {
                 mediaService.setTracks(tracks);
             }
         });
-    }
-
-
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        sliderHandler.removeCallbacks(sliderRunnable);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        sliderHandler.postDelayed(sliderRunnable, 3000);
-        getPlaylistsButtons();
-        getAlbumsButtons();
     }
 }

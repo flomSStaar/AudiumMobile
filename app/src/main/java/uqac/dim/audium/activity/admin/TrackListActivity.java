@@ -1,10 +1,10 @@
 package uqac.dim.audium.activity.admin;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -18,27 +18,30 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import uqac.dim.audium.R;
-import uqac.dim.audium.activity.AlbumPageActivity;
-import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.model.utils.ListViewTrackAdapter;
 
 public class TrackListActivity extends AppCompatActivity {
-    private DatabaseReference database;
+    private final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
     private String username;
+
+    private ListView lvTracks;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_list);
-        Context c =this;
+
+        lvTracks = ((ListView) findViewById(R.id.tracks_list));
+        ((Button) findViewById(R.id.btn_add_track)).setOnClickListener(this::addTrack);
+        lvTracks.setOnItemClickListener(this::onTrackClick);
+
         username = getIntent().getStringExtra("username");
 
-        ArrayList<Track> tracks = new ArrayList<>();
-        ListView artistListView = ((ListView) findViewById(R.id.tracks_list));
-        database = FirebaseDatabase.getInstance().getReference();
+        List<Track> tracks = new ArrayList<>();
         database.child("tracks").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -47,9 +50,7 @@ public class TrackListActivity extends AppCompatActivity {
                     Track t = snap.getValue(Track.class);
                     tracks.add(t);
                 }
-                //artistListView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, tracks));
-                artistListView.setAdapter(new ListViewTrackAdapter(tracks,c));
-
+                lvTracks.setAdapter(new ListViewTrackAdapter(tracks, getApplicationContext()));
             }
 
             @Override
@@ -57,28 +58,18 @@ public class TrackListActivity extends AppCompatActivity {
 
             }
         });
-
-        artistListView.setOnItemClickListener((adapter, view1, position, arg) -> {
-            Intent intent = new Intent(TrackListActivity.this, TrackPageActivity.class);
-            intent.putExtra("trackId", ((Track) artistListView.getItemAtPosition(position)).getId());
-            intent.putExtra("albumId", ((Track) artistListView.getItemAtPosition(position)).getAlbumId());
-            intent.putExtra("username",username);
-            startActivity(intent);
-        });
     }
 
-    public void addTracks(View view) {
-        /*FirebaseDatabase db = FirebaseDatabase.getInstance();
-        db.getReference("ids/lastTrackId").get()
-                .addOnSuccessListener(dataSnapshot -> {
-                    Long lastTrackId = dataSnapshot.getValue(Long.class);
-                    if (lastTrackId != null) {
-                        Track track = new Track("Track" + lastTrackId, 16L, lastTrackId);
-                        db.getReference("tracks/").child(String.valueOf(lastTrackId)).setValue(track);
-                        db.getReference("ids/lastTrackId").setValue(++lastTrackId);
-                    }
-                });*/
+    private void onTrackClick(AdapterView<?> adapterView, View view, int position, long arg) {
+        Intent intent = new Intent(TrackListActivity.this, TrackPageActivity.class);
+        Track track = (Track) lvTracks.getItemAtPosition(position);
+        intent.putExtra("trackId", track.getId());
+        intent.putExtra("albumId", track.getAlbumId());
+        intent.putExtra("username", username);
+        startActivity(intent);
+    }
 
+    public void addTrack(View view) {
         startActivity(new Intent(getApplicationContext(), AddTrackActivity.class));
     }
 }
