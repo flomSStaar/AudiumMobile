@@ -70,6 +70,7 @@ public class PlaylistFragment extends Fragment {
     }
 
     private void actualizeList() {
+        Context c = getContext();
         database.child("users").child(username).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
@@ -86,7 +87,7 @@ public class PlaylistFragment extends Fragment {
                                 }
                                 if (playlists != null)
                                     //gridView.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, playlists));
-                                    gridView.setAdapter(new GridViewAdapter(playlists, getContext()));
+                                    gridView.setAdapter(new GridViewAdapter(playlists, c));
                             }
                         }
 

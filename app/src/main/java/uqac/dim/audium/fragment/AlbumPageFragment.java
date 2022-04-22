@@ -85,6 +85,7 @@ public class AlbumPageFragment extends Fragment {
 
     private void load() {
         database = FirebaseDatabase.getInstance().getReference();
+        Context c = getContext();
         database.child("albums").child(String.valueOf(albumId)).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
@@ -122,11 +123,8 @@ public class AlbumPageFragment extends Fragment {
                             tracks.add(t);
                         }
                 }
-                if (tracks.size() != 0) {
-                    listView.setAdapter(new ListViewTrackAdapter(tracks, getContext(), username));
-                } else {
-                    Toast.makeText(getContext(), "This album has no tracks", Toast.LENGTH_SHORT).show(); ///Techniquement impossible
-                }
+                if (tracks.size() != 0)
+                    listView.setAdapter(new ListViewTrackAdapter(tracks, c, username));
             }
 
             @Override

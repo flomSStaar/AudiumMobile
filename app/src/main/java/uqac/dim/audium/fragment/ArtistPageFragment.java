@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -113,10 +114,13 @@ public class ArtistPageFragment extends Fragment {
         super.onCreate(savedInstanceState);
         username = getArguments().getString("username");
         artistId = getArguments().getLong("artistId");
-
         Intent intent = new Intent(getContext(), MediaService.class);
         getContext().bindService(intent, serviceConnection, 0);
 
+
+    }
+
+    private void getInfos(){
         database = FirebaseDatabase.getInstance().getReference();
         database.child("artists").child(Long.toString(artistId)).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
@@ -135,9 +139,11 @@ public class ArtistPageFragment extends Fragment {
         });
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
+        getInfos();
     }
 
     private void deleteArtist(View view) {
@@ -183,7 +189,7 @@ public class ArtistPageFragment extends Fragment {
     public void showAlbums(View view) {
         ListView listView = ((ListView) root.findViewById(R.id.artist_albums_tracks_list));
         ArrayList<Album> albums = new ArrayList<>();
-
+        Context c = getContext();
 
         database = FirebaseDatabase.getInstance().getReference();
         database.child("albums").addValueEventListener(new ValueEventListener() {
@@ -195,11 +201,8 @@ public class ArtistPageFragment extends Fragment {
                     if (a != null && a.getArtistId().equals(artist.getId()))
                         albums.add(a);
                 }
-                if (albums.size() != 0) {
-                    listView.setAdapter(new ListViewAlbumAdapter(albums, ArtistPageFragment.this));
-                } else {
-                    Toast.makeText(getContext(), "This artist has no albums", Toast.LENGTH_SHORT).show();
-                }
+                if (albums.size() != 0)
+                    listView.setAdapter(new ListViewAlbumAdapter(albums,c));
             }
 
             @Override
@@ -209,10 +212,21 @@ public class ArtistPageFragment extends Fragment {
         });
 
         listView.setOnItemClickListener((adapter, view1, position, arg) -> {
-            Intent intent = new Intent(getContext(), AlbumPage.class);
+            /*Intent intent = new Intent(getContext(), AlbumPage.class);
             intent.putExtra("albumId", ((Album) listView.getItemAtPosition(position)).getId());
             intent.putExtra("username", username);
-            startActivity(intent);
+            startActivity(intent);*/
+            AlbumPageFragment albumPageFragment = new AlbumPageFragment();
+            Bundle b = new Bundle();
+            b.putString("username", username);
+            b.putLong("albumId", albums.get(position).getId());
+            albumPageFragment.setArguments(b);
+            FragmentManager manager = getParentFragmentManager();
+            manager.beginTransaction()
+                    .replace(R.id.fragment_container, albumPageFragment)
+                    .addToBackStack("artistPage")
+                    .commit();
+
         });
 
 
