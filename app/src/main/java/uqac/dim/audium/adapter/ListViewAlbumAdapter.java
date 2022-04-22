@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -29,6 +30,12 @@ public class ListViewAlbumAdapter extends ArrayAdapter<Album> {
     public ListViewAlbumAdapter(List<Album> albums, Context context) {
         super(context, R.layout.list_view_track_item, albums);
         this.context = context;
+        this.albumList = albums;
+    }
+
+    public ListViewAlbumAdapter(List<Album> albums, Fragment fragment) {
+        super(fragment.getContext(), R.layout.list_view_track_item, albums);
+        this.context = fragment.getContext();
         this.albumList = albums;
     }
 

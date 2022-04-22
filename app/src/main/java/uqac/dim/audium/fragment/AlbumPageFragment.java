@@ -121,9 +121,9 @@ public class AlbumPageFragment extends Fragment {
                 if (dataSnapshot.exists()) {
                     user = dataSnapshot.getValue(User.class);
                     if (!user.isAdmin()) {
-                        btnEdit.setVisibility(View.INVISIBLE);
-                        btnDelete.setVisibility(View.INVISIBLE);
-                        btnSave.setVisibility(View.INVISIBLE);
+                        btnEdit.setVisibility(View.GONE);
+                        btnDelete.setVisibility(View.GONE);
+                        btnSave.setVisibility(View.GONE);
                     }
                 }
             }

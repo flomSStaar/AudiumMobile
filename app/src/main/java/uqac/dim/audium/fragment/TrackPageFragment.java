@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -54,14 +56,13 @@ public class TrackPageFragment extends Fragment {
     private EditText editName;
     private EditText editArtist;
     private TextView editAlbum;
-    private EditText editMusicPath;
-    private EditText editImagePath;
     private Button btnSave;
     private Button btnChangeAlbum;
     private ActivityResultLauncher<Intent> albumResultLauncher;
     private Button btnModify;
     private Button btnDelete;
     private Button btnAddPlaylist;
+    private ImageView imageView;
     private User user;
     View root;
 
@@ -98,6 +99,7 @@ public class TrackPageFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 track = snapshot.getValue(Track.class);
                 if (track != null) {
+                    Picasso.with(getContext()).load(track.getImageUrl()).placeholder(R.drawable.ic_notes).error(R.drawable.ic_notes).into(imageView);
                     editName.setText(track.getName());
                     if (track.getAlbumId() == null)
                         editAlbum.setText("Not in an album");
@@ -105,8 +107,7 @@ public class TrackPageFragment extends Fragment {
                         albumId = track.getAlbumId();
                         editAlbum.setText(albumId.toString());
                     }
-                    editMusicPath.setText(track.getUrl());
-                    editImagePath.setText(track.getImageUrl());
+
                     database.child("artists").child(track.getArtistId().toString()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
                         public void onSuccess(DataSnapshot dataSnapshot) {
@@ -131,9 +132,9 @@ public class TrackPageFragment extends Fragment {
                 if (dataSnapshot.exists()){
                     user = dataSnapshot.getValue(User.class);
                     if (!user.isAdmin()){
-                        btnDelete.setVisibility(View.INVISIBLE);
-                        btnSave.setVisibility(View.INVISIBLE);
-                        btnModify.setVisibility(View.INVISIBLE);
+                        btnDelete.setVisibility(View.GONE);
+                        btnSave.setVisibility(View.GONE);
+                        btnModify.setVisibility(View.GONE);
                     }
                 }
             }
@@ -148,14 +149,14 @@ public class TrackPageFragment extends Fragment {
         editName = (EditText) root.findViewById(R.id.edit_track_name);
         editAlbum = (TextView) root.findViewById(R.id.track_page_album);
         editArtist = (EditText) root.findViewById(R.id.edit_track_artist);
-        editMusicPath = (EditText) root.findViewById(R.id.edit_track_path);
-        editImagePath = (EditText) root.findViewById(R.id.edit_track_image_path);
+
 
         editName.setEnabled(false);
         editAlbum.setEnabled(false);
         editArtist.setEnabled(false);
-        editMusicPath.setEnabled(false);
-        editImagePath.setEnabled(false);
+
+        imageView = root.findViewById(R.id.track_image);
+
 
         btnSave = (Button) root.findViewById(R.id.btn_save_track);
         btnSave.setVisibility(View.INVISIBLE);
@@ -184,17 +185,16 @@ public class TrackPageFragment extends Fragment {
         if (track.getAlbumId() == null)
             btnChangeAlbum.setVisibility(View.VISIBLE);
         editName.setEnabled(true);
-        editImagePath.setEnabled(true);
+
     }
 
 
     public void saveTrack(View view) {
         String newName = editName.getText().toString();
-        String newImagePath = editImagePath.getText().toString();
 
 
         database = FirebaseDatabase.getInstance().getReference();
-        FirebaseTrack newTrack = new FirebaseTrack(trackId, newName, track.getUrl(), newImagePath, artist.getId(), albumId, track.getPlaylistsId());
+        FirebaseTrack newTrack = new FirebaseTrack(trackId, newName, track.getUrl(), track.getImageUrl(), artist.getId(), albumId, track.getPlaylistsId());
         database.child("tracks").child(String.valueOf(trackId)).setValue(newTrack);
         database.child("albums").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
@@ -208,7 +208,6 @@ public class TrackPageFragment extends Fragment {
                             database.child("albums").child(albumId.toString()).child("tracksId").setValue(album.getTracksId());
                         }
                         editName.setEnabled(false);
-                        editImagePath.setEnabled(false);
                         btnSave.setVisibility(View.INVISIBLE);
                         btnChangeAlbum.setVisibility(View.INVISIBLE);
                     }

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -48,13 +50,12 @@ public class TrackPage extends AppCompatActivity {
     private EditText editName;
     private EditText editArtist;
     private TextView editAlbum;
-    private EditText editMusicPath;
-    private EditText editImagePath;
     private Button btnSave;
     private Button btnChangeAlbum;
     private Button btnModify;
     private Button btnDelete;
     private Button btnAddPlaylist;
+    private ImageView imageView;
     private ActivityResultLauncher<Intent> albumResultLauncher;
 
     @Override
@@ -87,14 +88,14 @@ public class TrackPage extends AppCompatActivity {
         editName = (EditText) findViewById(R.id.edit_track_name);
         editAlbum = (TextView) findViewById(R.id.track_page_album);
         editArtist = (EditText) findViewById(R.id.edit_track_artist);
-        editMusicPath = (EditText) findViewById(R.id.edit_track_path);
-        editImagePath = (EditText) findViewById(R.id.edit_track_image_path);
+        imageView = findViewById(R.id.track_image);
+
+
 
         editName.setEnabled(false);
         editAlbum.setEnabled(false);
         editArtist.setEnabled(false);
-        editMusicPath.setEnabled(false);
-        editImagePath.setEnabled(false);
+
 
         btnSave = (Button) findViewById(R.id.btn_save_track);
         btnSave.setVisibility(View.INVISIBLE);
@@ -118,14 +119,14 @@ public class TrackPage extends AppCompatActivity {
                 track = snapshot.getValue(Track.class);
                 if (track != null) {
                     editName.setText(track.getName());
+                    Picasso.with(getApplicationContext()).load(track.getImageUrl()).placeholder(R.drawable.ic_notes).error(R.drawable.ic_notes).into(imageView);
                     if (track.getAlbumId() == null)
                         editAlbum.setText("Not in an album");
                     else {
                         albumId = track.getAlbumId();
                         editAlbum.setText(albumId.toString());
                     }
-                    editMusicPath.setText(track.getUrl());
-                    editImagePath.setText(track.getImageUrl());
+
                     database.child("artists").child(track.getArtistId().toString()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
                         public void onSuccess(DataSnapshot dataSnapshot) {
@@ -151,17 +152,15 @@ public class TrackPage extends AppCompatActivity {
         if (track.getAlbumId() == null)
             btnChangeAlbum.setVisibility(View.VISIBLE);
         editName.setEnabled(true);
-        editImagePath.setEnabled(true);
     }
 
 
     public void saveTrack(View view) {
         String newName = editName.getText().toString();
-        String newImagePath = editImagePath.getText().toString();
 
 
         database = FirebaseDatabase.getInstance().getReference();
-        FirebaseTrack newTrack = new FirebaseTrack(trackId, newName, track.getUrl(), newImagePath, artist.getId(), albumId, track.getPlaylistsId());
+        FirebaseTrack newTrack = new FirebaseTrack(trackId, newName, track.getUrl(), track.getUrl(), artist.getId(), albumId, track.getPlaylistsId());
         database.child("tracks").child(String.valueOf(trackId)).setValue(newTrack);
         database.child("albums").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
@@ -175,7 +174,6 @@ public class TrackPage extends AppCompatActivity {
                             database.child("albums").child(albumId.toString()).child("tracksId").setValue(album.getTracksId());
                         }
                         editName.setEnabled(false);
-                        editImagePath.setEnabled(false);
                         btnSave.setVisibility(View.INVISIBLE);
                         btnChangeAlbum.setVisibility(View.INVISIBLE);
                     }

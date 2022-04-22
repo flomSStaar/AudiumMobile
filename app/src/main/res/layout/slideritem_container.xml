@@ -4,6 +4,8 @@
     android:id="@+id/imageslide"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:maxHeight="130sp"
+    android:scaleType="centerCrop"
     android:adjustViewBounds="true"
     android:orientation="vertical"
     app:riv_corner_radius="12dp" />

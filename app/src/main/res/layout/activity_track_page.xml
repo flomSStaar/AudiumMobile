@@ -22,32 +22,27 @@
             android:textColor="@color/white">
         </TextView>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/title"
-            android:layout_marginHorizontal="20sp"
-            android:fontFamily="@font/montserrat"
-            android:textColor="@color/white"/>
-        <EditText
-            android:id="@+id/edit_track_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:layout_marginHorizontal="20sp"
-            android:paddingStart="20dp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:layout_marginVertical="10sp"
-            android:background="@drawable/custom_button"/>
+            <ImageView
+                android:id="@+id/track_image"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/artist"
-            android:layout_marginHorizontal="20sp"
-            android:fontFamily="@font/montserrat"
-            android:textColor="@color/white"/>
+
+            <EditText
+                android:id="@+id/edit_track_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20sp"
+                android:inputType="text"
+                android:paddingStart="20dp"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="30dp" />
+
+
         <EditText
             android:id="@+id/edit_track_artist"
             android:layout_width="match_parent"
@@ -55,10 +50,11 @@
             android:inputType="text"
             android:layout_marginHorizontal="20sp"
             android:paddingStart="20dp"
-            android:textColor="@color/white"
+            android:textAlignment="center"
+            android:textColor="#B2FFFFFF"
             android:textColorHint="@color/white"
-            android:layout_marginVertical="10sp"
-            android:background="@drawable/custom_button"/>
+            android:layout_marginBottom="10sp"
+            android:textSize="20dp"/>
 
         <LinearLayout
             android:layout_marginHorizontal="20sp"
@@ -90,7 +86,7 @@
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"
                     android:layout_marginVertical="10sp"
-                    android:background="@drawable/custom_button"/>
+/>
 
                 <Button
                     android:id="@+id/btn_choose_album_track_page"
@@ -102,7 +98,8 @@
                     android:textColor="@color/white"/>
             </LinearLayout>
         </LinearLayout>
-        <TextView
+            <!--
+            <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/music_path"
@@ -118,27 +115,9 @@
             android:paddingStart="20dp"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
-            android:layout_marginVertical="10sp"
-            android:background="@drawable/custom_button"/>
+            android:layout_marginVertical="10sp" />
+        -->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/image_path"
-            android:layout_marginHorizontal="20sp"
-            android:fontFamily="@font/montserrat"
-            android:textColor="@color/white"/>
-        <EditText
-            android:id="@+id/edit_track_image_path"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:layout_marginHorizontal="20sp"
-            android:paddingStart="20dp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:layout_marginVertical="10sp"
-            android:background="@drawable/custom_button"/>
 
 
                 <Button

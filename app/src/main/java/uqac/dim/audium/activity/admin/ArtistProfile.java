@@ -2,10 +2,12 @@ package uqac.dim.audium.activity.admin;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -19,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,17 +42,34 @@ public class ArtistProfile extends AppCompatActivity {
     private List<Long> idAlbums;
     private String username;
     private Artist artist;
+    private Button btnDelete;
+    private Button btnAddAlbum;
+    private Button btnAlbums;
+    private Button btnTracks;
+    private ImageView image;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_artist_profile);
-        username = getIntent().getStringExtra("username");
-
-        ((Button) findViewById(R.id.btn_delete_artist)).setOnClickListener(this::deleteArtist);
 
         Intent intent = getIntent();
         long artistId = intent.getLongExtra("artistId", 0);
+
+        username = getIntent().getStringExtra("username");
+
+        btnDelete = ((Button) findViewById(R.id.btn_delete_artist));
+        btnDelete.setOnClickListener(this::deleteArtist);
+
+        btnAddAlbum = ((Button) findViewById(R.id.btn_add_album));
+        btnAddAlbum.setOnClickListener(this::addAlbum);
+
+        btnAlbums = ((Button) findViewById(R.id.btn_albums));
+        btnAlbums.setOnClickListener(this::showAlbums);
+
+        btnTracks = ((Button) findViewById(R.id.btn_tracks));
+        btnTracks.setOnClickListener(this::showMusics);
+
         database = FirebaseDatabase.getInstance().getReference();
         database.child("artists").child(Long.toString(artistId)).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
@@ -60,11 +80,16 @@ public class ArtistProfile extends AppCompatActivity {
                     ((EditText) findViewById(R.id.tv_artist_first_name)).setText(artist.getFirstName());
                     ((EditText) findViewById(R.id.tv_artist_last_name)).setText(artist.getLastName());
                     ((EditText) findViewById(R.id.tv_artist_age)).setText(String.valueOf(artist.getAge()));
+                    image = findViewById(R.id.artist_image);
+                    Picasso.with(getApplicationContext()).load(artist.getImageUrl()).placeholder(R.drawable.ic_notes).error(R.drawable.ic_notes).into(image);
+
                 }
                 idTracks = artist.getTracksId();
                 idAlbums = artist.getAlbumsId();
             }
         });
+
+
     }
 
     private void deleteArtist(View view) {

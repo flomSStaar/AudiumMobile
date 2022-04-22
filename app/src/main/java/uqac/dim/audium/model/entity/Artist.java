@@ -11,21 +11,6 @@ public class Artist extends Person {
     private List<Long> tracksId;
     private String imageUrl;
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public List<Long> getTracksId() {
-        return tracksId;
-    }
-
-    public void setTracksId(List<Long> tracksId) {
-        this.tracksId = tracksId;
-    }
 
     public Artist() {
         super();
@@ -182,6 +167,22 @@ public class Artist extends Person {
         } else {
             return firstName + " " + lastName;
         }
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public List<Long> getTracksId() {
+        return tracksId;
+    }
+
+    public void setTracksId(List<Long> tracksId) {
+        this.tracksId = tracksId;
     }
 
     /**

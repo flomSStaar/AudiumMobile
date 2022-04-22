@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -33,6 +34,14 @@ public class ListViewTrackAdapter extends ArrayAdapter<Track> {
     public ListViewTrackAdapter(List<Track> tracks, Context context, String username) {
         super(context, R.layout.list_view_track_item, tracks);
         this.context = context;
+        this.trackList = tracks;
+        this.username = username;
+        this.method = null;
+    }
+
+    public ListViewTrackAdapter(List<Track> tracks, Fragment fragment, String username) {
+        super(fragment.getContext(), R.layout.list_view_track_item, tracks);
+        this.context = fragment.getContext();
         this.trackList = tracks;
         this.username = username;
         this.method = null;

@@ -21,73 +21,93 @@
             android:textColor="@color/white">
         </TextView>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/first_name"
-            android:fontFamily="@font/montserrat"
-            android:textColor="@color/white"/>
-        <EditText
-            android:id="@+id/tv_artist_first_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:paddingStart="20dp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:layout_marginVertical="10sp"
-            android:background="@drawable/custom_button"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/last_name"
-            android:fontFamily="@font/montserrat"
-            android:textColor="@color/white"/>
-        <EditText
-            android:id="@+id/tv_artist_last_name"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:enabled="false"
-            android:paddingStart="20dp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:layout_marginVertical="10sp"
-            android:background="@drawable/custom_button"/>
+            android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/stage_name"
-            android:fontFamily="@font/montserrat"
-            android:textColor="@color/white"/>
-        <EditText
-            android:id="@+id/tv_stage_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:paddingStart="20dp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:layout_marginVertical="10sp"
-            android:background="@drawable/custom_button"/>
+            <ImageView
+                android:id="@+id/artist_image"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/age"
-            android:fontFamily="@font/montserrat"
-            android:textColor="@color/white"/>
-        <EditText
-            android:id="@+id/tv_artist_age"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:paddingStart="20dp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:layout_marginVertical="10sp"
-            android:background="@drawable/custom_button"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="30dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/first_name"
+                    android:fontFamily="@font/montserrat"
+                    android:textColor="@color/white"/>
+                <EditText
+                    android:id="@+id/tv_artist_first_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:enabled="false"
+                    android:paddingStart="20dp"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="15sp"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/last_name"
+                    android:fontFamily="@font/montserrat"
+                    android:textColor="@color/white"/>
+                <EditText
+                    android:id="@+id/tv_artist_last_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:paddingStart="20dp"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="15sp"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stage_name"
+                    android:fontFamily="@font/montserrat"
+                    android:textColor="@color/white"/>
+                <EditText
+                    android:id="@+id/tv_stage_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:paddingStart="20dp"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="15sp"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/age"
+                    android:fontFamily="@font/montserrat"
+                    android:textColor="@color/white"/>
+                <EditText
+                    android:id="@+id/tv_artist_age"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:paddingStart="20dp"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="15sp"
+/>
+            </LinearLayout>
+        </LinearLayout>
 
 
     </LinearLayout>
@@ -96,26 +116,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
 
         <Button
             android:id="@+id/btn_delete_artist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginHorizontal="50sp"
             android:text="@string/delete"
+            android:background="@drawable/custom_button"
+            android:textColor="@color/white"
+            />
+
+        <Button
+            android:id="@+id/btn_add_album"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginVertical="10sp"
+            android:layout_marginHorizontal="10dp"
+            android:text="@string/add_album"
+            android:background="@drawable/custom_button"
+            android:textColor="@color/white"/>
+        <Button
+            android:id="@+id/btn_albums"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/albums"
+            android:layout_marginHorizontal="10dp"
+
             android:background="@drawable/custom_button"
             android:textColor="@color/white"/>
 
         <Button
+            android:id="@+id/btn_tracks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="50sp"
-            android:layout_marginVertical="20sp"
-            android:onClick="addAlbum"
-            android:text="@string/add_album"
+            android:text="@string/musics"
             android:background="@drawable/custom_button"
             android:textColor="@color/white"/>
 
@@ -128,23 +166,7 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="50sp"
-            android:onClick="showAlbums"
-            android:text="@string/albums"
-            android:background="@drawable/custom_button"
-            android:textColor="@color/white"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="50sp"
-            android:onClick="showMusics"
-            android:text="@string/musics"
-            android:background="@drawable/custom_button"
-            android:textColor="@color/white"/>
     </LinearLayout>
 
     <ListView
