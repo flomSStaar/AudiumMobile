@@ -65,7 +65,7 @@ public class AddArtist extends AppCompatActivity {
                     .addOnSuccessListener(dataSnapshot -> {
                         final Long[] lastArtistId = {dataSnapshot.getValue(Long.class)};
                         if (lastArtistId[0] != null) {
-                            StorageReference imageRef = storeRef.child(FirebaseUtils.ALBUM_IMAGE_FILE_PATH).child(lastArtistId[0].toString());
+                            StorageReference imageRef = storeRef.child(FirebaseUtils.ARTIST_IMAGE_FILE_PATH).child(lastArtistId[0].toString());
                             imageRef.putFile(localFileImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
