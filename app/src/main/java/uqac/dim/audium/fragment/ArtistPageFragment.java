@@ -1,8 +1,12 @@
 package uqac.dim.audium.fragment;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +31,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import uqac.dim.audium.MediaService;
 import uqac.dim.audium.R;
 import uqac.dim.audium.activity.AlbumPage;
 import uqac.dim.audium.activity.admin.AddAlbum;
@@ -45,6 +50,7 @@ public class ArtistPageFragment extends Fragment {
     private View root;
     private DatabaseReference database;
     private List<Long> idTracks;
+    private List<Track> tracks;
     private Long artistId;
     private List<Long> idAlbums;
     private String username;
@@ -54,6 +60,18 @@ public class ArtistPageFragment extends Fragment {
     private Button btnAlbums;
     private Button btnTracks;
     private ImageView image;
+    private MediaService mediaService;
+    private final ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            mediaService = ((MediaService.MediaServiceBinder) iBinder).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mediaService = null;
+        }
+    };
 
 
 
@@ -95,6 +113,9 @@ public class ArtistPageFragment extends Fragment {
         super.onCreate(savedInstanceState);
         username = getArguments().getString("username");
         artistId = getArguments().getLong("artistId");
+
+        Intent intent = new Intent(getContext(), MediaService.class);
+        getContext().bindService(intent, serviceConnection, 0);
 
         database = FirebaseDatabase.getInstance().getReference();
         database.child("artists").child(Long.toString(artistId)).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
@@ -199,7 +220,7 @@ public class ArtistPageFragment extends Fragment {
 
     public void showMusics(View view) {
         ListView listView = ((ListView) root.findViewById(R.id.artist_albums_tracks_list));
-        ArrayList<Track> tracks = new ArrayList<>();
+        tracks = new ArrayList<>();
         database = FirebaseDatabase.getInstance().getReference();
         database.child("tracks").addValueEventListener(new ValueEventListener() {
             @Override
@@ -223,11 +244,23 @@ public class ArtistPageFragment extends Fragment {
             }
         });
         listView.setOnItemClickListener((adapter, view1, position, arg) -> {
-            Intent intent = new Intent(getContext(), TrackPage.class);
+            /*Intent intent = new Intent(getContext(), TrackPage.class);
             intent.putExtra("trackId", ((Track) listView.getItemAtPosition(position)).getId());
             intent.putExtra("albumId", ((Track) listView.getItemAtPosition(position)).getAlbumId());
             intent.putExtra("username", username);
-            startActivity(intent);
+            startActivity(intent);*/
+
+            if (!tracks.isEmpty()) {
+                if (mediaService != null) {
+                    mediaService.setTracks(tracks, position);
+                    mediaService.stop();
+                    mediaService.play();
+                } else {
+                    Log.w("DIM", "Media service is not initialized");
+                }
+            } else {
+                Log.e("DIM", "No track available for the playlist");
+            }
         });
     }
 

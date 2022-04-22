@@ -1,6 +1,12 @@
 package uqac.dim.audium.fragment;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +32,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import uqac.dim.audium.MediaService;
 import uqac.dim.audium.R;
 import uqac.dim.audium.firebase.FirebaseAlbum;
 import uqac.dim.audium.model.entity.Album;
@@ -40,6 +47,7 @@ public class AlbumPageFragment extends Fragment {
     private Long albumId;
     private String username;
     private List<Long> tracksId;
+    private List<Track> tracks;
     private Artist artist;
     private Album album;
     private DatabaseReference database;
@@ -52,13 +60,27 @@ public class AlbumPageFragment extends Fragment {
     private Button btnEdit;
     private Button btnDelete;
     private User user;
+    private MediaService mediaService;
+    private final ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            mediaService = ((MediaService.MediaServiceBinder) iBinder).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mediaService = null;
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        tracks = new ArrayList<>();
         username = getArguments().getString("username");
         albumId = getArguments().getLong("albumId");
-
+        Intent intent = new Intent(getContext(), MediaService.class);
+        getContext().bindService(intent, serviceConnection, 0);
     }
 
     private void load() {
@@ -68,6 +90,7 @@ public class AlbumPageFragment extends Fragment {
             public void onSuccess(DataSnapshot dataSnapshot) {
                 album = dataSnapshot.getValue(Album.class);
                 if (album != null) {
+                    tracksId = album.getTracksId();
                     editTitle.setText(album.getTitle());
                     editTitle.setEnabled(false);
                     editDescription.setText(album.getDescription());
@@ -82,15 +105,12 @@ public class AlbumPageFragment extends Fragment {
                         public void onSuccess(DataSnapshot dataSnapshot) {
                             if (dataSnapshot.exists())
                                 artist = dataSnapshot.getValue(Artist.class);
-                            else {
-                                // A faire
-                            }
                         }
                     });
                 }
             }
         });
-        ArrayList<Track> tracks = new ArrayList<>();
+        tracks = new ArrayList<>();
         database.child("tracks").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -163,8 +183,20 @@ public class AlbumPageFragment extends Fragment {
         intent.putExtra("username", username);
         startActivity(intent);*/
 
+        if (!tracks.isEmpty()) {
+            if (mediaService != null) {
+                mediaService.setTracks(tracks, i);
+                mediaService.stop();
+                mediaService.play();
+            } else {
+                Log.w("DIM", "Media service is not initialized");
+            }
+        } else {
+            Log.e("DIM", "No track available for the playlist");
+        }
 
-        TrackPageFragment trackPageFragment = new TrackPageFragment();
+
+        /*TrackPageFragment trackPageFragment = new TrackPageFragment();
         Bundle b = new Bundle();
         b.putString("username", username);
         b.putLong("trackId", ((Track) listView.getItemAtPosition(i)).getId());
@@ -176,7 +208,7 @@ public class AlbumPageFragment extends Fragment {
         getParentFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, trackPageFragment)
                 .addToBackStack("playlistPage")
-                .commit();
+                .commit();*/
     }
 
     public void modifyAlbum(View view) {
