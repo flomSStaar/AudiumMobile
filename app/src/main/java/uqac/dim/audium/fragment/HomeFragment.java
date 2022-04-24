@@ -100,6 +100,8 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_home, container, false);
+        viewPager2 = root.findViewById(R.id.viewPagerImageSlider);
+
         //ViewPager
         return root;
     }
@@ -131,7 +133,6 @@ public class HomeFragment extends Fragment {
                         if(a!=null)
                             sliderItems.add(a);
                     }
-                    viewPager2 = root.findViewById(R.id.viewPagerImageSlider);
                     viewPager2.setAdapter(new SliderAdapter(sliderItems, viewPager2, HomeFragment.this));
                     viewPager2.setClipToPadding(false);
                     viewPager2.setClipChildren(false);

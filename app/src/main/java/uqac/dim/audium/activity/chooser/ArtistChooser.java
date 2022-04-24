@@ -71,7 +71,7 @@ public class ArtistChooser extends AppCompatActivity {
         Artist artist = (Artist) adapterView.getItemAtPosition(i);
         Intent resultIntent = new Intent();
         resultIntent.putExtra("artistId", artist.getId());
-        resultIntent.putExtra("artistName", artist.getStageName());
+        resultIntent.putExtra("artistName", artist.getPrintableName());
         setResult(RESULT_OK, resultIntent);
         finish();
     }

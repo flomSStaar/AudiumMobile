@@ -118,18 +118,18 @@ public class ArtistProfile extends AppCompatActivity {
                                 }
                             }
                         }
+                        if (idAlbums != null) {
+                            for (Long idAlbum : idAlbums) {
+                                database.child("albums").child(String.valueOf(idAlbum)).removeValue();
+                            }
+                        }
+                        artist = null;
+                        finish();
                     }
                 });
             }
         }
-        if (idAlbums != null) {
-            for (Long idAlbum : idAlbums) {
-                database.child("albums").child(String.valueOf(idAlbum)).removeValue();
-            }
-        }
 
-
-        artist = null;
     }
 
     public void showAlbums(View view) {
