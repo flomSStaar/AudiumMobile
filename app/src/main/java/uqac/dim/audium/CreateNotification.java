@@ -17,6 +17,10 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import uqac.dim.audium.activity.Login;
+import uqac.dim.audium.activity.Main;
+import uqac.dim.audium.activity.Settings;
+import uqac.dim.audium.fragment.MediaPlayerFragment;
 import uqac.dim.audium.model.entity.Track;
 
 public class CreateNotification extends AsyncTask<String, Void, Bitmap> {
@@ -75,8 +79,12 @@ public class CreateNotification extends AsyncTask<String, Void, Bitmap> {
         Intent intentLoop = new Intent(context, NotificationActionService.class).setAction(ACTION_LOOP);
         PendingIntent pendingIntentLoop = PendingIntent.getBroadcast(context, 0, intentLoop, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        PendingIntent openIntent = PendingIntent.getActivity(context, 0, new Intent(context, Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_UPDATE_CURRENT);
 
-        notification = new NotificationCompat.Builder(context, CHANNEL_ID)
+
+
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notes)
                 .setContentTitle(track.getName())
                 .setOnlyAlertOnce(true)
@@ -90,9 +98,12 @@ public class CreateNotification extends AsyncTask<String, Void, Bitmap> {
                 //TODO ajouter le looping
                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
                         .setShowActionsInCompactView(0, 1, 2))
-                .setLargeIcon(result)
-                .build();
+                .setLargeIcon(result);
 
-        notificationManagerCompat.notify(NOTIFICATION_ID, notification);
+        builder.setContentIntent(openIntent);
+
+
+
+        notificationManagerCompat.notify(NOTIFICATION_ID, builder.build());
     }
 }
