@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="120sp"
+    android:layout_width="130sp"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:maxHeight="200sp"
     android:orientation="vertical"
     android:padding="10dp">
-
-    <ImageView
-        android:id="@+id/gv_album_image"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="100sp"
-        android:contentDescription="@string/album_image"
-        android:gravity="center"
-        android:scaleType="centerCrop" />
+        android:layout_height="match_parent"
+        app:cardCornerRadius="10dp"
+        android:layout_margin="5dp"
+        android:elevation="10dp">
+        <ImageView
 
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            android:id="@+id/gv_album_image"
+            android:layout_width="match_parent"
+            android:layout_height="100sp"
+            android:contentDescription="@string/album_image"
+            android:gravity="center"
+            android:scaleType="centerCrop" />
+    </androidx.cardview.widget.CardView>
     <TextView
         android:id="@+id/gv_album_name"
         style="@style/Theme.Audium.SubSubTitle"

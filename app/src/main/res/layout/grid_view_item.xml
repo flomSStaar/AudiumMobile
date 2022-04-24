@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_width="130sp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="10dp">
-
-    <ImageView
-        android:id="@+id/playlist_image"
-        android:layout_width="100sp"
-        android:layout_height="100sp"
-        android:layout_gravity="center"
-        android:scaleType="centerCrop" />
-
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="10dp"
+        android:layout_margin="5dp"
+        android:elevation="10dp">
+        <ImageView
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            android:id="@+id/playlist_image"
+            android:layout_width="100sp"
+            android:layout_height="100sp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop" />
+    </androidx.cardview.widget.CardView>
     <TextView
         android:id="@+id/gv_playlist_name"
         android:layout_width="wrap_content"

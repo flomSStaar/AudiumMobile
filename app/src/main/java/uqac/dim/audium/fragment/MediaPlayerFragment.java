@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
@@ -47,7 +48,9 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
     private TextView tvTrackName, tvArtistName;
     private ImageView ivTrack;
 
-    private LinearProgressIndicator progressBar;
+    //private LinearProgressIndicator progressBar;
+
+    private SeekBar progressBar;
 
     private Track currentTrack;
 
@@ -83,6 +86,8 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
 
         getActivity().registerReceiver(broadcastReceiver, new IntentFilter("android.intent.action.MEDIA_BUTTON"));
         getActivity().startService(new Intent(getActivity().getBaseContext(), OnClearFromRecentService.class));
+
+
     }
 
     @Nullable
@@ -111,7 +116,25 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
         btnNext.setEnabled(false);
         btnLooping.setEnabled(false);
 
+        progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(mediaService != null && fromUser){
+                    mediaService.seekTo(progress);
+                }
+            }
+        });
         return root;
     }
 

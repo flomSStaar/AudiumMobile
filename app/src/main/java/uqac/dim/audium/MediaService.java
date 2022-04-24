@@ -288,6 +288,10 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
         listeners.forEach(listener -> listener.onTrackChanged(currentTrack));
     }
 
+    public void seekTo(int val){
+        mediaPlayer.seekTo(val);
+    }
+
     public interface MediaEventListener {
         void onTrackPlay();
 
@@ -298,3 +302,5 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
         void onTrackChanged(Track track);
     }
 }
+
+
