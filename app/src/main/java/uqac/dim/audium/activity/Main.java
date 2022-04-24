@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import uqac.dim.audium.MediaService;
 import uqac.dim.audium.R;
 import uqac.dim.audium.fragment.HomeFragment;
+import uqac.dim.audium.fragment.SearchFragment;
 import uqac.dim.audium.fragment.MediaPlayerFragment;
 import uqac.dim.audium.model.entity.User;
 
@@ -62,14 +63,19 @@ public class Main extends AppCompatActivity {
     }
 
     private void search(View view) {
-        /*
+        SearchFragment searchFragment = new SearchFragment(getApplicationContext());
+        Bundle b = new Bundle();
+        b.putString("username", user.getUsername());
+        searchFragment.setArguments(b);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new SearchFragment())
+                .replace(R.id.fragment_container, searchFragment)
                 .commit();
 
-         */
+         /*
         Intent i = new Intent(getApplicationContext(), Searchable.class);
         startActivity(i);
+        */
+
     }
 
     private void settings(View view) {
