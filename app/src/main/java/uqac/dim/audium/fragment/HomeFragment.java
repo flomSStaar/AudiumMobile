@@ -1,14 +1,9 @@
 package uqac.dim.audium.fragment;
 
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,21 +30,18 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import uqac.dim.audium.MediaService;
 import uqac.dim.audium.R;
 import uqac.dim.audium.SliderAdapter;
-import uqac.dim.audium.SliderItem;
 import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Playlist;
-import uqac.dim.audium.model.entity.Track;
 
 public class HomeFragment extends Fragment {
 
     private DatabaseReference database = FirebaseDatabase.getInstance().getReference();
     private String username;
     private View root;
-    private ImageButton btnSeeAlbums;
+    private ImageButton btnAlbums;
     private ViewPager2 viewPager2;
     private LinearLayout linearLayoutAlbums;
     private LinearLayout linearLayoutPlaylists;
@@ -61,23 +53,9 @@ public class HomeFragment extends Fragment {
         }
     };
     private final List<Artist> sliderItems = new ArrayList<>();
-    private ImageButton imageButton;
+    private ImageButton btnPlaylists;
 
     private final Context context;
-    private MediaService mediaService;
-    private final ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            mediaService = ((MediaService.MediaServiceBinder) iBinder).getService();
-            Log.i("DIM", "HomeFragment: onServiceConnected");
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            mediaService = null;
-            Log.i("DIM", "HomeFragment: onServiceDisconnected");
-        }
-    };
 
     public HomeFragment(Context context) {
         if (context == null) {
@@ -91,8 +69,6 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         username = getArguments().getString("username");
-        Intent intent = new Intent(context, MediaService.class);
-        context.bindService(intent, serviceConnection, 0);
     }
 
     @Nullable
@@ -100,8 +76,11 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_home, container, false);
         viewPager2 = root.findViewById(R.id.viewPagerImageSlider);
+        linearLayoutAlbums = root.findViewById(R.id.albums_list);
+        linearLayoutPlaylists = root.findViewById(R.id.playlists_list);
+        btnAlbums = root.findViewById(R.id.btn_see_albums);
+        btnPlaylists = root.findViewById(R.id.playlist_btn);
 
-        //ViewPager
         return root;
     }
 
@@ -120,17 +99,16 @@ public class HomeFragment extends Fragment {
         getAlbumsButtons();
     }
 
-    private void setHomePage(){
-        linearLayoutAlbums = root.findViewById(R.id.albums_list);
-        linearLayoutPlaylists = root.findViewById(R.id.playlists_list);
+    private void setHomePage() {
         database.child("artists").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    for (DataSnapshot data: dataSnapshot.getChildren()) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot data : dataSnapshot.getChildren()) {
                         Artist a = data.getValue(Artist.class);
-                        if(a!=null)
+                        if (a != null) {
                             sliderItems.add(a);
+                        }
                     }
                     viewPager2.setAdapter(new SliderAdapter(sliderItems, viewPager2, HomeFragment.this));
                     viewPager2.setClipToPadding(false);
@@ -140,50 +118,33 @@ public class HomeFragment extends Fragment {
 
                     CompositePageTransformer compositePageTransformer = new CompositePageTransformer();
                     compositePageTransformer.addTransformer(new MarginPageTransformer(40));
-                    compositePageTransformer.addTransformer(new ViewPager2.PageTransformer() {
-                        @Override
-                        public void transformPage(@NonNull View page, float position) {
-                            float r = 1 - Math.abs(position);
-                            page.setScaleY(0.85f + r * 0.15f);
-
-                        }
+                    compositePageTransformer.addTransformer((page, position) -> {
+                        float r = 1 - Math.abs(position);
+                        page.setScaleY(0.85f + r * 0.15f);
                     });
 
-                    btnSeeAlbums = root.findViewById(R.id.btn_see_albums);
-                    btnSeeAlbums.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            AlbumsFragment albumsFragment = new AlbumsFragment();
-                            Bundle b = new Bundle();
-                            b.putString("username", username);
-                            albumsFragment.setArguments(b);
-                            FragmentManager manager = getParentFragmentManager();
-                            manager.beginTransaction()
-                                    .replace(R.id.fragment_container, albumsFragment)
-                                    .addToBackStack("playlist")
-                                    .commit();
-                        }
+                    btnAlbums.setOnClickListener(view -> {
+                        AlbumsFragment albumsFragment = new AlbumsFragment();
+                        Bundle b = new Bundle();
+                        b.putString("username", username);
+                        albumsFragment.setArguments(b);
+                        FragmentManager manager = getParentFragmentManager();
+                        manager.beginTransaction()
+                                .replace(R.id.fragment_container, albumsFragment)
+                                .addToBackStack("albums")
+                                .commit();
                     });
 
-                    imageButton = root.findViewById(R.id.playlist_btn);
-                    imageButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            // New intent avec l'id du joueur
-                            PlaylistFragment homeFragment = new PlaylistFragment(context);
-                            Bundle b = new Bundle();
-                            b.putString("username", username);
-                            homeFragment.setArguments(b);
-                            FragmentManager manager = getParentFragmentManager();
-                            manager.beginTransaction()
-                                    .replace(R.id.fragment_container, homeFragment)
-                                    .addToBackStack("playlist")
-                                    .commit();
-
-                /*Intent i = new Intent(getContext(), PlaylistListActivity.class);
-                i.putExtra("username",username);
-                startActivity(i);*/
-                        }
+                    btnPlaylists.setOnClickListener(view -> {
+                        PlaylistFragment playlistFragment = new PlaylistFragment(context);
+                        Bundle b = new Bundle();
+                        b.putString("username", username);
+                        playlistFragment.setArguments(b);
+                        FragmentManager manager = getParentFragmentManager();
+                        manager.beginTransaction()
+                                .replace(R.id.fragment_container, playlistFragment)
+                                .addToBackStack("playlist")
+                                .commit();
                     });
 
                     viewPager2.setPageTransformer(compositePageTransformer);
@@ -195,18 +156,16 @@ public class HomeFragment extends Fragment {
                             sliderHandler.postDelayed(sliderRunnable, 3000);
                         }
                     });
-
-
                 }
             }
         });
     }
 
     private void getPlaylistsButtons() {
-        database = FirebaseDatabase.getInstance().getReference();
         database.child("playlists").child(username).get().addOnSuccessListener(dataSnapshot -> {
             if (dataSnapshot.exists()) {
                 linearLayoutPlaylists.removeAllViews();
+
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     Playlist playlist = data.getValue(Playlist.class);
                     if (playlist != null) {
@@ -241,6 +200,7 @@ public class HomeFragment extends Fragment {
                 noPlaylists.setText(R.string.no_playlist);
                 noPlaylists.setTextColor(Color.WHITE);
                 noPlaylists.setLayoutParams((new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)));
+                linearLayoutPlaylists.removeAllViews();
                 linearLayoutPlaylists.addView(noPlaylists);
             }
         });
@@ -248,7 +208,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void getAlbumsButtons() {
-        database = FirebaseDatabase.getInstance().getReference();
         database.child("albums").limitToLast(5).get().addOnSuccessListener(dataSnapshot -> {
             if (dataSnapshot.exists()) {
                 linearLayoutAlbums.removeAllViews();
@@ -300,6 +259,7 @@ public class HomeFragment extends Fragment {
                 TextView noAlbums = new TextView(getContext());
                 noAlbums.setText(R.string.no_album);
                 noAlbums.setLayoutParams((new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)));
+                linearLayoutAlbums.removeAllViews();
                 linearLayoutAlbums.addView(noAlbums);
             }
         });
