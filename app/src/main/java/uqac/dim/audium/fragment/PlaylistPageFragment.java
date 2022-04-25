@@ -32,10 +32,10 @@ import java.util.List;
 import uqac.dim.audium.MediaService;
 import uqac.dim.audium.R;
 import uqac.dim.audium.activity.ModifyPlaylist;
+import uqac.dim.audium.adapter.ListViewTrackAdapter;
 import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.model.entity.User;
-import uqac.dim.audium.adapter.ListViewTrackAdapter;
 
 public class PlaylistPageFragment extends Fragment {
     private String username;
@@ -129,7 +129,7 @@ public class PlaylistPageFragment extends Fragment {
                                 }
                         }
                         if (playlistTracks.size() != 0)
-                            listView.setAdapter(new ListViewTrackAdapter(playlistTracks, getContext(), username));
+                            listView.setAdapter(new ListViewTrackAdapter(getContext(), playlistTracks, username));
                         else {
                             Toast.makeText(getContext(), "This playlist has no tracks", Toast.LENGTH_SHORT).show(); ///Techniquement impossible
                         }

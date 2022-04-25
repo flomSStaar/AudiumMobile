@@ -171,14 +171,13 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
     }
 
     public void nextTrack() {
-
         Log.i("DIM", "MediaService.nextTrack()");
 
         if (tracks != null) {
             int nextPlayingIndex = (currentPlayingIndex + 1) % maxPlayingIndex;
             if (currentPlayingIndex == maxPlayingIndex - 1) {
                 if (!looping) {
-                    notifyStop();
+                    stop();
                 }
                 prepareTrack(looping, nextPlayingIndex);
 

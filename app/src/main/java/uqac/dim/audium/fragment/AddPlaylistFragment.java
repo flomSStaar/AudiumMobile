@@ -35,24 +35,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uqac.dim.audium.R;
+import uqac.dim.audium.adapter.ListViewAdapter;
 import uqac.dim.audium.firebase.FirebasePlaylist;
 import uqac.dim.audium.firebase.FirebaseUtils;
 import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.model.entity.User;
-import uqac.dim.audium.adapter.ListViewAdapter;
 
 public class AddPlaylistFragment extends Fragment {
 
     private final StorageReference storeRef = FirebaseStorage.getInstance().getReference();
     private String username;
-    View root;
+    private View root;
     private User user;
     public static List<Long> idTracksSelected;
-    AbsListView.MultiChoiceModeListener modeListener;
-    private ListViewAdapter adapter;
-    ListView listView;
+    private AbsListView.MultiChoiceModeListener modeListener;
+    private ListView listView;
     private DatabaseReference database;
-    Button add;
+    private Button add;
 
     private Button chooseImg;
     private ImageView image;

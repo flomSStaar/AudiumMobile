@@ -23,17 +23,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uqac.dim.audium.R;
+import uqac.dim.audium.adapter.ListViewAdapter;
 import uqac.dim.audium.firebase.FirebasePlaylist;
 import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.model.entity.User;
-import uqac.dim.audium.adapter.ListViewAdapter;
 
 public class AddPlaylist extends AppCompatActivity {
 
     private String username;
     private User user;
     public static List<Long> idTracksSelected;
-    private ListViewAdapter adapter;
     private DatabaseReference database;
 
 

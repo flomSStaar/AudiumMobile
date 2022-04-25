@@ -27,11 +27,11 @@ import java.util.List;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.activity.admin.TrackPage;
+import uqac.dim.audium.adapter.ListViewTrackAdapter;
 import uqac.dim.audium.firebase.FirebaseAlbum;
 import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
-import uqac.dim.audium.adapter.ListViewTrackAdapter;
 
 public class AlbumPage extends AppCompatActivity {
     private Long albumId;
@@ -111,7 +111,7 @@ public class AlbumPage extends AppCompatActivity {
                         }
                 }
                 if (tracks.size() != 0) {
-                    listView.setAdapter(new ListViewTrackAdapter(tracks, c, username));
+                    listView.setAdapter(new ListViewTrackAdapter(c, tracks, username));
                 } else {
                     Toast.makeText(getApplicationContext(), "This album has no tracks", Toast.LENGTH_SHORT).show(); ///Techniquement impossible
                 }

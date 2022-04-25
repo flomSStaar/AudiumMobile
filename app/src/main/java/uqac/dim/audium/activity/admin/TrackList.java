@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uqac.dim.audium.R;
-import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.adapter.ListViewTrackAdapter;
+import uqac.dim.audium.model.entity.Track;
 
 public class TrackList extends AppCompatActivity {
     private final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
@@ -50,7 +50,7 @@ public class TrackList extends AppCompatActivity {
                     Track t = snap.getValue(Track.class);
                     tracks.add(t);
                 }
-                lvTracks.setAdapter(new ListViewTrackAdapter(tracks, getApplicationContext(), username, "Admin"));
+                lvTracks.setAdapter(new ListViewTrackAdapter(getApplicationContext(), tracks, username).setHasInfos(false));
             }
 
             @Override

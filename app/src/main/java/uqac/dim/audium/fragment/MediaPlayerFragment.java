@@ -159,7 +159,6 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
 
     private void setServiceConnection() {
         serviceConnection = new ServiceConnection() {
-
             @Override
             public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
                 Log.i("DIM", "setServiceConnection.onServiceConnected()");

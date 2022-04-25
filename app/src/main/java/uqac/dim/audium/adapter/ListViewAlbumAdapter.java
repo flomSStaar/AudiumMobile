@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -23,20 +22,16 @@ import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Artist;
 
 public class ListViewAlbumAdapter extends ArrayAdapter<Album> {
-    private final List<Album> albumList;
     private final Context context;
-    private DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+    private final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
-    public ListViewAlbumAdapter(List<Album> albums, Context context) {
+    private final List<Album> albums;
+    private boolean hasIndex = true;
+
+    public ListViewAlbumAdapter(Context context, List<Album> albums) {
         super(context, R.layout.list_view_track_item, albums);
         this.context = context;
-        this.albumList = albums;
-    }
-
-    public ListViewAlbumAdapter(List<Album> albums, Fragment fragment) {
-        super(fragment.getContext(), R.layout.list_view_track_item, albums);
-        this.context = fragment.getContext();
-        this.albumList = albums;
+        this.albums = albums;
     }
 
     @NonNull
@@ -48,14 +43,18 @@ public class ListViewAlbumAdapter extends ArrayAdapter<Album> {
             row = inflater.inflate(R.layout.list_view_album_item, parent, false);
         }
 
-        Album album = albumList.get(position);
+        Album album = albums.get(position);
 
         TextView tvAlbumNumber = row.findViewById(R.id.tv_album_number);
         TextView tvAlbumName = row.findViewById(R.id.tv_album_name);
         TextView tvArtistName = row.findViewById(R.id.tv_artist_name);
         ImageView ivAlbum = row.findViewById(R.id.iv_album);
 
-        tvAlbumNumber.setText(String.valueOf(position));
+        if (hasIndex) {
+            tvAlbumNumber.setText(String.valueOf(position));
+        } else {
+            tvAlbumNumber.setVisibility(View.GONE);
+        }
         tvAlbumName.setText(album.getTitle());
         Picasso.with(context).load(album.getImageUrl()).placeholder(R.drawable.ic_notes).error(R.drawable.ic_notes).into(ivAlbum);
 
@@ -73,5 +72,10 @@ public class ListViewAlbumAdapter extends ArrayAdapter<Album> {
                 });
 
         return row;
+    }
+
+    public ListViewAlbumAdapter setHasIndex(boolean hasIndex) {
+        this.hasIndex = hasIndex;
+        return this;
     }
 }

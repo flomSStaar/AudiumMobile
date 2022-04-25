@@ -17,9 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uqac.dim.audium.R;
+import uqac.dim.audium.adapter.ListViewPlaylistAdapter;
 import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.Track;
-import uqac.dim.audium.adapter.ListViewPlaylistAdapter;
 
 public class PlaylistChooser extends AppCompatActivity {
 

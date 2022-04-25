@@ -11,7 +11,7 @@
         android:allowBackup="true"
         android:icon="@drawable/appicon"
         android:label="@string/app_name"
-        android:launchMode="singleTask"
+        android:launchMode="singleInstancePerTask"
         android:roundIcon="@drawable/appicon"
         android:supportsRtl="true"
         android:theme="@style/Theme.Audium"

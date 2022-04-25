@@ -24,8 +24,8 @@ import java.util.List;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.activity.admin.AddAlbum;
-import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.adapter.ListViewAlbumAdapter;
+import uqac.dim.audium.model.entity.Album;
 
 public class AlbumChooser extends AppCompatActivity {
     private TextView tvArtistInfo;
@@ -88,7 +88,7 @@ public class AlbumChooser extends AppCompatActivity {
                                                 }
                                             }
                                             //listViewAlbums.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, albums));
-                                            listViewAlbums.setAdapter(new ListViewAlbumAdapter(albums, c));
+                                            listViewAlbums.setAdapter(new ListViewAlbumAdapter(c, albums).setHasIndex(false));
                                         }
                                     });
                         } else {

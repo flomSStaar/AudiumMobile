@@ -90,4 +90,6 @@
     <string name="no_album">No album</string>
     <string name="track_infos">track_infos</string>
     <string name="no_playlist">No playlist</string>
+    <string name="track">Track</string>
+    <string name="maj_album">Album</string>
 </resources>

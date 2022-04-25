@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,16 +33,15 @@ import java.util.List;
 
 import uqac.dim.audium.MediaService;
 import uqac.dim.audium.R;
+import uqac.dim.audium.adapter.ListViewTrackAdapter;
 import uqac.dim.audium.firebase.FirebaseAlbum;
 import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.model.entity.User;
-import uqac.dim.audium.adapter.ListViewTrackAdapter;
 
 public class AlbumPageFragment extends Fragment {
-
-    View root;
+    private View root;
     private Long albumId;
     private String username;
     private List<Long> tracksId;
@@ -55,7 +53,7 @@ public class AlbumPageFragment extends Fragment {
     private EditText editDescription;
     private EditText editArtist;
     private ImageView imageView;
-    ListView listView;
+    private ListView listView;
     private Button btnSave;
     private Button btnEdit;
     private Button btnDelete;
@@ -124,7 +122,7 @@ public class AlbumPageFragment extends Fragment {
                         }
                 }
                 if (tracks.size() != 0)
-                    listView.setAdapter(new ListViewTrackAdapter(tracks, c, username));
+                    listView.setAdapter(new ListViewTrackAdapter(c, tracks, username));
             }
 
             @Override
@@ -175,12 +173,6 @@ public class AlbumPageFragment extends Fragment {
     }
 
     private void OnItemClicked(AdapterView<?> adapterView, View view, int i, long l) {
-        /*Intent intent = new Intent(AlbumPageActivity.this, TrackPageActivity.class);
-        intent.putExtra("trackId", ((Track) listView.getItemAtPosition(i)).getId());
-        intent.putExtra("albumId", ((Track) listView.getItemAtPosition(i)).getAlbumId());
-        intent.putExtra("username", username);
-        startActivity(intent);*/
-
         if (!tracks.isEmpty()) {
             if (mediaService != null) {
                 mediaService.setTracks(tracks, i);
@@ -192,21 +184,6 @@ public class AlbumPageFragment extends Fragment {
         } else {
             Log.e("DIM", "No track available for the playlist");
         }
-
-
-        /*TrackPageFragment trackPageFragment = new TrackPageFragment();
-        Bundle b = new Bundle();
-        b.putString("username", username);
-        b.putLong("trackId", ((Track) listView.getItemAtPosition(i)).getId());
-        if (((Track) listView.getItemAtPosition(i)).getAlbumId() != null)
-            b.putLong("albumId", album.getId());
-        else
-            b.putLong("albumId", 0);
-        trackPageFragment.setArguments(b);
-        getParentFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, trackPageFragment)
-                .addToBackStack("playlistPage")
-                .commit();*/
     }
 
     public void modifyAlbum(View view) {

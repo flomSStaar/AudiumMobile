@@ -9,17 +9,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import uqac.dim.audium.MediaService;
 import uqac.dim.audium.R;
 import uqac.dim.audium.fragment.HomeFragment;
-import uqac.dim.audium.fragment.SearchFragment;
 import uqac.dim.audium.fragment.MediaPlayerFragment;
+import uqac.dim.audium.fragment.SearchFragment;
 import uqac.dim.audium.model.entity.User;
 
 public class Main extends AppCompatActivity {
     private User user; ///A CHANGER !!!
     private ImageButton btnHome, btnSearch, btnSettings;
-    private MediaService mediaService;
+    private String fragmentState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,38 +43,41 @@ public class Main extends AppCompatActivity {
         Bundle b = new Bundle();
         b.putString("username", user.getUsername());
         homeFragment.setArguments(b);
-
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, homeFragment)
                 .add(R.id.music_player, new MediaPlayerFragment(getApplicationContext()))
                 .commit();
 
+        this.fragmentState = "home";
     }
 
     private void home(View view) {
-        HomeFragment homeFragment = new HomeFragment(getApplicationContext());
-        Bundle b = new Bundle();
-        b.putString("username", user.getUsername());
-        homeFragment.setArguments(b);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, homeFragment)
-                .commit();
+        if (!fragmentState.equals("home")) {
+            HomeFragment homeFragment = new HomeFragment(getApplicationContext());
+            Bundle b = new Bundle();
+            b.putString("username", user.getUsername());
+            homeFragment.setArguments(b);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, homeFragment)
+                    .commit();
+
+            this.fragmentState = "home";
+        }
     }
 
     private void search(View view) {
-        SearchFragment searchFragment = new SearchFragment(getApplicationContext());
-        Bundle b = new Bundle();
-        b.putString("username", user.getUsername());
-        searchFragment.setArguments(b);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, searchFragment)
-                .commit();
+        if(!fragmentState.equals("search")) {
+            SearchFragment searchFragment = new SearchFragment(getApplicationContext(), user.getUsername());
+            Bundle b = new Bundle();
+            b.putString("username", user.getUsername());
+            searchFragment.setArguments(b);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, searchFragment)
+                    .addToBackStack("search")
+                    .commit();
 
-         /*
-        Intent i = new Intent(getApplicationContext(), Searchable.class);
-        startActivity(i);
-        */
-
+            this.fragmentState = "search";
+        }
     }
 
     private void settings(View view) {

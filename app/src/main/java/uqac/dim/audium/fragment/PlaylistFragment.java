@@ -25,9 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uqac.dim.audium.R;
+import uqac.dim.audium.adapter.GridViewAdapter;
 import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.User;
-import uqac.dim.audium.adapter.GridViewAdapter;
 
 public class PlaylistFragment extends Fragment {
     private final Context context;
@@ -102,11 +102,6 @@ public class PlaylistFragment extends Fragment {
     }
 
     private void onItemClicked(AdapterView<?> adapterView, View view, int i, long l) {
-        /*
-        Intent intent = new Intent(getContext(), PlaylistPageActivity.class);
-        intent.putExtra("playlistId", ((Playlist) gridView.getItemAtPosition(i)).getId());
-        intent.putExtra("username", username);
-        startActivity(intent);*/
         PlaylistPageFragment playlistPageFragment = new PlaylistPageFragment(context);
         Bundle b = new Bundle();
         b.putString("username", username);
@@ -121,10 +116,6 @@ public class PlaylistFragment extends Fragment {
 
 
     public void addPlaylist(View view) {
-        /*
-        Intent i = new Intent(getContext(), AddPlaylistActivity.class);
-        i.putExtra("username",user.getUsername());
-        startActivity(i);/*/
         AddPlaylistFragment addPlaylistFragment = new AddPlaylistFragment();
         Bundle b = new Bundle();
         b.putString("username", username);

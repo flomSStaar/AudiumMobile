@@ -34,10 +34,7 @@ import java.util.List;
 
 import uqac.dim.audium.MediaService;
 import uqac.dim.audium.R;
-import uqac.dim.audium.activity.AlbumPage;
 import uqac.dim.audium.activity.admin.AddAlbum;
-import uqac.dim.audium.activity.admin.ArtistProfile;
-import uqac.dim.audium.activity.admin.TrackPage;
 import uqac.dim.audium.adapter.ListViewAlbumAdapter;
 import uqac.dim.audium.adapter.ListViewTrackAdapter;
 import uqac.dim.audium.model.entity.Album;
@@ -75,7 +72,6 @@ public class ArtistPageFragment extends Fragment {
     };
 
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -97,9 +93,9 @@ public class ArtistPageFragment extends Fragment {
         database.child("users").child(username).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     User u = dataSnapshot.getValue(User.class);
-                    if (!u.isAdmin()){
+                    if (!u.isAdmin()) {
                         btnAddAlbum.setVisibility(View.GONE);
                         btnDelete.setVisibility(View.GONE);
                     }
@@ -120,7 +116,7 @@ public class ArtistPageFragment extends Fragment {
 
     }
 
-    private void getInfos(){
+    private void getInfos() {
         database = FirebaseDatabase.getInstance().getReference();
         database.child("artists").child(Long.toString(artistId)).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
@@ -202,7 +198,7 @@ public class ArtistPageFragment extends Fragment {
                         albums.add(a);
                 }
                 if (albums.size() != 0)
-                    listView.setAdapter(new ListViewAlbumAdapter(albums,c));
+                    listView.setAdapter(new ListViewAlbumAdapter(c, albums).setHasIndex(false));
             }
 
             @Override
@@ -212,10 +208,6 @@ public class ArtistPageFragment extends Fragment {
         });
 
         listView.setOnItemClickListener((adapter, view1, position, arg) -> {
-            /*Intent intent = new Intent(getContext(), AlbumPage.class);
-            intent.putExtra("albumId", ((Album) listView.getItemAtPosition(position)).getId());
-            intent.putExtra("username", username);
-            startActivity(intent);*/
             AlbumPageFragment albumPageFragment = new AlbumPageFragment();
             Bundle b = new Bundle();
             b.putString("username", username);
@@ -246,7 +238,7 @@ public class ArtistPageFragment extends Fragment {
                         tracks.add(t);
                 }
                 if (tracks.size() != 0) {
-                    listView.setAdapter(new ListViewTrackAdapter(tracks, ArtistPageFragment.this, username));
+                    listView.setAdapter(new ListViewTrackAdapter(ArtistPageFragment.this.getContext(), tracks, username).setHasIndex(false));
                 } else {
                     Toast.makeText(getContext(), "This artist has no tracks", Toast.LENGTH_SHORT).show();
                 }
@@ -258,12 +250,6 @@ public class ArtistPageFragment extends Fragment {
             }
         });
         listView.setOnItemClickListener((adapter, view1, position, arg) -> {
-            /*Intent intent = new Intent(getContext(), TrackPage.class);
-            intent.putExtra("trackId", ((Track) listView.getItemAtPosition(position)).getId());
-            intent.putExtra("albumId", ((Track) listView.getItemAtPosition(position)).getAlbumId());
-            intent.putExtra("username", username);
-            startActivity(intent);*/
-
             if (!tracks.isEmpty()) {
                 if (mediaService != null) {
                     mediaService.setTracks(tracks, position);

@@ -36,17 +36,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uqac.dim.audium.R;
+import uqac.dim.audium.adapter.ListViewAdapter;
 import uqac.dim.audium.firebase.FirebaseAlbum;
 import uqac.dim.audium.firebase.FirebaseUtils;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
-import uqac.dim.audium.adapter.ListViewAdapter;
 
 public class AddAlbum extends AppCompatActivity {
     private final StorageReference storeRef = FirebaseStorage.getInstance().getReference();
     private Long artistId;
     private Artist artist;
-    private ListViewAdapter adapter;
     private DatabaseReference database;
     public static List<Long> idTracksSelected;
     private Button chooseImg;

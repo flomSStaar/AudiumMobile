@@ -21,29 +21,40 @@
         <item name="android:background">@drawable/mediabutton3</item>
     </style>
 
-    <style name="Theme.Audium.Title">
+    <style name="Theme.Audium.Title" parent="Theme.Audium">
         <item name="android:textSize">30sp</item>
     </style>
 
-    <style name="Theme.Audium.SubTitle">
+    <style name="Theme.Audium.SubTitle" parent="Theme.Audium">
         <item name="android:textSize">22sp</item>
     </style>
 
-    <style name="Theme.Audium.SubText">
+    <style name="Theme.Audium.SubText" parent="Theme.Audium">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/gray</item>
     </style>
 
-    <style name="Theme.Audium.SubSubTitle">
+    <style name="Theme.Audium.SubSubTitle" parent="Theme.Audium">
         <item name="android:textSize">20sp</item>
     </style>
 
-    <style name="Theme.Audium.SubSubText">
+    <style name="Theme.Audium.SubSubText" parent="Theme.Audium">
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">@color/gray</item>
     </style>
 
-    <style name="Theme.Audium.ListText">
+    <style name="Theme.Audium.ListText" parent="Theme.Audium">
         <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Theme.Audium.RadioButton" parent="Theme.Audium">
+        <item name="android:buttonTint">@color/white</item>
+    </style>
+
+    <style name="Theme.Audium.SearchView" parent="Theme.Audium">
+        <!-- Text color -->
+        <item name="android:editTextColor">@color/white</item>
+        <!-- Hint text color -->
+        <item name="android:textColorHint">@color/white</item>
     </style>
 </resources>

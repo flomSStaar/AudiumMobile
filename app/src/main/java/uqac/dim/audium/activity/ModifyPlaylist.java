@@ -27,11 +27,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uqac.dim.audium.R;
+import uqac.dim.audium.adapter.ListViewTrackAdapter;
 import uqac.dim.audium.firebase.FirebasePlaylist;
 import uqac.dim.audium.firebase.FirebaseUtils;
 import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.Track;
-import uqac.dim.audium.adapter.ListViewTrackAdapter;
 
 public class ModifyPlaylist extends AppCompatActivity {
     private EditText editTitle, editDescription;
@@ -97,7 +97,7 @@ public class ModifyPlaylist extends AppCompatActivity {
                                 }
                         }
                         if (playlistTracks.size() != 0)
-                            listPlaylistTracks.setAdapter(new ListViewTrackAdapter(playlistTracks, getApplicationContext(), username));
+                            listPlaylistTracks.setAdapter(new ListViewTrackAdapter(getApplicationContext(), playlistTracks, username));
                         else {
                             Toast.makeText(getApplicationContext(), getString(R.string.playlist_has_no_track), Toast.LENGTH_SHORT).show(); ///Techniquement impossible
                         }

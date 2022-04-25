@@ -249,7 +249,7 @@ public class HomeFragment extends Fragment {
                             FragmentManager manager = getParentFragmentManager();
                             manager.beginTransaction()
                                     .replace(R.id.fragment_container, albumPageFragment)
-                                    .addToBackStack("playlistPage")
+                                    .addToBackStack("albumPage")
                                     .commit();
                         });
                         linearLayoutAlbums.addView(view);

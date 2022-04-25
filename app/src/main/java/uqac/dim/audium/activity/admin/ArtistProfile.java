@@ -2,7 +2,6 @@ package uqac.dim.audium.activity.admin;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -28,12 +27,12 @@ import java.util.List;
 
 import uqac.dim.audium.R;
 import uqac.dim.audium.activity.AlbumPage;
+import uqac.dim.audium.adapter.ListViewAlbumAdapter;
+import uqac.dim.audium.adapter.ListViewTrackAdapter;
 import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Playlist;
 import uqac.dim.audium.model.entity.Track;
-import uqac.dim.audium.adapter.ListViewAlbumAdapter;
-import uqac.dim.audium.adapter.ListViewTrackAdapter;
 
 public class ArtistProfile extends AppCompatActivity {
 
@@ -149,7 +148,7 @@ public class ArtistProfile extends AppCompatActivity {
                         albums.add(a);
                 }
                 if (albums.size() != 0) {
-                    listView.setAdapter(new ListViewAlbumAdapter(albums, c));
+                    listView.setAdapter(new ListViewAlbumAdapter(c, albums).setHasIndex(false));
                 } else {
                     Toast.makeText(getApplicationContext(), "This artist has no albums", Toast.LENGTH_SHORT).show();
                 }
@@ -186,7 +185,7 @@ public class ArtistProfile extends AppCompatActivity {
                         tracks.add(t);
                 }
                 if (tracks.size() != 0) {
-                    listView.setAdapter(new ListViewTrackAdapter(tracks, c, username));
+                    listView.setAdapter(new ListViewTrackAdapter(c, tracks, username).setHasInfos(false));
                 } else {
                     Toast.makeText(getApplicationContext(), "This artist has no tracks", Toast.LENGTH_SHORT).show();
                 }

@@ -3,7 +3,6 @@ package uqac.dim.audium;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +19,6 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import uqac.dim.audium.fragment.ArtistPageFragment;
-import uqac.dim.audium.fragment.HomeFragment;
-import uqac.dim.audium.fragment.PlaylistPageFragment;
 import uqac.dim.audium.model.entity.Artist;
 
 public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderViewHolder> {
@@ -102,7 +99,6 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
             Picasso.with(context)
                     .load(Uri.parse(sliderItem.getImage()))
                     .into(imageView);
-            //imageView.setImageResource(sliderItem.getImage());
         }
 
     }

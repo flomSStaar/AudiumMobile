@@ -19,8 +19,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import uqac.dim.audium.R;
-import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.adapter.ListViewArtistAdapter;
+import uqac.dim.audium.model.entity.Artist;
 
 public class ArtistList extends AppCompatActivity {
     @Override
@@ -41,7 +41,6 @@ public class ArtistList extends AppCompatActivity {
                         l.add(a);
                     }
                 }
-                //artistListView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, l));
                 artistListView.setAdapter(new ListViewArtistAdapter(l, c));
             }
 
