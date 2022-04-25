@@ -70,7 +70,6 @@ public class HomeFragment extends Fragment {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             mediaService = ((MediaService.MediaServiceBinder) iBinder).getService();
             Log.i("DIM", "HomeFragment: onServiceConnected");
-            getTracks();
         }
 
         @Override
@@ -305,22 +304,4 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
-    // Méthode temporaire pour tester le media player
-    private void getTracks() {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("tracks");
-        ref.get().addOnSuccessListener(dataSnapshot -> {
-            List<Track> tracks = new ArrayList<>();
-            if (dataSnapshot.exists()) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Track track = snapshot.getValue(Track.class);
-                    if (track != null) {
-                        tracks.add(track);
-                    }
-                }
-                mediaService.setTracks(tracks);
-            }
-        });
-    }
-
 }

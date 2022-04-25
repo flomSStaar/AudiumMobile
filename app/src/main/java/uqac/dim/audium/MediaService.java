@@ -108,6 +108,7 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
             this.tracks = new ArrayList<>(tracks);
             this.currentPlayingIndex = 0;
             this.maxPlayingIndex = this.tracks.size();
+            prepareTrack(false, 0);
         } else {
             throw new IllegalArgumentException("tracks cannot be null or empty");
         }
@@ -122,6 +123,7 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
                 this.tracks = new ArrayList<>(tracks);
                 this.currentPlayingIndex = index;
                 this.maxPlayingIndex = this.tracks.size();
+                prepareTrack(false, 0);
             } else {
                 throw new IllegalArgumentException("index is out of range");
             }
@@ -209,6 +211,10 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
         }
     }
 
+    public void seekTo(int val) {
+        mediaPlayer.seekTo(val);
+    }
+
     private void prepareTrack(boolean isPlayingRequested, int newPlayingIndex) {
         Log.i("DIM", "MediaService.prepareTrack()");
 
@@ -246,6 +252,10 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
         return looping;
     }
 
+    public boolean isTrackPrepared() {
+        return isPrepared;
+    }
+
     public void setLooping(boolean looping) {
         this.looping = looping;
     }
@@ -256,6 +266,10 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
 
     public int getCurrentPosition() {
         return mediaPlayer.getCurrentPosition();
+    }
+
+    public Track getCurrentTrack() {
+        return currentTrack;
     }
 
     // Events
@@ -286,10 +300,6 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
 
     private void notifyTrackChanged() {
         listeners.forEach(listener -> listener.onTrackChanged(currentTrack));
-    }
-
-    public void seekTo(int val){
-        mediaPlayer.seekTo(val);
     }
 
     public interface MediaEventListener {

@@ -2,11 +2,9 @@ package uqac.dim.audium.fragment;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,14 +24,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import uqac.dim.audium.CreateNotification;
 import uqac.dim.audium.MediaService;
-import uqac.dim.audium.OnClearFromRecentService;
+import uqac.dim.audium.NotificationActionService;
 import uqac.dim.audium.R;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
@@ -42,14 +39,10 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
     private final Context context;
     private MediaService mediaService;
     private ServiceConnection serviceConnection;
-    private BroadcastReceiver broadcastReceiver;
 
     private ImageButton btnPrevious, btnPlayPause, btnNext, btnLooping;
     private TextView tvTrackName, tvArtistName;
     private ImageView ivTrack;
-
-    //private LinearProgressIndicator progressBar;
-
     private SeekBar progressBar;
 
     private Track currentTrack;
@@ -59,7 +52,6 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
             throw new IllegalArgumentException("context cannot be null");
         }
         this.context = context;
-
     }
 
     @Override
@@ -67,7 +59,6 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
         super.onCreate(savedInstanceState);
 
         setServiceConnection();
-        setBroadcastReceiver();
         Intent mediaServiceIntent = new Intent(context, MediaService.class);
         boolean successBind = context.bindService(mediaServiceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
         if (successBind) {
@@ -84,10 +75,7 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
             notificationManager.createNotificationChannel(channel);
         }
 
-        getActivity().registerReceiver(broadcastReceiver, new IntentFilter("android.intent.action.MEDIA_BUTTON"));
-        getActivity().startService(new Intent(getActivity().getBaseContext(), OnClearFromRecentService.class));
-
-
+        getActivity().startService(new Intent(getActivity().getBaseContext(), NotificationActionService.class));
     }
 
     @Nullable
@@ -102,9 +90,7 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
         tvTrackName = root.findViewById(R.id.tv_track_name);
         tvArtistName = root.findViewById(R.id.tv_artist_name);
         ivTrack = root.findViewById(R.id.iv_track);
-
         progressBar = root.findViewById(R.id.progress_bar);
-
 
         btnPrevious.setOnClickListener(this::previous);
         btnPlayPause.setOnClickListener(this::playPause);
@@ -115,6 +101,7 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
         btnPlayPause.setEnabled(false);
         btnNext.setEnabled(false);
         btnLooping.setEnabled(false);
+        progressBar.setEnabled(false);
 
         progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -130,7 +117,7 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(mediaService != null && fromUser){
+                if (mediaService != null && fromUser) {
                     mediaService.seekTo(progress);
                 }
             }
@@ -141,7 +128,6 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
     private void previous(View view) {
         if (mediaService != null) {
             mediaService.previousTrack();
-
         }
     }
 
@@ -180,10 +166,13 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
                 mediaService = ((MediaService.MediaServiceBinder) iBinder).getService();
                 mediaService.addMediaEventListener(MediaPlayerFragment.this);
 
+                onTrackChanged(mediaService.getCurrentTrack());
+
                 btnPrevious.setEnabled(true);
                 btnPlayPause.setEnabled(true);
                 btnNext.setEnabled(true);
                 btnLooping.setEnabled(true);
+                progressBar.setEnabled(true);
             }
 
             @Override
@@ -196,35 +185,7 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
                 btnPlayPause.setEnabled(false);
                 btnNext.setEnabled(false);
                 btnLooping.setEnabled(false);
-            }
-        };
-    }
-
-    private void setBroadcastReceiver() {
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String action = intent.getExtras().getString("actionname");
-
-                switch (action) {
-                    case CreateNotification.ACTION_PREVIOUS:
-                        mediaService.previousTrack();
-                        break;
-                    case CreateNotification.ACTION_PLAY:
-                        Log.e("DIM", "YOO!");
-                        if (mediaService.isPlaying()) {
-                            mediaService.pause();
-                        } else {
-                            mediaService.play();
-                        }
-                        break;
-                    case CreateNotification.ACTION_NEXT:
-                        mediaService.nextTrack();
-                        break;
-                    case CreateNotification.ACTION_LOOP:
-                        mediaService.setLooping(!mediaService.isLooping());
-                        break;
-                }
+                progressBar.setEnabled(false);
             }
         };
     }
@@ -266,6 +227,7 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
     public void onTrackChanged(Track track) {
         Log.i("DIM", "onTrackChanged()");
         if (track != null) {
+            currentTrack = track;
 
             tvTrackName.setText(track.getName());
             DatabaseReference ref = FirebaseDatabase.getInstance()
@@ -289,7 +251,20 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
                     });
             //Changer la photo de la musique
             Picasso.with(context).load(Uri.parse(track.getImageUrl())).placeholder(R.drawable.ic_notes).error(R.drawable.ic_notes).into(ivTrack);
-
+            progressBar.setEnabled(true);
+            if (mediaService != null && mediaService.isTrackPrepared()) {
+                progressBar.setProgress(mediaService.getCurrentPosition());
+                progressBar.setMax(mediaService.getDuration());
+                if (mediaService.isPlaying()) {
+                    btnPlayPause.setImageResource(R.drawable.ic_outline_pause_circle_filled_24);
+                    createNotification(R.drawable.ic_outline_pause_circle_filled_24);
+                } else {
+                    createNotification(R.drawable.ic_outline_play_circle_filled_24);
+                }
+            } else {
+                progressBar.setProgress(0);
+                progressBar.setMax(1);
+            }
 
             Handler mHandler = new Handler();
             //Make sure you update Seekbar on UI thread
@@ -303,10 +278,13 @@ public class MediaPlayerFragment extends Fragment implements MediaService.MediaE
                     mHandler.postDelayed(this, 100);
                 }
             });
-
-            currentTrack = track;
-
-            createNotification(R.drawable.ic_outline_play_circle_filled_24);
+        } else {
+            tvTrackName.setText("No track selected");
+            tvArtistName.setText("");
+            ivTrack.setImageResource(R.drawable.ic_notes);
+            progressBar.setEnabled(false);
+            progressBar.setProgress(0);
+            progressBar.setMax(1);
         }
     }
 }

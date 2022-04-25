@@ -18,9 +18,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import uqac.dim.audium.activity.Login;
-import uqac.dim.audium.activity.Main;
-import uqac.dim.audium.activity.Settings;
-import uqac.dim.audium.fragment.MediaPlayerFragment;
 import uqac.dim.audium.model.entity.Track;
 
 public class CreateNotification extends AsyncTask<String, Void, Bitmap> {
@@ -34,7 +31,6 @@ public class CreateNotification extends AsyncTask<String, Void, Bitmap> {
     public static final String ACTION_LOOP = "actionloop";
 
     public static final int NOTIFICATION_ID = 1;
-    public Notification notification;
 
     private final Context context;
     private final Track track;
@@ -67,22 +63,20 @@ public class CreateNotification extends AsyncTask<String, Void, Bitmap> {
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
 
         PendingIntent pendingIntentPrevious;
-        Intent intentPrevious = new Intent(context, NotificationActionService.class).setAction(ACTION_PREVIOUS);
+        Intent intentPrevious = new Intent(context, NotificationBroadcastReceiver.class).setAction(ACTION_PREVIOUS);
         pendingIntentPrevious = PendingIntent.getBroadcast(context, 0, intentPrevious, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent intentPlay = new Intent(context, NotificationActionService.class).setAction(ACTION_PLAY);
+        Intent intentPlay = new Intent(context, NotificationBroadcastReceiver.class).setAction(ACTION_PLAY);
         PendingIntent pendingIntentPlay = PendingIntent.getBroadcast(context, 0, intentPlay, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent intentNext = new Intent(context, NotificationActionService.class).setAction(ACTION_NEXT);
+        Intent intentNext = new Intent(context, NotificationBroadcastReceiver.class).setAction(ACTION_NEXT);
         PendingIntent pendingIntentNext = PendingIntent.getBroadcast(context, 0, intentNext, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent intentLoop = new Intent(context, NotificationActionService.class).setAction(ACTION_LOOP);
+        Intent intentLoop = new Intent(context, NotificationBroadcastReceiver.class).setAction(ACTION_LOOP);
         PendingIntent pendingIntentLoop = PendingIntent.getBroadcast(context, 0, intentLoop, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        PendingIntent openIntent = PendingIntent.getActivity(context, 0, new Intent(context, Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-
+        Intent openIntent = new Intent(context, Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingOpenIntent = PendingIntent.getActivity(context, 0, openIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notes)
@@ -100,9 +94,7 @@ public class CreateNotification extends AsyncTask<String, Void, Bitmap> {
                         .setShowActionsInCompactView(0, 1, 2))
                 .setLargeIcon(result);
 
-        builder.setContentIntent(openIntent);
-
-
+        builder.setContentIntent(pendingOpenIntent);
 
         notificationManagerCompat.notify(NOTIFICATION_ID, builder.build());
     }
