@@ -89,7 +89,7 @@ public class PlaylistPageFragment extends Fragment {
         btnPlay = (ImageButton) root.findViewById(R.id.btn_play_playlist);
         btnDelete = (ImageButton) root.findViewById(R.id.btn_delete_playlist);
         btnModify = (ImageButton) root.findViewById(R.id.btn_modify_playlist);
-        listView = (ListView) root.findViewById(R.id.playlist_page_tracks);
+        listView = (ListView) root.findViewById(R.id.lv_playlist_tracks);
         imageView = root.findViewById(R.id.image_playlist);
 
         btnPlay.setOnClickListener(this::playPlaylist);

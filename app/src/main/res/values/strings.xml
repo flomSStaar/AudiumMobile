@@ -92,4 +92,8 @@
     <string name="no_playlist">No playlist</string>
     <string name="track">Track</string>
     <string name="maj_album">Album</string>
+    <string name="albums_informations">Albums informations</string>
+    <string name="modify_album">Modify Album</string>
+    <string name="cannot_modify_album">Cannot modify album</string>
+    <string name="album_has_no_track">Album has no track</string>
 </resources>

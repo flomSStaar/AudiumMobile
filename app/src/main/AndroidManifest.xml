@@ -79,6 +79,9 @@
             android:name=".activity.ModifyPlaylist"
             android:exported="false" />
         <activity
+            android:name=".activity.admin.ModifyAlbum"
+            android:exported="false" />
+        <activity
             android:name=".activity.Searchable"
             android:exported="false">
             <intent-filter>

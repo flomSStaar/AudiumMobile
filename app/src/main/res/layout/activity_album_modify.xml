@@ -25,13 +25,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:fontFamily="@font/montserrat"
             android:gravity="center"
-            android:text="@string/modify_playlist"
+            android:text="@string/modify_album"
             android:textAlignment="center" />
 
         <ImageButton
-            android:id="@+id/btn_save_playlist"
+            android:id="@+id/btn_save_album"
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -53,7 +52,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/iv_playlist"
+                android:id="@+id/iv_album"
                 android:layout_width="120sp"
                 android:layout_height="120sp"
                 android:scaleType="centerCrop" />
@@ -63,8 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/change_image"
-                android:textColor="@color/white" />
+                android:text="@string/change_image" />
 
         </LinearLayout>
 
@@ -81,7 +79,7 @@
                 android:textColor="@color/white" />
 
             <EditText
-                android:id="@+id/edit_playlist_title"
+                android:id="@+id/edit_album_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
@@ -90,11 +88,10 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/description"
-                android:textColor="@color/white" />
+                android:text="@string/description" />
 
             <EditText
-                android:id="@+id/edit_playlist_description"
+                android:id="@+id/edit_album_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
@@ -103,7 +100,7 @@
     </LinearLayout>
 
     <ListView
-        android:id="@+id/list_playlist_tracks"
+        android:id="@+id/lv_album_tracks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:dividerHeight="10sp" />

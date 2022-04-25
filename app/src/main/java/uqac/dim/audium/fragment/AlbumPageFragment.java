@@ -11,16 +11,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,82 +34,85 @@ import java.util.List;
 import uqac.dim.audium.MediaService;
 import uqac.dim.audium.R;
 import uqac.dim.audium.adapter.ListViewTrackAdapter;
-import uqac.dim.audium.firebase.FirebaseAlbum;
 import uqac.dim.audium.model.entity.Album;
 import uqac.dim.audium.model.entity.Artist;
 import uqac.dim.audium.model.entity.Track;
 import uqac.dim.audium.model.entity.User;
 
 public class AlbumPageFragment extends Fragment {
-    private View root;
-    private Long albumId;
     private String username;
+    private Long albumId;
+    private final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+    private MediaService mediaService;
+    private ServiceConnection serviceConnection;
+
     private List<Long> tracksId;
-    private List<Track> tracks;
+    private final List<Track> tracks = new ArrayList<>();
     private Artist artist;
     private Album album;
-    private DatabaseReference database;
-    private EditText editTitle;
-    private EditText editDescription;
-    private EditText editArtist;
-    private ImageView imageView;
-    private ListView listView;
-    private Button btnSave;
-    private Button btnEdit;
-    private Button btnDelete;
-    private User user;
-    private MediaService mediaService;
-    private final ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            mediaService = ((MediaService.MediaServiceBinder) iBinder).getService();
-        }
 
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            mediaService = null;
-        }
-    };
+    private ImageView ivAlbum;
+    private ListView listView;
+    private ImageButton btnPlay;
+    private TextView tvAlbumName, tvAlbumArtistName, tvAlbumDescription;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tracks = new ArrayList<>();
         username = getArguments().getString("username");
         albumId = getArguments().getLong("albumId");
+
+        setServiceConnection();
         Intent intent = new Intent(getContext(), MediaService.class);
         getContext().bindService(intent, serviceConnection, 0);
     }
 
-    private void load() {
-        database = FirebaseDatabase.getInstance().getReference();
-        Context c = getContext();
-        database.child("albums").child(String.valueOf(albumId)).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-            @Override
-            public void onSuccess(DataSnapshot dataSnapshot) {
-                album = dataSnapshot.getValue(Album.class);
-                if (album != null) {
-                    tracksId = album.getTracksId();
-                    editTitle.setText(album.getTitle());
-                    editTitle.setEnabled(false);
-                    editDescription.setText(album.getDescription());
-                    editDescription.setEnabled(false);
-                    editArtist.setText(album.getArtistId().toString());
-                    editArtist.setEnabled(false);
-                    imageView = root.findViewById(R.id.image_album);
-                    Picasso.with(getContext()).load(album.getImageUrl()).placeholder(R.drawable.ic_notes).error(R.drawable.ic_notes).into(imageView);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.fragment_album_page, container, false);
 
-                    database.child("artists/" + album.getArtistId()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-                        @Override
-                        public void onSuccess(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists())
-                                artist = dataSnapshot.getValue(Artist.class);
+        ivAlbum = root.findViewById(R.id.iv_album);
+        listView = root.findViewById(R.id.lv_album_tracks);
+        btnPlay = root.findViewById(R.id.btn_play_album);
+        tvAlbumName = root.findViewById(R.id.tv_album_name);
+        tvAlbumArtistName = root.findViewById(R.id.tv_album_artist);
+        tvAlbumDescription = root.findViewById(R.id.tv_album_description);
+
+        listView.setOnItemClickListener(this::onTrackItemClicked);
+        btnPlay.setOnClickListener(this::playAlbum);
+
+        return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        load();
+    }
+
+    private void load() {
+        Context c = getContext();
+        database.child("albums").child(String.valueOf(albumId)).get().addOnSuccessListener(albumSnapshot -> {
+            album = albumSnapshot.getValue(Album.class);
+            if (album != null) {
+                tracksId = album.getTracksId();
+                tvAlbumName.setText(album.getTitle());
+                tvAlbumDescription.setText(album.getDescription());
+                Picasso.with(getContext()).load(album.getImageUrl()).placeholder(R.drawable.ic_notes).error(R.drawable.ic_notes).into(ivAlbum);
+
+                database.child("artists").child(album.getArtistId().toString()).get().addOnSuccessListener(artistSnapshot -> {
+                    if (artistSnapshot.exists()) {
+                        artist = artistSnapshot.getValue(Artist.class);
+                        if (artist != null) {
+                            tvAlbumArtistName.setText(artist.getPrintableName());
                         }
-                    });
-                }
+                    } else {
+                        tvAlbumArtistName.setText(R.string.artist_name_error);
+                    }
+                });
             }
         });
-        tracks = new ArrayList<>();
         database.child("tracks").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -121,8 +124,9 @@ public class AlbumPageFragment extends Fragment {
                             tracks.add(t);
                         }
                 }
-                if (tracks.size() != 0)
+                if (tracks.size() != 0) {
                     listView.setAdapter(new ListViewTrackAdapter(c, tracks, username));
+                }
             }
 
             @Override
@@ -130,49 +134,9 @@ public class AlbumPageFragment extends Fragment {
 
             }
         });
-
-        database.child("users").child(username).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-            @Override
-            public void onSuccess(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    user = dataSnapshot.getValue(User.class);
-                    if (!user.isAdmin()) {
-                        btnEdit.setVisibility(View.GONE);
-                        btnDelete.setVisibility(View.GONE);
-                        btnSave.setVisibility(View.GONE);
-                    }
-                }
-            }
-        });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        load();
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.activity_album_page, container, false);
-        listView = ((ListView) root.findViewById(R.id.album_page_tracks));
-        listView.setOnItemClickListener(this::OnItemClicked);
-        editTitle = (EditText) root.findViewById(R.id.edit_album_title);
-        editDescription = (EditText) root.findViewById(R.id.edit_album_description);
-        editArtist = (EditText) root.findViewById(R.id.edit_album_stagename);
-        btnSave = (Button) root.findViewById(R.id.btn_save_album);
-        btnSave.setOnClickListener(this::saveAlbum);
-        btnEdit = (Button) root.findViewById(R.id.edit_album);
-        btnEdit.setOnClickListener(this::modifyAlbum);
-        btnDelete = (Button) root.findViewById(R.id.delete_album);
-        btnDelete.setOnClickListener(this::deleteAlbum);
-
-
-        return root;
-    }
-
-    private void OnItemClicked(AdapterView<?> adapterView, View view, int i, long l) {
+    private void onTrackItemClicked(AdapterView<?> adapterView, View view, int i, long l) {
         if (!tracks.isEmpty()) {
             if (mediaService != null) {
                 mediaService.setTracks(tracks, i);
@@ -186,55 +150,31 @@ public class AlbumPageFragment extends Fragment {
         }
     }
 
-    public void modifyAlbum(View view) {
-        editTitle.setEnabled(true);
-        editDescription.setEnabled(true);
-        btnSave.setVisibility(View.VISIBLE);
-    }
-
-    public void saveAlbum(View view) {
-        String newTitle = editTitle.getText().toString();
-        String newDescription = editDescription.getText().toString();
-
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
-        FirebaseAlbum newAlbum = new FirebaseAlbum(albumId, newTitle, newDescription, album.getImageUrl(), album.getArtistId(), album.getTracksId());
-        db.getReference("albums/").child(String.valueOf(albumId)).setValue(newAlbum);
-        editTitle.setEnabled(false);
-        editDescription.setEnabled(false);
-        btnSave.setVisibility(View.INVISIBLE);
-    }
-
-    public void deleteAlbum(View view) {
-        database = FirebaseDatabase.getInstance().getReference();
-
-        /// Supprimer les idAlbum des musiques
-        database.child("albums").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-            @Override
-            public void onSuccess(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                    Album a = snap.getValue(Album.class);
-                    if (a != null && a.getId().equals(albumId)) {
-                        tracksId = a.getTracksId();
-                        database.child("albums").child(String.valueOf(albumId)).removeValue();
-                        database.child("tracks").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-                            @Override
-                            public void onSuccess(DataSnapshot dataSnapshot) {
-                                for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                                    Track t = snap.getValue(Track.class);
-                                    if (tracksId.contains(t.getId())) {
-                                        t.setAlbumId(null);
-                                        database.child("tracks").child(String.valueOf(t.getId())).setValue(t);
-                                        List<Long> artistAlbumsId = artist.getAlbumsId();
-                                        artistAlbumsId.remove(albumId);
-                                        database.child("artists").child(artist.getId().toString()).child("albumsId").setValue(artistAlbumsId);
-                                    }
-                                }
-                            }
-                        });
-                    }
-                }
+    private void playAlbum(View view) {
+        if (!tracks.isEmpty()) {
+            if (mediaService != null) {
+                mediaService.setTracks(tracks);
+                mediaService.stop();
+                mediaService.play();
+            } else {
+                Log.w("DIM", "Media service is not initialized");
             }
-        });
-        getParentFragmentManager().popBackStack();
+        } else {
+            Log.e("DIM", "No track available for the album");
+        }
+    }
+
+    private void setServiceConnection() {
+        serviceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+                mediaService = ((MediaService.MediaServiceBinder) iBinder).getService();
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName componentName) {
+                mediaService = null;
+            }
+        };
     }
 }
