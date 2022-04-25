@@ -43,6 +43,7 @@ public class AddTrack extends AppCompatActivity {
     private TextView tvAlbum;
     private EditText editTrackName;
     private ImageView editImagePath;
+    private Button btnAddTrack;
 
     private ActivityResultLauncher<String> trackResultLauncher;
     private ActivityResultLauncher<String> imageResultLauncher;
@@ -60,7 +61,8 @@ public class AddTrack extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_track);
 
-        ((Button) findViewById(R.id.btn_add)).setOnClickListener(this::addTrack);
+        btnAddTrack = findViewById(R.id.btn_add);
+        btnAddTrack.setOnClickListener(this::addTrack);
         ((Button) findViewById(R.id.btn_choose_track_file)).setOnClickListener(this::selectFile);
         ((Button) findViewById(R.id.btn_choose_image_file)).setOnClickListener(this::selectImage);
         ((Button) findViewById(R.id.btn_choose_artist)).setOnClickListener(this::chooseArtist);
@@ -105,14 +107,14 @@ public class AddTrack extends AppCompatActivity {
     private void addTrack(View view) {
         String trackName = editTrackName.getText().toString();
 
-
         if (localFileImageUri != null && localFileUri != null && artistId != null && !trackName.trim().isEmpty()) {
+            btnAddTrack.setEnabled(false);
+
             dbRef.child("ids/lastTrackId").get()
                     .addOnSuccessListener(dataSnapshot -> {
                         if (dataSnapshot.exists()) {
                             Long trackId = dataSnapshot.getValue(Long.class);
                             if (trackId != null) {
-
                                 StorageReference imageRef = storeRef.child(FirebaseUtils.TRACK_IMAGE_FILE_PATH).child(trackId.toString());
                                 imageRef.putFile(localFileImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                     @Override
@@ -151,6 +153,7 @@ public class AddTrack extends AppCompatActivity {
                                                                         finish();
                                                                     })
                                                                     .addOnFailureListener(e -> {
+                                                                        btnAddTrack.setEnabled(true);
                                                                         Toast.makeText(getApplicationContext(), getString(R.string.error_occured), Toast.LENGTH_SHORT).show();
                                                                         Log.e("DIM", "Cannot get download url");
                                                                     });
@@ -159,6 +162,7 @@ public class AddTrack extends AppCompatActivity {
                                                             //Progress bar ??
                                                         })
                                                         .addOnFailureListener(e -> {
+                                                            btnAddTrack.setEnabled(true);
                                                             Log.e("DIM", "Cannot upload file");
                                                             Toast.makeText(getApplicationContext(), getString(R.string.error_occured), Toast.LENGTH_SHORT).show();
                                                         });
