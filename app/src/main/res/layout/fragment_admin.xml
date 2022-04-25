@@ -24,6 +24,7 @@
             android:id="@+id/btn_manage_users"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@drawable/custom_button"
@@ -35,6 +36,7 @@
             android:id="@+id/btn_manage_artists"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@drawable/custom_button"
@@ -52,6 +54,7 @@
             android:id="@+id/btn_manage_tracks"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@drawable/custom_button"
@@ -62,10 +65,11 @@
             android:id="@+id/btn_add_track"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@drawable/custom_button"
-            android:text="Add track"
+            android:text="@string/add_track"
             android:textColor="@color/white" />
 
     </LinearLayout>
