@@ -108,7 +108,7 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
             this.tracks = new ArrayList<>(tracks);
             this.currentPlayingIndex = 0;
             this.maxPlayingIndex = this.tracks.size();
-            prepareTrack(false, 0);
+            prepareTrack(false, currentPlayingIndex);
         } else {
             throw new IllegalArgumentException("tracks cannot be null or empty");
         }
@@ -123,7 +123,7 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
                 this.tracks = new ArrayList<>(tracks);
                 this.currentPlayingIndex = index;
                 this.maxPlayingIndex = this.tracks.size();
-                prepareTrack(false, 0);
+                prepareTrack(false, currentPlayingIndex);
             } else {
                 throw new IllegalArgumentException("index is out of range");
             }

@@ -48,11 +48,11 @@ public class Main extends AppCompatActivity {
                 .add(R.id.music_player, new MediaPlayerFragment(getApplicationContext()))
                 .commit();
 
-        this.fragmentState = "home";
+        //this.fragmentState = "home";
     }
 
     private void home(View view) {
-        if (!fragmentState.equals("home")) {
+        //if (!fragmentState.equals("home")) {
             HomeFragment homeFragment = new HomeFragment(getApplicationContext());
             Bundle b = new Bundle();
             b.putString("username", user.getUsername());
@@ -61,12 +61,12 @@ public class Main extends AppCompatActivity {
                     .replace(R.id.fragment_container, homeFragment)
                     .commit();
 
-            this.fragmentState = "home";
-        }
+           // this.fragmentState = "home";
+        //}
     }
 
     private void search(View view) {
-        if(!fragmentState.equals("search")) {
+        //if(!fragmentState.equals("search")) {
             SearchFragment searchFragment = new SearchFragment(getApplicationContext(), user.getUsername());
             Bundle b = new Bundle();
             b.putString("username", user.getUsername());
@@ -76,8 +76,8 @@ public class Main extends AppCompatActivity {
                     .addToBackStack("search")
                     .commit();
 
-            this.fragmentState = "search";
-        }
+            //this.fragmentState = "search";
+        //}
     }
 
     private void settings(View view) {
